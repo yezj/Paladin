@@ -35,8 +35,8 @@ settings['psql'] = dict(
 )
 
 settings['redis'] = dict(
-    host=DATA_HOST,
-    dbid=DATA_DBID
+    host=REDIS_HOST,
+    dbid=REDIS_DBID
 )
 
 settings['predis'] = dict(
