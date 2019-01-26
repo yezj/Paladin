@@ -33,10 +33,10 @@ class GetHandler(ApiHandler):
 
         res = yield self.sql.runQuery("""SELECT gate_id, vers, rs, "itemTypes",  props, "taskStep", tasks, scores, gird,
                     "newGridTypes", "newGrid", portal, item, "itemBg", "wallH", "wallV", "taskBgItem", "wayDownOut",
-                     attach, diff, "taskType" FROM core_gate WHERE gate_id=%s LIMIT 1""", (gate_id,))
+                     attach, diff, "taskType", "trackBelt", "movingFloor" FROM core_gate WHERE gate_id=%s LIMIT 1""", (gate_id,))
         if res:
             gate_id, vers, rs, itemTypes, props, taskStep, tasks, scores, gird, newGridTypes, newGrid, portal, item, \
-            itemBg, wallH, wallV, taskBgItem, wayDownOut, attach, diff, taskType = res[0]
+            itemBg, wallH, wallV, taskBgItem, wayDownOut, attach, diff, taskType, trackBelt, movingFloor  = res[0]
             # print 'jgates', jgates
             # jgates = escape.json_decode(jgates)
             # print type(name_2P)
@@ -63,6 +63,8 @@ class GetHandler(ApiHandler):
                           attach=escape.json_decode(attach),
                           diff=diff,
                           taskType=taskType,
+                          trackBelt=escape.json_decode(trackBelt),
+                          movingFloor=escape.json_decode(movingFloor)
                           )
         else:
             jgates = dict(timestamp=int(time.time()))
@@ -102,6 +104,8 @@ class SetHandler(ApiHandler):
         Param('attach', True, str, '[]', '[]', 'attach'),
         Param('diff', True, str, 'h', 'h', 'diff'),
         Param('taskType', True, str, '0', '0', 'taskType'),
+        Param('trackBelt', True, str, '[]', '[]', 'trackBelt'),
+        Param('movingFloor', True, str, '[]', '[]', 'movingFloor'),
 
     ], filters=[ps_filter], description="Gate set")
     def get(self):
@@ -133,6 +137,8 @@ class SetHandler(ApiHandler):
             attach = self.get_argument("attach")
             diff = self.get_argument("diff")
             taskType = self.get_argument("taskType")
+            trackBelt = self.get_argument("trackBelt")
+            movingFloor = self.get_argument("movingFloor")
 
         except Exception:
             raise web.HTTPError(400, "Argument error")
@@ -140,11 +146,11 @@ class SetHandler(ApiHandler):
         if not res:
             query = """INSERT INTO core_gate (gate_id, vers, rs, "itemTypes", props, "taskStep", tasks, scores, gird,
                     "newGridTypes", "newGrid", portal, item, "itemBg", "wallH", "wallV", "taskBgItem", "wayDownOut",
-                     attach, diff, "taskType", created, modified) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                     attach, diff, "taskType", "trackBelt", "movingFloor", created, modified) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                       %s, %s, %s, %s, %s, %s, %s, %s, %s, now(), now()) RETURNING id"""
             params = (
                 gate_id, vers, rs, itemTypes, props, taskStep, tasks, scores, gird, newGridTypes, newGrid, portal, item,
-                itemBg, wallH, wallV, taskBgItem, wayDownOut, attach, diff, taskType)
+                itemBg, wallH, wallV, taskBgItem, wayDownOut, attach, diff, taskType, trackBelt, movingFloor)
             print query % params
             for i in range(5):
                 try:
@@ -157,10 +163,10 @@ class SetHandler(ApiHandler):
             query = """UPDATE core_gate SET vers=%s, rs=%s, "itemTypes"=%s, props=%s, "taskStep"=%s, tasks=%s,
                     scores=%s, gird=%s, "newGridTypes"=%s, "newGrid"=%s, portal=%s, item=%s,
                      "itemBg"=%s, "wallH"=%s, "wallV"=%s, "taskBgItem"=%s, "wayDownOut"=%s, attach=%s, diff=%s,
-                      "taskType"=%s WHERE gate_id=%s"""
+                      "taskType"=%s, "trackBelt"=%s, "movingFloor"=%s WHERE gate_id=%s"""
             params = (
                 vers, rs, itemTypes, props, taskStep, tasks, scores, gird, newGridTypes, newGrid, portal, item, itemBg,
-                wallH, wallV, taskBgItem, wayDownOut, attach, diff, taskType, gate_id)
+                wallH, wallV, taskBgItem, wayDownOut, attach, diff, taskType, trackBelt, movingFloor, gate_id)
             print query % params
             for i in range(5):
                 try:
