@@ -321,6 +321,9 @@ class Gate(TimeStampedModel):
     attach = models.TextField(_('attach'), blank=True)
     diff = models.CharField(_('diff'), max_length=64)
     taskType = models.CharField(_('taskType'), max_length=64)
+    trackBelt = models.TextField(_('trackBelt'), blank=True)
+    movingFloor = models.TextField(_('movingFloor'), blank=True)
+
 
     class Meta:
         verbose_name = _('Gate')
