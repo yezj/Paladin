@@ -1,0 +1,52 @@
+log_format access.front.kingdom '$http_x_forwarded_for - $remote_user [$time_local]  '
+    '"$request" $status $body_bytes_sent '
+    '"$http_referer" "$http_user_agent" '
+    '$request_time $upstream_response_time $pipe';
+
+upstream front.kingdom {
+    server 127.0.0.1:37310;
+    server 127.0.0.1:37311;
+
+}
+
+server {
+    listen 80;
+
+    access_log /root/srv/kingdom/var/nginx.front.kingdom.access.log access.front.kingdom;
+    error_log /root/srv/kingdom/var/nginx.front.kingdom.error.log;
+
+    server_name front.kingdom.putaogame.com;
+    client_max_body_size 10m;
+
+    location /static {
+        alias /root/srv/kingdom/src/front/static;
+        if ($query_string) {
+            expires max;
+        }
+    }
+
+    location /media {
+        alias /root/srv/kingdom/src/front/media;
+        if ($query_string) {
+            expires max;
+        }
+    }
+
+    location = /crossdomain.xml {
+        rewrite (.*) /static/crossdomain.xml;
+    }
+
+    location / {
+        proxy_set_header X-Real-Ip $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://front.kingdom;
+    }
+
+
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+    	root /root/srv/kingdom/src/templates;
+    }
+}
