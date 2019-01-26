@@ -1,0 +1,3519 @@
+FIRSTBATT = {
+  "010101": {
+    "feat": 0,
+    "gold": 0,
+    "prods": {
+      "01001": 1
+    },
+    "rock": 0
+  },
+  "010102": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010103": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010104": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010105": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010106": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010107": {
+    "feat": 0,
+    "gold": 0,
+    "prods": {
+      "01001": 1,
+      "01108": 1,
+      "01204": 1,
+      "01312": 1,
+      "01512": 1,
+      "01607": 1
+    },
+    "rock": 0
+  },
+  "010108": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010109": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010110": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010111": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010112": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010113": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010114": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010115": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010116": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010201": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010202": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010203": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010204": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010205": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010206": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010207": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010208": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010209": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010210": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010211": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010212": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010213": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010214": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010215": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010216": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010301": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010302": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010303": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010304": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010305": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010306": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010307": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010308": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010309": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010310": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010311": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010312": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010313": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010314": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010315": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010316": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010401": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010402": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010403": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010404": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010405": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010406": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010407": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010408": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010409": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010410": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010411": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010412": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010413": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010414": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010415": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010416": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010501": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010502": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010503": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010504": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010505": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010506": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010507": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010508": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010509": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010510": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010511": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010512": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010513": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010514": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010515": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010516": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010601": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010602": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010603": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010604": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010605": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010606": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010607": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010608": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010609": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010610": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010611": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010612": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010613": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010614": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010615": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010616": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010701": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010702": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010703": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010704": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010705": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010706": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010707": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010708": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010709": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010710": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010711": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010712": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010713": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010714": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010715": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010716": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010801": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010802": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010803": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010804": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010805": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010806": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010807": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010808": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010809": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010810": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010811": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010812": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010813": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010814": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010815": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010816": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010901": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010902": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010903": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010904": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010905": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010906": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010907": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010908": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010909": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010910": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010911": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010912": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010913": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010914": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010915": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "010916": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011001": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011002": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011003": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011004": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011005": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011006": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011007": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011008": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011009": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011010": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011011": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011012": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011013": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011014": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011015": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  },
+  "011016": {
+    "feat": 0,
+    "gold": 0,
+    "rock": 0
+  }
+}
+MATCH = {
+  "010101": {
+    "feat": 60,
+    "gold": 600,
+    "hp": 6,
+    "hxp": 12,
+    "label": "010101",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010102": {
+    "feat": 0,
+    "gold": 600,
+    "hp": 6,
+    "hxp": 13,
+    "label": "010102",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010103": {
+    "feat": 0,
+    "gold": 600,
+    "hp": 6,
+    "hxp": 14,
+    "label": "010103",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010104": {
+    "feat": 60,
+    "gold": 610,
+    "hp": 6,
+    "hxp": 15,
+    "label": "010104",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010105": {
+    "feat": 0,
+    "gold": 610,
+    "hp": 6,
+    "hxp": 16,
+    "label": "010105",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010106": {
+    "feat": 0,
+    "gold": 610,
+    "hp": 6,
+    "hxp": 17,
+    "label": "010106",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010107": {
+    "feat": 120,
+    "gold": 620,
+    "hp": 6,
+    "hxp": 18,
+    "label": "010107",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010108": {
+    "feat": 0,
+    "gold": 620,
+    "hp": 6,
+    "hxp": 18,
+    "label": "010108",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010109": {
+    "feat": 0,
+    "gold": 620,
+    "hp": 6,
+    "hxp": 19,
+    "label": "010109",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010110": {
+    "feat": 120,
+    "gold": 630,
+    "hp": 6,
+    "hxp": 20,
+    "label": "010110",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010111": {
+    "feat": 0,
+    "gold": 630,
+    "hp": 6,
+    "hxp": 20,
+    "label": "010111",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010112": {
+    "feat": 0,
+    "gold": 630,
+    "hp": 6,
+    "hxp": 20,
+    "label": "010112",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010113": {
+    "feat": 120,
+    "gold": 640,
+    "hp": 6,
+    "hxp": 20,
+    "label": "010113",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010114": {
+    "feat": 0,
+    "gold": 640,
+    "hp": 6,
+    "hxp": 20,
+    "label": "010114",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010115": {
+    "feat": 0,
+    "gold": 640,
+    "hp": 6,
+    "hxp": 20,
+    "label": "010115",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010116": {
+    "feat": 120,
+    "gold": 650,
+    "hp": 6,
+    "hxp": 20,
+    "label": "010116",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010191": {
+    "feat": 120,
+    "gold": 1200,
+    "hp": 12,
+    "hxp": 24,
+    "label": "010191",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010192": {
+    "feat": 120,
+    "gold": 1220,
+    "hp": 12,
+    "hxp": 30,
+    "label": "010192",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010193": {
+    "feat": 240,
+    "gold": 1240,
+    "hp": 12,
+    "hxp": 36,
+    "label": "010193",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010194": {
+    "feat": 240,
+    "gold": 1260,
+    "hp": 12,
+    "hxp": 40,
+    "label": "010194",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010195": {
+    "feat": 240,
+    "gold": 1280,
+    "hp": 12,
+    "hxp": 40,
+    "label": "010195",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010196": {
+    "feat": 240,
+    "gold": 1300,
+    "hp": 12,
+    "hxp": 40,
+    "label": "010196",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010201": {
+    "feat": 120,
+    "gold": 700,
+    "hp": 6,
+    "hxp": 20,
+    "label": "010201",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010202": {
+    "feat": 0,
+    "gold": 700,
+    "hp": 6,
+    "hxp": 20,
+    "label": "010202",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010203": {
+    "feat": 0,
+    "gold": 700,
+    "hp": 6,
+    "hxp": 21,
+    "label": "010203",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010204": {
+    "feat": 120,
+    "gold": 710,
+    "hp": 6,
+    "hxp": 21,
+    "label": "010204",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010205": {
+    "feat": 0,
+    "gold": 710,
+    "hp": 6,
+    "hxp": 21,
+    "label": "010205",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010206": {
+    "feat": 0,
+    "gold": 710,
+    "hp": 6,
+    "hxp": 21,
+    "label": "010206",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010207": {
+    "feat": 120,
+    "gold": 720,
+    "hp": 6,
+    "hxp": 22,
+    "label": "010207",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010208": {
+    "feat": 0,
+    "gold": 720,
+    "hp": 6,
+    "hxp": 22,
+    "label": "010208",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010209": {
+    "feat": 0,
+    "gold": 720,
+    "hp": 6,
+    "hxp": 22,
+    "label": "010209",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010210": {
+    "feat": 120,
+    "gold": 730,
+    "hp": 6,
+    "hxp": 22,
+    "label": "010210",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010211": {
+    "feat": 0,
+    "gold": 730,
+    "hp": 6,
+    "hxp": 22,
+    "label": "010211",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010212": {
+    "feat": 0,
+    "gold": 730,
+    "hp": 6,
+    "hxp": 22,
+    "label": "010212",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010213": {
+    "feat": 120,
+    "gold": 740,
+    "hp": 6,
+    "hxp": 22,
+    "label": "010213",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010214": {
+    "feat": 0,
+    "gold": 740,
+    "hp": 6,
+    "hxp": 22,
+    "label": "010214",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010215": {
+    "feat": 0,
+    "gold": 740,
+    "hp": 6,
+    "hxp": 23,
+    "label": "010215",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010216": {
+    "feat": 120,
+    "gold": 750,
+    "hp": 6,
+    "hxp": 23,
+    "label": "010216",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010291": {
+    "feat": 240,
+    "gold": 1400,
+    "hp": 12,
+    "hxp": 40,
+    "label": "010291",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010292": {
+    "feat": 240,
+    "gold": 1420,
+    "hp": 12,
+    "hxp": 42,
+    "label": "010292",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010293": {
+    "feat": 240,
+    "gold": 1440,
+    "hp": 12,
+    "hxp": 44,
+    "label": "010293",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010294": {
+    "feat": 240,
+    "gold": 1460,
+    "hp": 12,
+    "hxp": 44,
+    "label": "010294",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010295": {
+    "feat": 240,
+    "gold": 1480,
+    "hp": 12,
+    "hxp": 44,
+    "label": "010295",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010296": {
+    "feat": 240,
+    "gold": 1500,
+    "hp": 12,
+    "hxp": 46,
+    "label": "010296",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010301": {
+    "feat": 120,
+    "gold": 830,
+    "hp": 6,
+    "hxp": 24,
+    "label": "010301",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010302": {
+    "feat": 0,
+    "gold": 830,
+    "hp": 6,
+    "hxp": 24,
+    "label": "010302",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010303": {
+    "feat": 0,
+    "gold": 830,
+    "hp": 6,
+    "hxp": 25,
+    "label": "010303",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010304": {
+    "feat": 120,
+    "gold": 840,
+    "hp": 6,
+    "hxp": 26,
+    "label": "010304",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010305": {
+    "feat": 0,
+    "gold": 840,
+    "hp": 6,
+    "hxp": 26,
+    "label": "010305",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010306": {
+    "feat": 0,
+    "gold": 840,
+    "hp": 6,
+    "hxp": 26,
+    "label": "010306",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010307": {
+    "feat": 120,
+    "gold": 850,
+    "hp": 6,
+    "hxp": 27,
+    "label": "010307",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010308": {
+    "feat": 0,
+    "gold": 850,
+    "hp": 6,
+    "hxp": 27,
+    "label": "010308",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010309": {
+    "feat": 0,
+    "gold": 850,
+    "hp": 6,
+    "hxp": 27,
+    "label": "010309",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010310": {
+    "feat": 120,
+    "gold": 860,
+    "hp": 6,
+    "hxp": 28,
+    "label": "010310",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010311": {
+    "feat": 0,
+    "gold": 860,
+    "hp": 6,
+    "hxp": 28,
+    "label": "010311",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010312": {
+    "feat": 0,
+    "gold": 860,
+    "hp": 6,
+    "hxp": 28,
+    "label": "010312",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010313": {
+    "feat": 120,
+    "gold": 870,
+    "hp": 6,
+    "hxp": 29,
+    "label": "010313",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010314": {
+    "feat": 0,
+    "gold": 870,
+    "hp": 6,
+    "hxp": 29,
+    "label": "010314",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010315": {
+    "feat": 0,
+    "gold": 870,
+    "hp": 6,
+    "hxp": 29,
+    "label": "010315",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010316": {
+    "feat": 180,
+    "gold": 890,
+    "hp": 6,
+    "hxp": 30,
+    "label": "010316",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010391": {
+    "feat": 240,
+    "gold": 1660,
+    "hp": 12,
+    "hxp": 48,
+    "label": "010391",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010392": {
+    "feat": 240,
+    "gold": 1680,
+    "hp": 12,
+    "hxp": 52,
+    "label": "010392",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010393": {
+    "feat": 240,
+    "gold": 1700,
+    "hp": 12,
+    "hxp": 54,
+    "label": "010393",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010394": {
+    "feat": 240,
+    "gold": 1720,
+    "hp": 12,
+    "hxp": 56,
+    "label": "010394",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010395": {
+    "feat": 240,
+    "gold": 1740,
+    "hp": 12,
+    "hxp": 58,
+    "label": "010395",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010396": {
+    "feat": 360,
+    "gold": 1780,
+    "hp": 12,
+    "hxp": 60,
+    "label": "010396",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010401": {
+    "feat": 180,
+    "gold": 980,
+    "hp": 6,
+    "hxp": 32,
+    "label": "010401",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010402": {
+    "feat": 0,
+    "gold": 980,
+    "hp": 6,
+    "hxp": 32,
+    "label": "010402",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010403": {
+    "feat": 0,
+    "gold": 980,
+    "hp": 6,
+    "hxp": 33,
+    "label": "010403",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010404": {
+    "feat": 180,
+    "gold": 990,
+    "hp": 6,
+    "hxp": 33,
+    "label": "010404",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010405": {
+    "feat": 0,
+    "gold": 990,
+    "hp": 6,
+    "hxp": 33,
+    "label": "010405",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010406": {
+    "feat": 0,
+    "gold": 990,
+    "hp": 6,
+    "hxp": 34,
+    "label": "010406",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010407": {
+    "feat": 180,
+    "gold": 1000,
+    "hp": 6,
+    "hxp": 34,
+    "label": "010407",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010408": {
+    "feat": 0,
+    "gold": 1000,
+    "hp": 6,
+    "hxp": 35,
+    "label": "010408",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010409": {
+    "feat": 0,
+    "gold": 1000,
+    "hp": 6,
+    "hxp": 35,
+    "label": "010409",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010410": {
+    "feat": 180,
+    "gold": 1010,
+    "hp": 6,
+    "hxp": 36,
+    "label": "010410",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010411": {
+    "feat": 0,
+    "gold": 1010,
+    "hp": 6,
+    "hxp": 36,
+    "label": "010411",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010412": {
+    "feat": 0,
+    "gold": 1010,
+    "hp": 6,
+    "hxp": 36,
+    "label": "010412",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010413": {
+    "feat": 180,
+    "gold": 1020,
+    "hp": 6,
+    "hxp": 37,
+    "label": "010413",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010414": {
+    "feat": 0,
+    "gold": 1020,
+    "hp": 6,
+    "hxp": 37,
+    "label": "010414",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010415": {
+    "feat": 0,
+    "gold": 1020,
+    "hp": 6,
+    "hxp": 38,
+    "label": "010415",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010416": {
+    "feat": 180,
+    "gold": 1070,
+    "hp": 6,
+    "hxp": 38,
+    "label": "010416",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010491": {
+    "feat": 360,
+    "gold": 1960,
+    "hp": 12,
+    "hxp": 64,
+    "label": "010491",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010492": {
+    "feat": 360,
+    "gold": 1980,
+    "hp": 12,
+    "hxp": 66,
+    "label": "010492",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010493": {
+    "feat": 360,
+    "gold": 2000,
+    "hp": 12,
+    "hxp": 68,
+    "label": "010493",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010494": {
+    "feat": 360,
+    "gold": 2020,
+    "hp": 12,
+    "hxp": 72,
+    "label": "010494",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010495": {
+    "feat": 360,
+    "gold": 2040,
+    "hp": 12,
+    "hxp": 74,
+    "label": "010495",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010496": {
+    "feat": 360,
+    "gold": 2140,
+    "hp": 12,
+    "hxp": 76,
+    "label": "010496",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 12
+  },
+  "010501": {
+    "feat": 180,
+    "gold": 1300,
+    "hp": 6,
+    "hxp": 41,
+    "label": "010501",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010502": {
+    "feat": 0,
+    "gold": 1300,
+    "hp": 6,
+    "hxp": 41,
+    "label": "010502",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010503": {
+    "feat": 0,
+    "gold": 1300,
+    "hp": 6,
+    "hxp": 42,
+    "label": "010503",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010504": {
+    "feat": 240,
+    "gold": 1320,
+    "hp": 6,
+    "hxp": 43,
+    "label": "010504",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010505": {
+    "feat": 0,
+    "gold": 1320,
+    "hp": 6,
+    "hxp": 43,
+    "label": "010505",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010506": {
+    "feat": 0,
+    "gold": 1320,
+    "hp": 6,
+    "hxp": 44,
+    "label": "010506",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010507": {
+    "feat": 240,
+    "gold": 1340,
+    "hp": 6,
+    "hxp": 45,
+    "label": "010507",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010508": {
+    "feat": 0,
+    "gold": 1340,
+    "hp": 6,
+    "hxp": 46,
+    "label": "010508",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010509": {
+    "feat": 0,
+    "gold": 1340,
+    "hp": 6,
+    "hxp": 46,
+    "label": "010509",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010510": {
+    "feat": 240,
+    "gold": 1360,
+    "hp": 6,
+    "hxp": 47,
+    "label": "010510",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010511": {
+    "feat": 0,
+    "gold": 1360,
+    "hp": 6,
+    "hxp": 48,
+    "label": "010511",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010512": {
+    "feat": 0,
+    "gold": 1360,
+    "hp": 6,
+    "hxp": 48,
+    "label": "010512",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010513": {
+    "feat": 240,
+    "gold": 1380,
+    "hp": 6,
+    "hxp": 49,
+    "label": "010513",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010514": {
+    "feat": 0,
+    "gold": 1380,
+    "hp": 6,
+    "hxp": 50,
+    "label": "010514",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010515": {
+    "feat": 0,
+    "gold": 1380,
+    "hp": 6,
+    "hxp": 51,
+    "label": "010515",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010516": {
+    "feat": 240,
+    "gold": 1430,
+    "hp": 6,
+    "hxp": 52,
+    "label": "010516",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010591": {
+    "feat": 360,
+    "gold": 2600,
+    "hp": 16,
+    "hxp": 82,
+    "label": "010591",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010592": {
+    "feat": 480,
+    "gold": 2640,
+    "hp": 16,
+    "hxp": 86,
+    "label": "010592",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010593": {
+    "feat": 480,
+    "gold": 2680,
+    "hp": 16,
+    "hxp": 90,
+    "label": "010593",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010594": {
+    "feat": 480,
+    "gold": 2720,
+    "hp": 16,
+    "hxp": 94,
+    "label": "010594",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010595": {
+    "feat": 480,
+    "gold": 2760,
+    "hp": 16,
+    "hxp": 98,
+    "label": "010595",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010596": {
+    "feat": 480,
+    "gold": 2860,
+    "hp": 16,
+    "hxp": 104,
+    "label": "010596",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010601": {
+    "feat": 300,
+    "gold": 2600,
+    "hp": 6,
+    "hxp": 54,
+    "label": "010601",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010602": {
+    "feat": 0,
+    "gold": 2610,
+    "hp": 6,
+    "hxp": 55,
+    "label": "010602",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010603": {
+    "feat": 0,
+    "gold": 2620,
+    "hp": 6,
+    "hxp": 55,
+    "label": "010603",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010604": {
+    "feat": 300,
+    "gold": 2630,
+    "hp": 6,
+    "hxp": 56,
+    "label": "010604",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010605": {
+    "feat": 0,
+    "gold": 2640,
+    "hp": 6,
+    "hxp": 57,
+    "label": "010605",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010606": {
+    "feat": 0,
+    "gold": 2650,
+    "hp": 6,
+    "hxp": 58,
+    "label": "010606",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010607": {
+    "feat": 300,
+    "gold": 2660,
+    "hp": 6,
+    "hxp": 59,
+    "label": "010607",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010608": {
+    "feat": 0,
+    "gold": 2670,
+    "hp": 6,
+    "hxp": 60,
+    "label": "010608",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010609": {
+    "feat": 0,
+    "gold": 2680,
+    "hp": 6,
+    "hxp": 61,
+    "label": "010609",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010610": {
+    "feat": 300,
+    "gold": 2690,
+    "hp": 6,
+    "hxp": 62,
+    "label": "010610",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010611": {
+    "feat": 0,
+    "gold": 2700,
+    "hp": 6,
+    "hxp": 63,
+    "label": "010611",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010612": {
+    "feat": 0,
+    "gold": 2710,
+    "hp": 6,
+    "hxp": 64,
+    "label": "010612",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010613": {
+    "feat": 300,
+    "gold": 2720,
+    "hp": 6,
+    "hxp": 65,
+    "label": "010613",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010614": {
+    "feat": 0,
+    "gold": 2730,
+    "hp": 6,
+    "hxp": 65,
+    "label": "010614",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010615": {
+    "feat": 0,
+    "gold": 2740,
+    "hp": 6,
+    "hxp": 66,
+    "label": "010615",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010616": {
+    "feat": 360,
+    "gold": 2790,
+    "hp": 6,
+    "hxp": 66,
+    "label": "010616",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010691": {
+    "feat": 600,
+    "gold": 5200,
+    "hp": 16,
+    "hxp": 108,
+    "label": "010691",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010692": {
+    "feat": 600,
+    "gold": 5260,
+    "hp": 16,
+    "hxp": 112,
+    "label": "010692",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010693": {
+    "feat": 600,
+    "gold": 5320,
+    "hp": 16,
+    "hxp": 118,
+    "label": "010693",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010694": {
+    "feat": 600,
+    "gold": 5380,
+    "hp": 16,
+    "hxp": 124,
+    "label": "010694",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010695": {
+    "feat": 600,
+    "gold": 5440,
+    "hp": 16,
+    "hxp": 130,
+    "label": "010695",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010696": {
+    "feat": 720,
+    "gold": 5580,
+    "hp": 16,
+    "hxp": 132,
+    "label": "010696",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010701": {
+    "feat": 360,
+    "gold": 3910,
+    "hp": 6,
+    "hxp": 72,
+    "label": "010701",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010702": {
+    "feat": 0,
+    "gold": 3920,
+    "hp": 6,
+    "hxp": 73,
+    "label": "010702",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010703": {
+    "feat": 0,
+    "gold": 3930,
+    "hp": 6,
+    "hxp": 74,
+    "label": "010703",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010704": {
+    "feat": 360,
+    "gold": 3940,
+    "hp": 6,
+    "hxp": 75,
+    "label": "010704",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010705": {
+    "feat": 0,
+    "gold": 3950,
+    "hp": 6,
+    "hxp": 76,
+    "label": "010705",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010706": {
+    "feat": 0,
+    "gold": 3960,
+    "hp": 6,
+    "hxp": 77,
+    "label": "010706",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010707": {
+    "feat": 420,
+    "gold": 3970,
+    "hp": 6,
+    "hxp": 78,
+    "label": "010707",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010708": {
+    "feat": 0,
+    "gold": 3980,
+    "hp": 6,
+    "hxp": 79,
+    "label": "010708",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010709": {
+    "feat": 0,
+    "gold": 3990,
+    "hp": 6,
+    "hxp": 80,
+    "label": "010709",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010710": {
+    "feat": 420,
+    "gold": 4000,
+    "hp": 6,
+    "hxp": 83,
+    "label": "010710",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010711": {
+    "feat": 0,
+    "gold": 4010,
+    "hp": 6,
+    "hxp": 85,
+    "label": "010711",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010712": {
+    "feat": 0,
+    "gold": 4020,
+    "hp": 6,
+    "hxp": 86,
+    "label": "010712",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010713": {
+    "feat": 420,
+    "gold": 4030,
+    "hp": 6,
+    "hxp": 87,
+    "label": "010713",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010714": {
+    "feat": 0,
+    "gold": 4040,
+    "hp": 6,
+    "hxp": 89,
+    "label": "010714",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010715": {
+    "feat": 0,
+    "gold": 4050,
+    "hp": 6,
+    "hxp": 90,
+    "label": "010715",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010716": {
+    "feat": 480,
+    "gold": 4100,
+    "hp": 6,
+    "hxp": 91,
+    "label": "010716",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 6
+  },
+  "010791": {
+    "feat": 720,
+    "gold": 7820,
+    "hp": 16,
+    "hxp": 144,
+    "label": "010791",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010792": {
+    "feat": 720,
+    "gold": 7880,
+    "hp": 16,
+    "hxp": 150,
+    "label": "010792",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010793": {
+    "feat": 840,
+    "gold": 7940,
+    "hp": 16,
+    "hxp": 156,
+    "label": "010793",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010794": {
+    "feat": 840,
+    "gold": 8000,
+    "hp": 16,
+    "hxp": 166,
+    "label": "010794",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010795": {
+    "feat": 840,
+    "gold": 8060,
+    "hp": 16,
+    "hxp": 174,
+    "label": "010795",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010796": {
+    "feat": 960,
+    "gold": 8200,
+    "hp": 16,
+    "hxp": 182,
+    "label": "010796",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 16
+  },
+  "010801": {
+    "feat": 480,
+    "gold": 5200,
+    "hp": 8,
+    "hxp": 95,
+    "label": "010801",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010802": {
+    "feat": 0,
+    "gold": 5210,
+    "hp": 8,
+    "hxp": 96,
+    "label": "010802",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010803": {
+    "feat": 0,
+    "gold": 5220,
+    "hp": 8,
+    "hxp": 97,
+    "label": "010803",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010804": {
+    "feat": 480,
+    "gold": 5230,
+    "hp": 8,
+    "hxp": 98,
+    "label": "010804",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010805": {
+    "feat": 0,
+    "gold": 5240,
+    "hp": 8,
+    "hxp": 99,
+    "label": "010805",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010806": {
+    "feat": 0,
+    "gold": 5250,
+    "hp": 8,
+    "hxp": 100,
+    "label": "010806",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010807": {
+    "feat": 480,
+    "gold": 5260,
+    "hp": 8,
+    "hxp": 101,
+    "label": "010807",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010808": {
+    "feat": 0,
+    "gold": 5270,
+    "hp": 8,
+    "hxp": 102,
+    "label": "010808",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010809": {
+    "feat": 0,
+    "gold": 5280,
+    "hp": 8,
+    "hxp": 103,
+    "label": "010809",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010810": {
+    "feat": 540,
+    "gold": 5290,
+    "hp": 8,
+    "hxp": 104,
+    "label": "010810",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010811": {
+    "feat": 0,
+    "gold": 5300,
+    "hp": 8,
+    "hxp": 104,
+    "label": "010811",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010812": {
+    "feat": 0,
+    "gold": 5310,
+    "hp": 8,
+    "hxp": 105,
+    "label": "010812",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010813": {
+    "feat": 540,
+    "gold": 5320,
+    "hp": 8,
+    "hxp": 105,
+    "label": "010813",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010814": {
+    "feat": 0,
+    "gold": 5330,
+    "hp": 8,
+    "hxp": 106,
+    "label": "010814",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010815": {
+    "feat": 0,
+    "gold": 5340,
+    "hp": 8,
+    "hxp": 106,
+    "label": "010815",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010816": {
+    "feat": 540,
+    "gold": 5390,
+    "hp": 8,
+    "hxp": 106,
+    "label": "010816",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010891": {
+    "feat": 960,
+    "gold": 10400,
+    "hp": 20,
+    "hxp": 190,
+    "label": "010891",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "010892": {
+    "feat": 960,
+    "gold": 10460,
+    "hp": 20,
+    "hxp": 196,
+    "label": "010892",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "010893": {
+    "feat": 960,
+    "gold": 10520,
+    "hp": 20,
+    "hxp": 202,
+    "label": "010893",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "010894": {
+    "feat": 1080,
+    "gold": 10580,
+    "hp": 20,
+    "hxp": 208,
+    "label": "010894",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "010895": {
+    "feat": 1080,
+    "gold": 10640,
+    "hp": 20,
+    "hxp": 210,
+    "label": "010895",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "010896": {
+    "feat": 1080,
+    "gold": 10780,
+    "hp": 20,
+    "hxp": 212,
+    "label": "010896",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "010901": {
+    "feat": 540,
+    "gold": 6500,
+    "hp": 8,
+    "hxp": 109,
+    "label": "010901",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010902": {
+    "feat": 0,
+    "gold": 6510,
+    "hp": 8,
+    "hxp": 110,
+    "label": "010902",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010903": {
+    "feat": 0,
+    "gold": 6520,
+    "hp": 8,
+    "hxp": 111,
+    "label": "010903",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010904": {
+    "feat": 540,
+    "gold": 6530,
+    "hp": 8,
+    "hxp": 111,
+    "label": "010904",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010905": {
+    "feat": 0,
+    "gold": 6540,
+    "hp": 8,
+    "hxp": 111,
+    "label": "010905",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010906": {
+    "feat": 0,
+    "gold": 6550,
+    "hp": 8,
+    "hxp": 112,
+    "label": "010906",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010907": {
+    "feat": 540,
+    "gold": 6560,
+    "hp": 8,
+    "hxp": 113,
+    "label": "010907",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010908": {
+    "feat": 0,
+    "gold": 6570,
+    "hp": 8,
+    "hxp": 113,
+    "label": "010908",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010909": {
+    "feat": 0,
+    "gold": 6580,
+    "hp": 8,
+    "hxp": 114,
+    "label": "010909",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010910": {
+    "feat": 600,
+    "gold": 6590,
+    "hp": 8,
+    "hxp": 115,
+    "label": "010910",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010911": {
+    "feat": 0,
+    "gold": 6600,
+    "hp": 8,
+    "hxp": 115,
+    "label": "010911",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010912": {
+    "feat": 0,
+    "gold": 6610,
+    "hp": 8,
+    "hxp": 115,
+    "label": "010912",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010913": {
+    "feat": 600,
+    "gold": 6620,
+    "hp": 8,
+    "hxp": 116,
+    "label": "010913",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010914": {
+    "feat": 0,
+    "gold": 6630,
+    "hp": 8,
+    "hxp": 117,
+    "label": "010914",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010915": {
+    "feat": 0,
+    "gold": 6640,
+    "hp": 8,
+    "hxp": 118,
+    "label": "010915",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010916": {
+    "feat": 600,
+    "gold": 6690,
+    "hp": 8,
+    "hxp": 119,
+    "label": "010916",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 8
+  },
+  "010991": {
+    "feat": 1080,
+    "gold": 13000,
+    "hp": 20,
+    "hxp": 218,
+    "label": "010991",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "010992": {
+    "feat": 1080,
+    "gold": 13060,
+    "hp": 20,
+    "hxp": 222,
+    "label": "010992",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "010993": {
+    "feat": 1080,
+    "gold": 13120,
+    "hp": 20,
+    "hxp": 226,
+    "label": "010993",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "010994": {
+    "feat": 1200,
+    "gold": 13180,
+    "hp": 20,
+    "hxp": 230,
+    "label": "010994",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "010995": {
+    "feat": 1200,
+    "gold": 13240,
+    "hp": 20,
+    "hxp": 232,
+    "label": "010995",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "010996": {
+    "feat": 1200,
+    "gold": 13380,
+    "hp": 20,
+    "hxp": 238,
+    "label": "010996",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "011001": {
+    "feat": 600,
+    "gold": 7800,
+    "hp": 10,
+    "hxp": 124,
+    "label": "011001",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011002": {
+    "feat": 0,
+    "gold": 7810,
+    "hp": 10,
+    "hxp": 125,
+    "label": "011002",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011003": {
+    "feat": 0,
+    "gold": 7820,
+    "hp": 10,
+    "hxp": 126,
+    "label": "011003",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011004": {
+    "feat": 660,
+    "gold": 7830,
+    "hp": 10,
+    "hxp": 127,
+    "label": "011004",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011005": {
+    "feat": 0,
+    "gold": 7840,
+    "hp": 10,
+    "hxp": 128,
+    "label": "011005",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011006": {
+    "feat": 0,
+    "gold": 7850,
+    "hp": 10,
+    "hxp": 128,
+    "label": "011006",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011007": {
+    "feat": 660,
+    "gold": 7860,
+    "hp": 10,
+    "hxp": 129,
+    "label": "011007",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011008": {
+    "feat": 0,
+    "gold": 7870,
+    "hp": 10,
+    "hxp": 130,
+    "label": "011008",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011009": {
+    "feat": 0,
+    "gold": 7880,
+    "hp": 10,
+    "hxp": 131,
+    "label": "011009",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011010": {
+    "feat": 660,
+    "gold": 7890,
+    "hp": 10,
+    "hxp": 131,
+    "label": "011010",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011011": {
+    "feat": 0,
+    "gold": 7900,
+    "hp": 10,
+    "hxp": 132,
+    "label": "011011",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011012": {
+    "feat": 0,
+    "gold": 7910,
+    "hp": 10,
+    "hxp": 133,
+    "label": "011012",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011013": {
+    "feat": 720,
+    "gold": 7920,
+    "hp": 10,
+    "hxp": 134,
+    "label": "011013",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011014": {
+    "feat": 0,
+    "gold": 7930,
+    "hp": 10,
+    "hxp": 135,
+    "label": "011014",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011015": {
+    "feat": 0,
+    "gold": 7940,
+    "hp": 10,
+    "hxp": 136,
+    "label": "011015",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011016": {
+    "feat": 720,
+    "gold": 7990,
+    "hp": 10,
+    "hxp": 137,
+    "label": "011016",
+    "maxnum": 2,
+    "minnum": 2,
+    "prods": [],
+    "xp": 10
+  },
+  "011091": {
+    "feat": 1200,
+    "gold": 15600,
+    "hp": 20,
+    "hxp": 248,
+    "label": "011091",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "011092": {
+    "feat": 1320,
+    "gold": 15660,
+    "hp": 20,
+    "hxp": 254,
+    "label": "011092",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "011093": {
+    "feat": 1320,
+    "gold": 15720,
+    "hp": 20,
+    "hxp": 258,
+    "label": "011093",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "011094": {
+    "feat": 1320,
+    "gold": 15780,
+    "hp": 20,
+    "hxp": 262,
+    "label": "011094",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "011095": {
+    "feat": 1440,
+    "gold": 15840,
+    "hp": 20,
+    "hxp": 268,
+    "label": "011095",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  },
+  "011096": {
+    "feat": 1440,
+    "gold": 15980,
+    "hp": 20,
+    "hxp": 274,
+    "label": "011096",
+    "maxentry": 3,
+    "maxnum": 4,
+    "minnum": 4,
+    "prods": [],
+    "xp": 20
+  }
+}
+BATT = [
+  "010101",
+  "010102",
+  "010103",
+  "010104",
+  "010105",
+  "010106",
+  "010107",
+  "010108",
+  "010109",
+  "010110",
+  "010111",
+  "010112",
+  "010113",
+  "010114",
+  "010115",
+  "010116",
+  "010201",
+  "010202",
+  "010203",
+  "010204",
+  "010205",
+  "010206",
+  "010207",
+  "010208",
+  "010209",
+  "010210",
+  "010211",
+  "010212",
+  "010213",
+  "010214",
+  "010215",
+  "010216",
+  "010301",
+  "010302",
+  "010303",
+  "010304",
+  "010305",
+  "010306",
+  "010307",
+  "010308",
+  "010309",
+  "010310",
+  "010311",
+  "010312",
+  "010313",
+  "010314",
+  "010315",
+  "010316",
+  "010401",
+  "010402",
+  "010403",
+  "010404",
+  "010405",
+  "010406",
+  "010407",
+  "010408",
+  "010409",
+  "010410",
+  "010411",
+  "010412",
+  "010413",
+  "010414",
+  "010415",
+  "010416",
+  "010501",
+  "010502",
+  "010503",
+  "010504",
+  "010505",
+  "010506",
+  "010507",
+  "010508",
+  "010509",
+  "010510",
+  "010511",
+  "010512",
+  "010513",
+  "010514",
+  "010515",
+  "010516",
+  "010601",
+  "010602",
+  "010603",
+  "010604",
+  "010605",
+  "010606",
+  "010607",
+  "010608",
+  "010609",
+  "010610",
+  "010611",
+  "010612",
+  "010613",
+  "010614",
+  "010615",
+  "010616",
+  "010701",
+  "010702",
+  "010703",
+  "010704",
+  "010705",
+  "010706",
+  "010707",
+  "010708",
+  "010709",
+  "010710",
+  "010711",
+  "010712",
+  "010713",
+  "010714",
+  "010715",
+  "010716",
+  "010801",
+  "010802",
+  "010803",
+  "010804",
+  "010805",
+  "010806",
+  "010807",
+  "010808",
+  "010809",
+  "010810",
+  "010811",
+  "010812",
+  "010813",
+  "010814",
+  "010815",
+  "010816",
+  "010901",
+  "010902",
+  "010903",
+  "010904",
+  "010905",
+  "010906",
+  "010907",
+  "010908",
+  "010909",
+  "010910",
+  "010911",
+  "010912",
+  "010913",
+  "010914",
+  "010915",
+  "010916",
+  "011001",
+  "011002",
+  "011003",
+  "011004",
+  "011005",
+  "011006",
+  "011007",
+  "011008",
+  "011009",
+  "011010",
+  "011011",
+  "011012",
+  "011013",
+  "011014",
+  "011015",
+  "011016"
+]
+HARDBATT = [
+  "010191",
+  "010192",
+  "010193",
+  "010194",
+  "010195",
+  "010196",
+  "010291",
+  "010292",
+  "010293",
+  "010294",
+  "010295",
+  "010296",
+  "010391",
+  "010392",
+  "010393",
+  "010394",
+  "010395",
+  "010396",
+  "010491",
+  "010492",
+  "010493",
+  "010494",
+  "010495",
+  "010496",
+  "010591",
+  "010592",
+  "010593",
+  "010594",
+  "010595",
+  "010596",
+  "010691",
+  "010692",
+  "010693",
+  "010694",
+  "010695",
+  "010696",
+  "010791",
+  "010792",
+  "010793",
+  "010794",
+  "010795",
+  "010796",
+  "010891",
+  "010892",
+  "010893",
+  "010894",
+  "010895",
+  "010896",
+  "010991",
+  "010992",
+  "010993",
+  "010994",
+  "010995",
+  "010996",
+  "011091",
+  "011092",
+  "011093",
+  "011094",
+  "011095",
+  "011096"
+]

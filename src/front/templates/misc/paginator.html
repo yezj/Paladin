@@ -1,0 +1,18 @@
+{% if multiple_page %}
+<div class="pageList">
+  <a href="{{ prev_page }}" class="next2" title="前一页">&lt;</a>
+  {% for p in page_range %}
+    {% if p.url %}
+      <a href="{{ p.url }}" title="第{{ p.page }}页">{{ p.page }}</a>
+    {% else %}
+      {% ifequal p.page current_number %}
+      <span style="background: darkblue; color: white;">{{ p.page }}</span>
+      {% else %}
+           {{ p.page }}
+      {% endifequal %}
+    {% endif %}
+  {% endfor %}
+  <a href="{{ next_page }}" title="后一页" class="next2">&gt;</a>
+  <span class="currentPage">{{ page.number }}/{{ q.num_pages }}</span>
+</div>
+{% endif %}

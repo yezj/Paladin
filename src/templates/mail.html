@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>后台调试工具</title>
+    <script src="/static/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="/static/js/jquery.form.min.js" type="text/javascript"></script>
+	<meta charset="utf-8" />
+
+	<!--<link rel="stylesheet" href="/static/css/style.css" type="text/css" media="all" />-->
+    <style type="text/css">
+        /*
+	Theme Name: CSS3 Contact Form
+	Date: April 2013
+	Description: Basic HTML5/CSS3 contact form
+	Version: 1.0
+	Author: Christian Vasile
+	Author URL: http://christianvasile.com
+*/
+
+        /* ===========================
+           ======= Body style ========
+           =========================== */
+
+        body {
+            padding: 50px 100px;
+            font-size: 13px;
+            font-style: Verdana, Tahoma, sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #474E69;
+        }
+        h3 {
+            text-align: right;
+            margin-bottom: 40px;
+            color: #474E69;
+        }
+        /* ===========================
+           ====== Contact Form =======
+           =========================== */
+
+        input, textarea {
+            padding: 10px;
+            border: 1px solid #E5E5E5;
+            width: 120px;
+            color: #999999;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
+            -moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
+            -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
+        }
+
+        /*label {*/
+            /*margin-left: 80px;*/
+            /*padding: 10px;*/
+            /*width: 400px;*/
+            /*height: 150px;*/
+            /*max-width: 400px;*/
+            /*line-height: 18px;*/
+            /*margin-bottom: 40px;*/
+        /*}*/
+        textarea {
+            margin-left: 30px;
+            padding: 10px;
+            width: 400px;
+            height: 150px;
+            max-width: 400px;
+            line-height: 18px;
+            margin-bottom: 10px;
+        }
+
+        input:hover, textarea:hover,
+        input:focus, textarea:focus {
+            border-color: 1px solid #C9C9C9;
+            box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 8px;
+            -moz-box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 8px;
+            -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 8px;
+        }
+
+        .form label {
+            margin-left: 10px;
+            padding: 20px;
+            color: #999999;
+            /*width: 200px;*/
+
+        }
+        td {
+            margin-bottom: 10px;
+            padding: 10px 50px;
+        }
+        /* ===========================
+           ====== Submit Button ======
+           =========================== */
+
+        .submit input {
+            margin-left: 80px;
+            padding: 10px;
+            width: 100px;
+            height: 40px;
+            background-color: #474E69;
+            color: #FFF;
+            border-radius: 3px;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+        }
+        .button {
+            display: inline-block;
+            outline: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font: 14px/100% Arial, Helvetica, sans-serif;
+            padding: .5em 2em .55em;
+            text-shadow: 0 1px 1px rgba(0,0,0,.3);
+            -webkit-border-radius: .5em;
+            -moz-border-radius: .5em;
+            border-radius: .5em;
+            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+            -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+            box-shadow: 0 1px 2px rgba(0,0,0,.2);
+        }
+        .button:hover {
+            text-decoration: none;
+        }
+        .button:active {
+            position: relative;
+            top: 1px;
+        }
+        .blue {
+            color: #d9eef7;
+            border: solid 1px #0076a3;
+            background: #0095cd;
+            background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
+            background: -moz-linear-gradient(top,  #00adee,  #0078a5);
+            filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
+        }
+        .blue:hover {
+            background: #007ead;
+            background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+            background: -moz-linear-gradient(top,  #0095cc,  #00678e);
+            filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095cc', endColorstr='#00678e');
+        }
+        .blue:active {
+            color: #80bed6;
+            background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
+            background: -moz-linear-gradient(top,  #0078a5,  #00adee);
+            filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
+        }
+        #send, #errorinfo {
+            margin-top: 120px;
+            padding: 10px;
+            font-size: 20px;
+        }
+        #tit {
+            margin-left: -250px;
+            width: 250px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+	<h2>邮件赠送GM工具</h2>
+	<h3><a href="/gm/">调试工具</a></h3>
+	<form class="form">
+        <hr width=100% size=5 color=#d9eef7 style="FILTER: alpha(opacity=100,finishopacity=0,style=3)">
+        <table>
+		<tr class="name">
+            <td>
+            <label for="name">用户ID</label>
+			<input type="text" name="name" id="name" placeholder="frog00027" />
+            </td>
+		</tr>
+        </table>
+        <hr width=100% size=5 color=#d9eef7 style="FILTER: alpha(opacity=100,finishopacity=0,style=3)">
+        <table>
+        <tr class="content">
+            <td>
+                <label for="gold">金币</label>
+                <input type="text" name="gold" id="gold" placeholder="0" />
+            </td>
+            <td>
+                <label for="rock">宝石</label>
+                <input type="text" name="rock" id="rock" placeholder="0" />
+            </td>
+            <td>
+                <label for="feat">功勋</label>
+                <input type="text" name="feat" id="feat" placeholder="0" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="prod1">物品1 ID</label>
+                <input type="text" name="prod1" id="prod1" placeholder="10001" />
+            </td>
+            <td>
+                <label for="prod1_num">物品1 数量</label>
+                <input type="text" name="prod1_num" id="prod1_num" placeholder="0" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="prod2">物品2 ID</label>
+                <input type="text" name="prod2" id="prod2" placeholder="10001" />
+            </td>
+            <td>
+                <label for="prod2_num">物品2 数量</label>
+                <input type="text" name="prod2_num" id="prod2_num" placeholder="0" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="prod3">物品3 ID</label>
+                <input type="text" name="prod3" id="prod3" placeholder="10001" />
+            </td>
+            <td>
+                <label for="prod3_num">物品3 数量</label>
+                <input type="text" name="prod3_num" id="prod3_num" placeholder="0" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="prod4">物品4 ID</label>
+                <input type="text" name="prod4" id="prod4" placeholder="10001" />
+            </td>
+            <td>
+                <label for="prod4_num">物品4 数量</label>
+                <input type="text" name="prod4_num" id="prod4_num" placeholder="0" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="prod5">物品5 ID</label>
+                <input type="text" name="prod5" id="prod5" placeholder="10001" />
+            </td>
+            <td>
+                <label for="prod5_num">物品5 数量</label>
+                <input type="text" name="prod5_num" id="prod5_num" placeholder="0" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="title">标题</label>
+            </td>
+            <td>
+                <input type="text" name="title" id="tit" placeholder="" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="title">邮件正文</label>
+            </td>
+        </tr>
+        </table>
+        <table>
+            <td>
+                <textarea id="content" name="text" placeholder="Write something to us"></textarea>
+            </td>
+            <td>
+                <input id="send" type="text" class="button blue" value="确认赠送" />
+            </td>
+            <td>
+                <div id="errorinfo" for="name" style="#ff0000"></div>
+            </td>
+        </table>
+        <hr width=100% size=5 color=#d9eef7 style="FILTER: alpha(opacity=100,finishopacity=0,style=3)">
+
+	</form>
+<script>
+    $(document).ready(function() {
+        $("#send").click(function() {
+            var nameval = $("#name").val();
+            if(nameval.length == 0)
+            {
+                alert("用户ID不能为空");
+            }
+
+            else {
+                var data = {'name': nameval};
+                var gold = $("#gold").val();
+                var rock = $("#rock").val();
+                var feat = $("#feat").val();
+                var prod1 = $("#prod1").val();
+                var prod1_num = $("#prod1_num").val();
+                var prod2 = $("#prod2").val();
+                var prod2_num = $("#prod2_num").val();
+                var prod3 = $("#prod3").val();
+                var prod3_num = $("#prod3_num").val();
+                var prod4 = $("#prod4").val();
+                var prod4_num = $("#prod4_num").val();
+                var prod5 = $("#prod5").val();
+                var prod5_num = $("#prod5_num").val();
+                var title = $("#tit").val();
+                var content =$("#content").val();
+                if(gold.length != 0)
+                {
+                    data.gold = gold
+                }
+                if(rock.length != 0)
+                {
+                    data.rock = gold
+                }
+                if(feat.length != 0)
+                {
+                    data.feat = gold
+                }
+                if(prod1.length != 0)
+                {
+                    if(prod1_num.length == 0)
+                    {
+                        alert("物品1数量不能为空");
+                    }
+                    else
+                    {
+                        data.prod1 = prod1;
+                        data.prod1_num = prod1_num;
+                    }
+                }
+                if(prod2.length != 0)
+                {
+                    if(prod2_num.length == 0)
+                    {
+                        alert("物品1数量不能为空");
+                    }
+                    else
+                    {
+                        data.prod2 = prod2;
+                        data.prod2_num = prod2_num;
+                    }
+                }
+                if(prod3.length != 0)
+                {
+                    if(prod3_num.length == 0)
+                    {
+                        alert("物品1数量不能为空");
+                    }
+                    else
+                    {
+                        data.prod3 = prod3;
+                        data.prod3_num = prod3_num;
+                    }
+                }
+                if(prod4.length != 0)
+                {
+                    if(prod4_num.length == 0)
+                    {
+                        alert("物品1数量不能为空");
+                    }
+                    else
+                    {
+                        data.prod4 = prod4;
+                        data.prod4_num = prod4_num;
+                    }
+                }
+                if(prod5.length != 0)
+                {
+                    if(prod5_num.length == 0)
+                    {
+                        alert("物品1数量不能为空");
+                    }
+                    else
+                    {
+                        data.prod5 = prod5;
+                        data.prod5_num = prod5_num;
+                    }
+                }
+                if(title.length != 0)
+                {
+                    data.title = title;
+                }
+                if(content.length != 0){
+                    data.content = content;
+                }
+                $.ajax({
+                    type: "GET",
+                    url: "/mail/",
+                    data: data,
+                    dataType: "json",
+                    success: function (data) {
+                        $("#errorinfo").html('<p class="error" style="color:#B22222">' + data["error"] + '</p>');
+                        // Play with returned data in JSON format
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        $("#errorinfo").html('<p class="error" style="color:#F00">' + JSON.parse(XMLHttpRequest.responseText)["error"] + '</p>');
+                    }
+                });
+            }
+        });
+    });
+</script>
+</body>
+
+</html>
+

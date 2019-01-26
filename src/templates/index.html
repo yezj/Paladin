@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html>
+<link rel="stylesheet" type="text/css" href="/static/css/gm.css" />
+<head>
+	<title>后台调试工具</title>
+	
+	<meta charset="utf-8" />
+    <script src="/static/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="/static/js/jquery.form.min.js" type="text/javascript"></script>
+    <script src="/static/js/gm.js" type="text/javascript"></script>
+    <!--<script src="/static/js/jquery.form.js" type="text/javascript"></script>-->
+</head>
+
+<body>
+
+	<h2>后台调试工具</h2>
+	<h3><a href="/mail/">邮件赠送</a></h3>
+	<form id="inputform" class="inputform">
+        <hr width=100% size=5 color=#d9eef7 style="FILTER: alpha(opacity=100,finishopacity=0,style=3)">
+        <table>
+		<tr class="name">
+            <td>
+            <label for="name">用户ID</label>
+			<input type="text" name="name" id="name" placeholder="frog00027" />
+            </td>
+            <td>
+                <div id="errorinfo" for="name" style="#ff0000"></div>
+            </td>
+		</tr>
+        </table>
+        <hr width=100% size=5 color=#d9eef7 style="FILTER: alpha(opacity=100,finishopacity=0,style=3)">
+        <table>
+        <tr class="gold">
+        <td>
+            <label for="gold">金币</label>
+			<input type="text" name="gold" id="gold" placeholder="0" />
+            <p id="mgold" class="button blue">修改</p>
+        </td>
+        <td>
+            <label for="acoin">巅峰币</label>
+            <input type="text" name="acoin" id="acoin" placeholder="0" />
+            <p id="mcoin" class="button blue">修改</p>
+        </td>
+        <td>
+            <label for="vrock">VIP宝石</label>
+            <input type="text" name="vrock" id="vrock" placeholder="0" />
+            <p id="mvrock" class="button blue">修改</p>
+        </td>
+		</tr>
+        <tr class="rock">
+            <td>
+                <label for="rock">宝石</label>
+                <input type="text" name="rock" id="rock" placeholder="0" />
+                <p id="mrock" class="button blue">修改</p>
+            </td>
+            <td>
+                <label for="hp">体力</label>
+                <input type="text" name="hp" id="hp" placeholder="0" />
+                <p id="mhp" class="button blue">修改</p>
+            </td>
+            <td>
+                <label for="exped_coin">五关币</label>
+                <input type="text" name="exped_coin" id="exped_coin" placeholder="0" />
+                <p id="mexped_coin" class="button blue">修改</p>
+            </td>
+		</tr>
+        <tr class="feat">
+            <td>
+                <label for="feat">功勋</label>
+                <input type="text" name="feat" id="feat" placeholder="0" />
+                <p id="mfeat" class="button blue">修改</p>
+            </td>
+            <td>
+                <label for="xp">经验</label>
+                <input type="text" name="xp" id="xp" placeholder="0" />
+                <p id="mxp" class="button blue">修改</p>
+            </td>
+            <td>
+                <label for="versus_coin">群雄币</label>
+                <input type="text" name="versus_coin" id="versus_coin" placeholder="0" />
+                <p id="mversus_coin" class="button blue">修改</p>
+            </td>
+        </tr>
+        </table>
+        <hr width=100% size=5 color=#d9eef7 style="FILTER: alpha(opacity=100,finishopacity=0,style=3)">
+        <table>
+        <tr class="prod">
+            <td>
+                <label for="prod">物品ID</label>
+                <input type="text" name="prod" id="prod" placeholder="10001" />
+            </td>
+            <td>
+                <label for="num">数量</label>
+                <input type="text" name="num" id="num" placeholder="0" />
+                <p id="mprod" class="button blue">修改</p>
+            </td>
+        </tr>
+        </table>
+        <hr width=100% size=5 color=#d9eef7 style="FILTER: alpha(opacity=100,finishopacity=0,style=3)">
+
+        <table>
+            <tr class="hero">
+                <td>
+                    <label for="hero">武将ID</label>
+                    <input type="text" name="hero" id="hero" placeholder="10001" />
+                    <p id="init" class="button blue">初始化</p>
+                    <p id="recruit" class="button blue">招募</p>
+                    <p id="dispear" class="button blue">消失</p>
+                </td>
+            </tr>
+        </table>
+        <hr width=100% size=5 color=#d9eef7 style="FILTER: alpha(opacity=100,finishopacity=0,style=3)">
+        <table>
+        <tr class="gate">
+            <td>
+                <label for="batt">普通关卡ID</label>
+                <input type="text" name="batt" id="batt" placeholder="10001" />
+                <p id="mbatt" class="button blue">前往</p>
+            </td>
+            <td>
+                <label for="inst">精英关卡ID</label>
+                <input type="text" name="inst" id="inst" placeholder="10001" />
+                <p id="minst" class="button blue">前往</p>
+            </td>
+        </tr>
+        </table>
+        <hr width=100% size=5 color=#d9eef7 style="FILTER: alpha(opacity=100,finishopacity=0,style=3)">
+	</form>
+
+</body>
+
+</html>
+

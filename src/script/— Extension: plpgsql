@@ -1,0 +1,22 @@
+— Extension: plpgsql
+
+— DROP EXTENSION plpgsql;
+
+CREATE OR REPLACE FUNCTION create_userversus()
+  RETURNS "trigger" AS
+$BODY$begin
+  if TG_OP = 'UPDATE' then 
+    if old.xp < 4500000 and new.xp >= 4500000 then
+      insert into core_versus(user_id, versus_coin, before_rank, now_rank, last_rank, jguards, jpositions, formation, timestamp) VALUES (old.id, 0, currval('core_versus_id_seq'), currval('core_versus_id_seq'), currval('core_versus_id_seq'),'{"01001":' || ((new.jheros)::json->'01001') || ',"01002":' || ((new.jheros)::json->'01002') || '}', '{"01001": "-1","01002":"-1"}', 1, trunc(extract(epoch from now())));
+    end if;
+  end if;
+  return new;
+end;$BODY$
+  LANGUAGE plpgsql VOLATILE;
+ALTER FUNCTION create_userversus() OWNER TO deploy;
+
+CREATE TRIGGER tg_create_userversus
+  BEFORE UPDATE
+  ON core_user
+  FOR EACH ROW
+  EXECUTE PROCEDURE create_userversus();
