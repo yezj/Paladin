@@ -324,7 +324,6 @@ class Gate(TimeStampedModel):
     trackBelt = models.TextField(_('trackBelt'), blank=True)
     movingFloor = models.TextField(_('movingFloor'), blank=True)
 
-
     class Meta:
         verbose_name = _('Gate')
         verbose_name_plural = _('Gates')
