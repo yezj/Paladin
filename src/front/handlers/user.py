@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import random
 import time
 import zlib
@@ -7,173 +8,180 @@ import uuid
 import json
 import datetime
 import pickle
+import binascii
+import base64
 from twisted.internet import defer
 from twisted.python import log
 from cyclone import escape, web
 from front import storage
 from front import utils
 from front.utils import E
+from passlib.apps import custom_app_context as pwd_context
 from front.D import USERINIT, PREFIX, POSTFIX
 from itertools import *
 # from front.handlers.base import BaseHandler
 from front.wiapi import *
 from front.handlers.base import ApiHandler, ApiJSONEncoder
+from itsdangerous import (TimedJSONWebSignatureSerializer
+                          as Serializer, BadSignature, SignatureExpired)
 from front.utils import E
 from front.wiapi import *
 from front import D
 from cyclone import web, escape
 
-@handler
-class GetHandler(ApiHandler):
-
-    @storage.databaseSafe
-    @defer.inlineCallbacks
-    @utils.signed
-    @api('User get', '/user/get/', [
-        Param('channel', False, str, 'test1', 'test1', 'channel'),
-        Param('_sign', True, str, '4GRwMApTJ3VpZCcKcDEKUycxMScKcDIKcyK', '4GRwMApTJ3VpZCcKcDEKUycxMScKcDIKcyK', '_sign'),
-        ], filters=[ps_filter], description="User get")
-    def post(self):
-        nickname = yield self.get_nickname()
-        self.write(dict(nickname=nickname))
 
 @handler
-class SetHandler(ApiHandler):
-
-    @storage.databaseSafe
-    @defer.inlineCallbacks
-    @utils.signed
-    @api('User set', '/user/set/', [
-        Param('channel', False, str, 'test1', 'test1', 'channel'),
-        Param('nickname', False, str, '帅哥', '帅哥', 'nickname'),
-        Param('avat', False, str, '1', '1', 'avat'),
-        Param('_sign', True, str, '4GRwMApTJ3VpZCcKcDEKUycxMScKcDIKcyK', '4GRwMApTJ3VpZCcKcDEKUycxMScKcDIKcyK', '_sign'),
-        ], filters=[ps_filter], description="Task set")
-    def post(self):
-        nickname = self.get_argument("nickname", None)
-        avat = self.get_argument("avat", None)
-
-        uid = self.uid
-        user = yield self.get_user(uid)
-        nuser = {}
-        if nickname:
-            cuser = dict(nickname=user['nickname'])
-            nuser = dict(nickname=nickname)
-            yield self.redis.lpush("nickname", nickname)
-        if avat:
-            cuser = dict(avat=user['avat'])
-            nuser = dict(avat=avat)
-        if nickname and avat:
-            cuser = dict(nickname=user['nickname'], avat=user['avat'])
-            nuser = dict(nickname=nickname, avat=avat)
-            yield self.redis.lpush("nickname", nickname)
-
-        ctask = E.pushtasks(user)
-        if ctask:
-            cuser['tasks'] = user['tasks']
-            nuser['tasks'] = user['tasks']
-        cmail = E.checkmails(user)
-        if cmail:
-            cuser['mails'] = user['mails']
-            nuser['mails'] = user['mails']
-        if nuser:
-            yield self.set_user(uid, **nuser)
-            ret = dict(out=dict(user=nuser), timestamp=int(time.time()))
-            reb = zlib.compress(escape.json_encode(ret))
-            self.write(ret)
-        else:
-            self.set_status(400)
-            return 
-
 class RegisterHandler(ApiHandler):
-
     @storage.databaseSafe
     @defer.inlineCallbacks
+    @api('User register', '/user/register/', [
+        Param('username', True, str, 'test1', 'test1', 'username'),
+        Param('password', True, str, 'test1', 'test1', 'password'),
+    ], filters=[ps_filter], description="User register")
     def get(self):
         try:
-            name = self.get_argument("name")
-            secret = self.get_argument("secret")
+            username = self.get_argument("username")
+            password = self.get_argument("password")
         except Exception:
             raise web.HTTPError(400, "Argument error")
-        res = yield self.sql.runQuery("SELECT id, name, secret FROM core_user WHERE name=%s LIMIT 1", (name, ))
+        res = yield self.sql.runQuery(
+            "SELECT id, username, password_hash FROM core_user WHERE username=%s AND password_hash=%s LIMIT 1",
+            (username, password))
         if not res:
-            res = yield self.sql.runQuery("SELECT id, name, secret FROM core_user WHERE name=%s AND secret=%s LIMIT 1", (name, secret))
-            if not res:        
-                params = USERINIT
-                params['name'] = name
-                params['secret'] = secret
-                params['timestamp'] = int(time.time())
-                query = """INSERT INTO core_user(secret, name, avat, xp, gold, rock, feat, book, jheros, jprods, jbatts, jseals,\
-                 jtasks, jworks, jmails, timestamp) VALUES (%(secret)s, %(name)s, %(avat)s, %(xp)s, %(gold)s, %(rock)s, %(feat)s,\
-                  %(book)s, %(jheros)s, %(jprods)s, %(jbatts)s, %(jseals)s, %(jtasks)s, %(jworks)s, %(jmails)s, %(timestamp)s) RETURNING id"""
-                for i in range(5):
-                    try:
-                        sql = yield self.sql.runQuery(query, params)
-                        break
-                    except storage.IntegrityError:
-                        log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                        sql = None
-                        continue
-                if sql:
-                    uid = sql[0][0]
-                else:
-                    raise web.HTTPError(500, 'Create user failed')
-            else:
-                uid =res[0][0]
-        else:
-            raise web.HTTPError(400, 'user exist, please try another name')
-
-        self.write(dict(uid=uid))
-
-class LoginHandler(ApiHandler):
-
-    @storage.databaseSafe
-    @defer.inlineCallbacks
-    def get(self):
-        try:
-            name = self.get_argument("name")
-            secret = self.get_argument("secret")
-        except Exception:
-            raise web.HTTPError(400, "Argument error")
-        res = yield self.sql.runQuery("SELECT id, name, secret FROM core_user WHERE name=%s LIMIT 1", (name, ))
-        if not res:
-            raise web.HTTPError(401, "User does not exist")
-        else:
-            res = yield self.sql.runQuery("SELECT id, name, secret FROM core_user WHERE name=%s AND secret=%s LIMIT 1", (name, secret))
-            if not res:
-                raise web.HTTPError(401, "User does not exist or password error, please register")
-
-        self.write(dict(uid=res[0][0]))
-
-@handler
-class CreateArenaHandler(ApiHandler):
-
-    @storage.databaseSafe
-    @defer.inlineCallbacks
-    @api('User set', '/create/arena/', [
-    ], filters=[ps_filter], description="Task set")
-    def get(self):
-        res = yield self.sql.runQuery("SELECT id, jheros FROM core_user WHERE xp>=900000 ORDER BY id")
-        j = 1
-        for r in res:
-
-            iid, heros = r
-            arena = yield self.sql.runQuery("select * from core_arena where user_id=%s", (iid, ))
-            heros = escape.json_decode(heros)
-            guards = {'01001':heros['01001'], '01002':heros['01002']}
-            guards = escape.json_encode(guards)
-            query = "INSERT INTO core_arena(user_id, arena_coin, before_rank, now_rank, last_rank, jguards, jpositions, formation, timestamp) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id"
-            params = (iid, 0, j, j, j, guards, '{"01001": "-1","01002": "-1"}', E.default_formation, int(time.time()))
+            username = username
+            password_hash = password  # pwd_context.encrypt(password)
+            access_token = str(binascii.hexlify(os.urandom(20)).decode())
+            refresh_token = str(binascii.hexlify(os.urandom(20)).decode())
+            created = int(time.time())
+            modified = int(time.time())
+            query = "INSERT INTO core_user(username, password_hash, access_token, refresh_token, created, modified)" \
+                    " VALUES (%s, %s, %s, %s, %s, %s) RETURNING id"
+            params = (username, password_hash, access_token, refresh_token, created, modified)
             print query % params
             for i in range(5):
                 try:
-                    yield self.sql.runQuery(query, params)
+                    user = yield self.sql.runQuery(query, params)
                     break
                 except storage.IntegrityError:
                     log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
                     continue
-            j += 1
+            print user
+            if user:
+                user_id = user[0][0]
+                self.redis.set('access_token:%s' % access_token, user_id, D.EXPIRATION)
+                self.write(dict(user_id=user_id, access_token=access_token, refresh_token=refresh_token))
+                return
+            else:
+                self.write(dict(err=E.ERR_USER_CREATED, msg=E.errmsg(E.ERR_USER_CREATED)))
+                return
+        else:
+            self.write(dict(err=E.ERR_USER_REPEAT, msg=E.errmsg(E.ERR_USER_REPEAT)))
+            return
 
 
+@handler
+class LoginHandler(ApiHandler):
+    @storage.databaseSafe
+    @defer.inlineCallbacks
+    @api('User login', '/user/login/', [
+        Param('username', False, str, 'test1', 'test1', 'username'),
+        Param('password', False, str, 'test1', 'test1', 'password'),
+        Param('user_id', False, str, '1', '1', 'user_id'),
+        Param('access_token', False, str, 'bb6ab3286a923c66088f790c395c0d11019c075b', 'bb6ab3286a923c66088f790c395c0d11019c075b', 'access_token'),
+        Param('refresh_token', False, str, 'bb6ab3286a923c66088f790c395c0d11019c075b', 'bb6ab3286a923c66088f790c395c0d11019c075b', 'refresh_token'),
+    ], filters=[ps_filter], description="User login")
+    def get(self):
+        try:
+            username = self.get_argument("username", None)
+            password = self.get_argument("password", None)
+            user_id = self.get_argument("user_id", None)
+            access_token = self.get_argument("access_token", None)
+            refresh_token = self.get_argument("refresh_token", None)
+        except Exception:
+            self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
+            return
+        print self.has_arg("access_token"), self.has_arg("user_id")
+        if username and password:
+            query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE username=%s AND" \
+                    " password_hash=%s LIMIT 1"
+            r = yield self.sql.runQuery(query, (username, password))
+            if r:
+                user_id, username, password_hash, _access_token, _refresh_token = r[0]
+                access_token_redis = self.redis.get('access_token:%s' % access_token)
+                if not access_token_redis:
+                    _access_token = binascii.hexlify(os.urandom(20)).decode()
+                    _refresh_token = binascii.hexlify(os.urandom(20)).decode()
+                    query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
+                    params = (_access_token, _refresh_token, int(time.time()), user_id)
+                    for i in range(5):
+                        try:
+                            yield self.sql.runOperation(query, params)
+                            break
+                        except storage.IntegrityError:
+                            log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
+                            continue
+                self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
+                self.write(dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token))
+                return
+            else:
+                self.write(dict(err=E.ERR_USER_PASSWORD, msg=E.errmsg(E.ERR_USER_PASSWORD)))
+                return
+        elif self.has_arg("access_token") and self.has_arg("user_id"):
+            query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE id=%s AND" \
+                    " access_token=%s LIMIT 1"
+            r = yield self.sql.runQuery(query, (user_id, access_token))
+            if r:
+                user_id, username, password_hash, _access_token, _refresh_token = r[0]
+                access_token_redis = yield self.redis.get('access_token:%s' % _access_token)
+                #print 'access_token_redis', access_token_redis
+                if not access_token_redis:
+                    if self.has_arg("refresh_token"):
+                        if self.arg("refresh_token") == _refresh_token:
+                            _access_token = binascii.hexlify(os.urandom(20)).decode()
+                            _refresh_token = binascii.hexlify(os.urandom(20)).decode()
+                            query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
+                            params = (_access_token, _refresh_token, int(time.time()), user_id)
+                            for i in range(5):
+                                try:
+                                    yield self.sql.runOperation(query, params)
+                                    break
+                                except storage.IntegrityError:
+                                    log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
+                                    continue
+                            self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
+                        else:
+                            self.write(dict(err=E.ERR_USER_REFRESH_TOKEN, msg=E.errmsg(E.ERR_USER_REFRESH_TOKEN)))
+                            return
+                    else:
+                        self.write(dict(err=E.ERR_USER_TOKEN_EXPIRE, msg=E.errmsg(E.ERR_USER_TOKEN_EXPIRE)))
+                        return
+                else:
+                    if self.has_arg("refresh_token"):
+                        if self.arg("refresh_token") == _refresh_token:
+                            _access_token = binascii.hexlify(os.urandom(20)).decode()
+                            _refresh_token = binascii.hexlify(os.urandom(20)).decode()
+                            query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
+                            params = (_access_token, _refresh_token, int(time.time()), user_id)
+                            for i in range(5):
+                                try:
+                                    yield self.sql.runOperation(query, params)
+                                    break
+                                except storage.IntegrityError:
+                                    log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
+                                    continue
+                            self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
+                        else:
+                            self.write(dict(err=E.ERR_USER_REFRESH_TOKEN, msg=E.errmsg(E.ERR_USER_REFRESH_TOKEN)))
+                            return
+                    else:
+                        pass
 
+                self.write(dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token))
+                return
 
+            else:
+                self.write(dict(err=E.ERR_USER_TOKEN, msg=E.errmsg(E.ERR_USER_TOKEN)))
+                return
+        else:
+            self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
+            return

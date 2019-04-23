@@ -13,7 +13,7 @@ from django.db.models.signals import post_save, post_delete
 from django.core.exceptions import ValidationError
 from filebrowser.fields import FileBrowseField, FileObject
 from django.contrib.auth.models import User as AdminUser
-
+from passlib.apps import custom_app_context as pwd_context
 
 # from django.contrib.postgres.fields import JSONField
 
@@ -330,3 +330,26 @@ class Gate(TimeStampedModel):
 
     def __unicode__(self):
         return u'%s' % self.vers
+
+
+class User(models.Model):
+    username = models.CharField(_('Username'), max_length=32, unique=True)
+    password_hash = models.CharField(_('Password_hash'), max_length=128, blank=True)
+    access_token = models.CharField(_('Access_token'), max_length=128, unique=True)
+    refresh_token = models.CharField(_('Refresh_token'), max_length=128, unique=True)
+    created = models.PositiveIntegerField(_('Created'), default=0, db_index=True)
+    modified = models.PositiveIntegerField(_('Modified'), default=0, db_index=True)
+
+    def hash_password(self, password):
+        self.password_hash = pwd_context.encrypt(password)
+        return self.password_hash
+
+    def verify_password(self, password):
+        return pwd_context.verify(password, self.password_hash)
+
+    class Meta:
+        verbose_name = _('User')
+        verbose_name_plural = _('Users')
+
+    def __unicode__(self):
+        return self.username
