@@ -2,7 +2,7 @@ import cyclone.web
 import api_doc
 from twisted.internet.tcp import _AbortingMixin
 from wiapi import api_manager
-from front.handlers import home
+from front.handlers import user
 from front.handlers import gate
 # from front.handlers import stage
 # from front.handlers import battle
@@ -16,10 +16,10 @@ from front.handlers import gate
 from local_settings import DEBUG
 
 url_patterns = [
-    (r'/', home.HomeHandler),
-    (r'/active/', home.ActiveHandler),
-    (r'/startup/', home.StartupHandler),
-    (r'/sync/', home.SyncHandler),
+    # (r'/', home.HomeHandler),
+    # (r'/active/', home.ActiveHandler),
+    # (r'/startup/', home.StartupHandler),
+    # (r'/sync/', home.SyncHandler),
     # (r'/syncdb/', home.SyncdbHandler),
     # (r'/flushdb/', home.FlushdbHandler),
 
@@ -29,7 +29,7 @@ url_patterns = [
     # (r'/gm/account/edit/', gmaccount.EditHandler),
     # (r'/gm/prod/edit/', gmprod.EditProdHandler),
 
-    (r'/crossdomain\.xml', home.CrossdomainHandler),
+    #(r'/crossdomain\.xml', home.CrossdomainHandler),
     (r'/crossdomain\.xml', cyclone.web.RedirectHandler,
      {'url': '/static/crossdmain.xml'}),
 ]
