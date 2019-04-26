@@ -87,8 +87,10 @@ class LoginHandler(ApiHandler):
         Param('username', False, str, 'test1', 'test1', 'username'),
         Param('password', False, str, 'test1', 'test1', 'password'),
         Param('user_id', False, str, '1', '1', 'user_id'),
-        Param('access_token', False, str, 'bb6ab3286a923c66088f790c395c0d11019c075b', 'bb6ab3286a923c66088f790c395c0d11019c075b', 'access_token'),
-        Param('refresh_token', False, str, 'bb6ab3286a923c66088f790c395c0d11019c075b', 'bb6ab3286a923c66088f790c395c0d11019c075b', 'refresh_token'),
+        Param('access_token', False, str, 'bb6ab3286a923c66088f790c395c0d11019c075b',
+              'bb6ab3286a923c66088f790c395c0d11019c075b', 'access_token'),
+        Param('refresh_token', False, str, 'bb6ab3286a923c66088f790c395c0d11019c075b',
+              'bb6ab3286a923c66088f790c395c0d11019c075b', 'refresh_token'),
     ], filters=[ps_filter], description="User login")
     def get(self):
         try:
@@ -132,56 +134,45 @@ class LoginHandler(ApiHandler):
             r = yield self.sql.runQuery(query, (user_id, access_token))
             if r:
                 user_id, username, password_hash, _access_token, _refresh_token = r[0]
-                access_token_redis = yield self.redis.get('access_token:%s' % _access_token)
-                #print 'access_token_redis', access_token_redis
-                if not access_token_redis:
-                    if self.has_arg("refresh_token"):
-                        if self.arg("refresh_token") == _refresh_token:
-                            _access_token = binascii.hexlify(os.urandom(20)).decode()
-                            _refresh_token = binascii.hexlify(os.urandom(20)).decode()
-                            query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
-                            params = (_access_token, _refresh_token, int(time.time()), user_id)
-                            for i in range(5):
-                                try:
-                                    yield self.sql.runOperation(query, params)
-                                    break
-                                except storage.IntegrityError:
-                                    log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                                    continue
-                            self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
-                        else:
-                            self.write(dict(err=E.ERR_USER_REFRESH_TOKEN, msg=E.errmsg(E.ERR_USER_REFRESH_TOKEN)))
-                            return
-                    else:
-                        self.write(dict(err=E.ERR_USER_TOKEN_EXPIRE, msg=E.errmsg(E.ERR_USER_TOKEN_EXPIRE)))
-                        return
-                else:
-                    if self.has_arg("refresh_token"):
-                        if self.arg("refresh_token") == _refresh_token:
-                            _access_token = binascii.hexlify(os.urandom(20)).decode()
-                            _refresh_token = binascii.hexlify(os.urandom(20)).decode()
-                            query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
-                            params = (_access_token, _refresh_token, int(time.time()), user_id)
-                            for i in range(5):
-                                try:
-                                    yield self.sql.runOperation(query, params)
-                                    break
-                                except storage.IntegrityError:
-                                    log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                                    continue
-                            self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
-                        else:
-                            self.write(dict(err=E.ERR_USER_REFRESH_TOKEN, msg=E.errmsg(E.ERR_USER_REFRESH_TOKEN)))
-                            return
-                    else:
-                        pass
-
-                self.write(dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token))
-                return
-
+                _access_token = binascii.hexlify(os.urandom(20)).decode()
+                _refresh_token = binascii.hexlify(os.urandom(20)).decode()
+                query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
+                params = (_access_token, _refresh_token, int(time.time()), user_id)
+                for i in range(5):
+                    try:
+                        yield self.sql.runOperation(query, params)
+                        break
+                    except storage.IntegrityError:
+                        log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
+                        continue
+                self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
+                self.write(dict(access_token=_access_token))
             else:
-                self.write(dict(err=E.ERR_USER_TOKEN, msg=E.errmsg(E.ERR_USER_TOKEN)))
+                self.write(dict(err=E.ERR_USER_REFRESH_TOKEN, msg=E.errmsg(E.ERR_USER_REFRESH_TOKEN)))
                 return
+
+        elif self.has_arg("refresh_token") and self.has_arg("user_id"):
+            query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE id=%s AND" \
+                    " refresh_token=%s LIMIT 1"
+            r = yield self.sql.runQuery(query, (self.arg("user_id"), self.arg("refresh_token")))
+            if r:
+                _access_token = binascii.hexlify(os.urandom(20)).decode()
+                #_refresh_token = binascii.hexlify(os.urandom(20)).decode()
+                query = "UPDATE core_user SET refresh_token=%s, modified=%s WHERE id=%s"
+                params = (_access_token, int(time.time()), user_id)
+                for i in range(5):
+                    try:
+                        yield self.sql.runOperation(query, params)
+                        break
+                    except storage.IntegrityError:
+                        log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
+                        continue
+                self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
+                self.write(dict(access_token=_access_token))
+            else:
+                self.write(dict(err=E.ERR_USER_REFRESH_TOKEN, msg=E.errmsg(E.ERR_USER_REFRESH_TOKEN)))
+                return
+
         else:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
