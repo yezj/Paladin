@@ -158,7 +158,7 @@ class LoginHandler(ApiHandler):
             if r:
                 _access_token = binascii.hexlify(os.urandom(20)).decode()
                 # _refresh_token = binascii.hexlify(os.urandom(20)).decode()
-                query = "UPDATE core_user SET refresh_token=%s, modified=%s WHERE id=%s"
+                query = "UPDATE core_user SET access_token=%s, modified=%s WHERE id=%s"
                 params = (_access_token, int(time.time()), user_id)
                 for i in range(5):
                     try:
