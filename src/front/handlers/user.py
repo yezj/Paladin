@@ -148,7 +148,7 @@ class LoginHandler(ApiHandler):
                 self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
                 self.write(dict(access_token=_access_token))
             else:
-                self.write(dict(err=E.ERR_USER_REFRESH_TOKEN, msg=E.errmsg(E.ERR_USER_REFRESH_TOKEN)))
+                self.write(dict(err=E.ERR_USER_TOKEN_EXPIRE, msg=E.errmsg(E.ERR_USER_TOKEN_EXPIRE)))
                 return
 
         elif self.has_arg("refresh_token") and self.has_arg("user_id"):
