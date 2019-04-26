@@ -135,9 +135,9 @@ class LoginHandler(ApiHandler):
             if r:
                 user_id, username, password_hash, _access_token, _refresh_token = r[0]
                 _access_token = binascii.hexlify(os.urandom(20)).decode()
-                _refresh_token = binascii.hexlify(os.urandom(20)).decode()
-                query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
-                params = (_access_token, _refresh_token, int(time.time()), user_id)
+                #_refresh_token = binascii.hexlify(os.urandom(20)).decode()
+                query = "UPDATE core_user SET access_token=%s, modified=%s WHERE id=%s"
+                params = (_access_token, int(time.time()), user_id)
                 for i in range(5):
                     try:
                         yield self.sql.runOperation(query, params)
@@ -157,7 +157,7 @@ class LoginHandler(ApiHandler):
             r = yield self.sql.runQuery(query, (self.arg("user_id"), self.arg("refresh_token")))
             if r:
                 _access_token = binascii.hexlify(os.urandom(20)).decode()
-                #_refresh_token = binascii.hexlify(os.urandom(20)).decode()
+                # _refresh_token = binascii.hexlify(os.urandom(20)).decode()
                 query = "UPDATE core_user SET refresh_token=%s, modified=%s WHERE id=%s"
                 params = (_access_token, int(time.time()), user_id)
                 for i in range(5):
