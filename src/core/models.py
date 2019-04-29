@@ -15,21 +15,23 @@ from filebrowser.fields import FileBrowseField, FileObject
 from django.contrib.auth.models import User as AdminUser
 from passlib.apps import custom_app_context as pwd_context
 
-# from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.fields import JSONField
 
 
-# class Channel(models.Model):
-#     title = models.CharField(_('Title'), max_length=20)
-#     slug = models.SlugField(_('Slug'))
-# 
-#     class Meta:
-#         verbose_name = _('Channel')
-#         verbose_name_plural = _('Channels')
-#         ordering = ('slug',)
-# 
-#     def __unicode__(self):
-#         return self.title
-# 
+class Channel(models.Model):
+    title = models.CharField(_('Title'), max_length=20)
+    slug = models.SlugField(_('Slug'))
+
+    class Meta:
+        verbose_name = _('Channel')
+        verbose_name_plural = _('Channels')
+        ordering = ('slug',)
+
+    def __unicode__(self):
+        return self.title
+
+
+#
 # 
 # class User(models.Model):
 #     id = models.AutoField(primary_key=True)
@@ -332,13 +334,11 @@ class Gate(TimeStampedModel):
         return u'%s' % self.vers
 
 
-class User(models.Model):
+class User(TimeStampedModel):
     username = models.CharField(_('Username'), max_length=32, unique=True)
     password_hash = models.CharField(_('Password_hash'), max_length=128, blank=True)
     access_token = models.CharField(_('Access_token'), max_length=128, unique=True)
     refresh_token = models.CharField(_('Refresh_token'), max_length=128, unique=True)
-    created = models.PositiveIntegerField(_('Created'), default=0, db_index=True)
-    modified = models.PositiveIntegerField(_('Modified'), default=0, db_index=True)
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -353,3 +353,41 @@ class User(models.Model):
 
     def __unicode__(self):
         return self.username
+
+
+class Player(TimeStampedModel):
+    id = models.AutoField(primary_key=True)  # idcard, 1851100000
+    user = models.OneToOneField(User)
+    channel = models.ForeignKey(Channel, blank=True, null=True)  # 渠道
+    model = models.CharField(_('Model'), max_length=50, blank=True)  # 设备号
+    serial = models.CharField(_('Serial'), max_length=100, blank=True)  # 物理地址
+    phone = models.CharField(_('Phone'), max_length=100, blank=True)  # 手机号
+    nickname = models.CharField(_('Nickname'), max_length=30, blank=True, db_index=True)  # 昵称
+    avatar = models.CharField(_('Avatar'), max_length=20, blank=True)  # 头像
+    gold = models.PositiveIntegerField(_('Gold'), default=0)  # 金币
+    rock = models.PositiveIntegerField(_('Rock'), default=0)  # 钻石
+    star = models.PositiveIntegerField(_('Star'), default=0)  # 总星数
+    point = models.PositiveIntegerField(_('Point'), default=0)  # 积分
+    prods = JSONField(default={})  # 道具
+    gates = JSONField(default={})  # 关卡
+    ips = JSONField(default=[])  # 常用IP
+
+    class Meta:
+        verbose_name = _('Player')
+        verbose_name_plural = _('Players')
+
+    def __unicode__(self):
+        return self.nickname
+
+
+class Hp(TimeStampedModel):
+    user = models.OneToOneField(User)
+    hp = models.PositiveSmallIntegerField(_('Hp'), default=0)  # 体力
+    timestamp = models.PositiveIntegerField(_('Timestamp'), default=0, blank=True)
+
+    class Meta:
+        verbose_name = _('Hp')
+        verbose_name_plural = _('Hps')
+
+    def __unicode__(self):
+        return self.user
