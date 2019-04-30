@@ -108,7 +108,7 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
         ips = escape.json_encode(D.USERINIT["ips"])
 
         query = """INSERT INTO core_player(user_id, channel_id, model, serial, phone, nickname, avatar, gold,\
-                rock, star, point, prods, gates, mails, created, modified) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,\
+                rock, star, point, prods, gates, mails, ips, created, modified) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,\
                  %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id"""
         params = (
             user_id, channel, model, serial, phone, nickname, avatar, gold, rock, star, point, prods, gates, \
@@ -117,7 +117,7 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
         print query % params
         for i in range(5):
             try:
-                res = yield self.sql.runOperation(query, params)
+                res = yield self.sql.runQuery(query, params)
                 if res:
                     user = dict(nickname=nickname,
                                 avatar=avatar,
