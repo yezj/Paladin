@@ -92,20 +92,20 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
 
     @storage.databaseSafe
     @defer.inlineCallbacks
-    def generate_idcard(self, model, serial, channel, access_token, user_id):
-        idcard = ''
+    def generate_player(self, model, serial, channel, user_id):
+        user = dict()
         nickname = D.USERINIT["nickname"]
         avatar = D.USERINIT["avatar"]
         gold = D.USERINIT["gold"]
         rock = D.USERINIT["rock"]
         star = D.USERINIT["star"]
         point = D.USERINIT["point"]
-        phone = ''
+        phone = D.USERINIT["phone"]
         ####
         prods = escape.json_encode(D.USERINIT["prods"])
         gates = escape.json_encode(D.USERINIT["gates"])
         mails = escape.json_encode(D.USERINIT["mails"])
-        ips = escape.json_encode([])
+        ips = escape.json_encode(D.USERINIT["ips"])
 
         query = """INSERT INTO core_player(user_id, channel_id, model, serial, phone, nickname, avatar, gold,\
                 rock, star, point, prods, gates, mails, created, modified) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,\
@@ -116,171 +116,48 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
         # print query, params
         print query % params
         for i in range(5):
-
             try:
                 res = yield self.sql.runOperation(query, params)
-                print 'res', res
-                idcard = res[0][0]
+                if res:
+                    user = dict(nickname=nickname,
+                                avatar=avatar,
+                                gold=gold,
+                                rock=rock,
+                                star=star,
+                                phone=phone,
+                                prods=D.USERINIT["prods"],
+                                gates=D.USERINIT["gates"],
+                                mails=D.USERINIT["mails"],
+                                ips=D.USERINIT["ips"])
+
                 break
             except storage.IntegrityError:
                 log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
                 continue
-        defer.returnValue(idcard)
+
+        defer.returnValue(user)
 
     @storage.databaseSafe
     @defer.inlineCallbacks
-    def refresh_idcard(self, idcard, model, serial, channel, access_token, user_id):
-        if idcard:
-            ahex, aid = idcard.split('h', 1)
-            query = "UPDATE core_user SET model=%s, serial=%s, timestamp=%s WHERE id=%s AND hex=%s RETURNING id"
-            params = (model, serial, int(time.time()), aid, ahex)
-            for i in range(5):
-                try:
-                    res = yield self.sql.runQuery(query, params)
-                    if not res:
-                        idcard = None
-                    break
-                except storage.IntegrityError:
-                    log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                    continue
-
-        else:
-            res = yield self.sql.runQuery("SELECT hex, id FROM core_user WHERE user_id=%s LIMIT 1",
-                                          (user_id,))
-            if res:
-                ahex, aid = res[0]
-                idcard = '%sh%s' % (ahex, aid)
-            else:
-                ahex = uuid.uuid4().hex
-                nickname = D.USERINIT["nickname"]
-                avat = D.USERINIT["avat"]
-                playerLevel = D.USERINIT["playerLevel"]
-                playerXp = D.USERINIT["playerXp"]
-                goldcoin = D.USERINIT["goldcoin"]
-                gem = D.USERINIT["gem"]
-                honorPoint = D.USERINIT["honorPoint"]
-                arena5v5Rank = D.USERINIT["arena5v5Rank"]
-                arena5v5Place = D.USERINIT["arena5v5Place"]
-                arenaOtherRank = D.USERINIT["arenaOtherRank"]
-                arenaOtherPlace = D.USERINIT["arenaOtherPlace"]
-                ####
-                heroList = escape.json_encode(D.USERINIT["heroList"])
-                soldierList = escape.json_encode(D.USERINIT["soldierList"])
-                formations = escape.json_encode(D.USERINIT["formations"])
-                items = escape.json_encode(D.USERINIT["items"])
-                headIconList = escape.json_encode(D.USERINIT["headIconList"])
-                titleList = escape.json_encode(D.USERINIT["titleList"])
-                achievement = escape.json_encode(D.USERINIT["achievement"])
-                playerConfig = escape.json_encode(D.USERINIT["playerConfig"])
-                buddyList = escape.json_encode(D.USERINIT["buddyList"])
-                playerStatusInfo = escape.json_encode(D.USERINIT["playerStatusInfo"])
-                annalNormal = escape.json_encode(D.USERINIT["annalNormal"])
-                annelCurrentGateNormal = escape.json_encode(D.USERINIT["annelCurrentGateNormal"])
-                annalHero = escape.json_encode(D.USERINIT["annalHero"])
-                annelCurrentGateHero = escape.json_encode(D.USERINIT["annelCurrentGateHero"])
-                annalEpic = escape.json_encode(D.USERINIT["annalEpic"])
-                dungeonAnnelHero = escape.json_encode(D.USERINIT["dungeonAnnelHero"])
-                dungeonAnnelEpic = escape.json_encode(D.USERINIT["dungeonAnnelEpic"])
-                dungeonAnnelGatesNormal = escape.json_encode(D.USERINIT["dungeonAnnelGatesNormal"])
-                dungeonAnnelGatesHero = escape.json_encode(D.USERINIT["dungeonAnnelGatesHero"])
-                dungeonAnnelGatesEpic = escape.json_encode(D.USERINIT["dungeonAnnelGatesEpic"])
-                jmails = escape.json_encode(D.USERINIT["jmails"])
-
-                query = """INSERT INTO core_user(hex, model, serial, user_id, channel_id, nickname, avat, "playerLevel",\
-                         "playerXp", goldcoin, gem, "honorPoint", "arena5v5Rank", "arena5v5Place", "arenaOtherRank",\
-                          "arenaOtherPlace", "heroList", "soldierList", formations, items, "headIconList", "titleList",\
-                           achievement, "playerConfig", "buddyList", "playerStatusInfo", "annalNormal", "annelCurrentGateNormal",\
-                           "annalHero", "annelCurrentGateHero", "annalEpic", "dungeonAnnelHero", "dungeonAnnelEpic",\
-                            "dungeonAnnelGatesNormal", "dungeonAnnelGatesHero", "dungeonAnnelGatesEpic", jmails, created,\
-                            modified) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,\
-                             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id"""
-                params = (ahex, model, serial, user_id, channel, nickname, avat, playerLevel, playerXp, goldcoin, gem, \
-                          honorPoint, arena5v5Rank, arena5v5Place, arenaOtherRank, arenaOtherPlace, heroList,
-                          soldierList, formations, items, headIconList, titleList, achievement, playerConfig,
-                          buddyList, playerStatusInfo, annalNormal, annelCurrentGateNormal, annalHero,
-                          annelCurrentGateHero, annalEpic, dungeonAnnelHero, dungeonAnnelEpic, dungeonAnnelGatesNormal,
-                          dungeonAnnelGatesHero, dungeonAnnelGatesEpic, jmails, int(time.time()), int(time.time()))
-                # print query, params
-                print query % params
-                for i in range(5):
-
-                    try:
-                        res = yield self.sql.runOperation(query, params)
-                        print 'res', res
-                        aid = res[0][0]
-                        idcard = '%sh%s' % (ahex, aid)
-                        break
-                    except storage.IntegrityError:
-                        log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                        continue
-
-        defer.returnValue(idcard)
-
-    @storage.databaseSafe
-    @defer.inlineCallbacks
-    def get_user(self, use_id):
-        user = yield self.get_cache("user:%s" % use_id)
-        if not user:
-            query = """SELECT nickname, avat, "playerLevel", "playerXp", "goldcoin", gem, "honorPoint",\
-                  "arena5v5Rank", "arena5v5Place",  "arenaOtherRank", "arenaOtherPlace", "heroList", "soldierList",\
-                   formations, items, "headIconList", "titleList", achievement, "playerConfig", "buddyList",\
-                    "playerStatusInfo", jmails, "annalNormal", "annelCurrentGateNormal", "annalHero",\
-                     "annelCurrentGateHero", "annalEpic", "dungeonAnnelHero", "dungeonAnnelEpic",\
-                      "dungeonAnnelGatesNormal", "dungeonAnnelGatesHero", "dungeonAnnelGatesEpic"\
-                       FROM core_user WHERE id=%s LIMIT 1"""
-            params = (use_id,)
-            res = yield self.sql.runQuery(query, params)
-            if res:
-                nickname, avat, playerLevel, playerXp, goldcoin, gem, honorPoint, arena5v5Rank, arena5v5Place, \
-                arenaOtherRank, arenaOtherPlace, heroList, soldierList, formations, items, headIconList, titleList, \
-                achievement, playerConfig, buddyList, playerStatusInfo, jmails, annalNormal, annelCurrentGateNormal, \
-                annalHero, annelCurrentGateHero, annalEpic, dungeonAnnelHero, dungeonAnnelEpic, dungeonAnnelGatesNormal, \
-                dungeonAnnelGatesHero, dungeonAnnelGatesEpic = res[0]
-            else:
-                self.write(dict(err=E.ERR_USER_NOTFOUND, msg=E.errmsg(E.ERR_USER_NOTFOUND)))
-                return
-                # yield self.predis.hset('zone:%s:%s' % (zone, datetime.datetime.now().strftime('%Y%m%d')), aid, E.true)
-            hero_list = []
-            heroList = escape.json_decode(heroList)
-            for index, one in enumerate(heroList):
-                if int(one['unlock']) != 0:
-                    hero_list.append(one)
-            for index, one in enumerate(hero_list):
-                one.pop("unlock")
-            user = dict(avat=avat,
-                        playerLevel=playerLevel,
-                        playerXp=playerXp,
-                        goldcoin=goldcoin,
-                        gem=gem,
-                        honorPoint=honorPoint,
-                        arena5v5Rank=arena5v5Rank,
-                        arena5v5Place=arena5v5Place,
-                        arenaOtherRank=arenaOtherRank,
-                        arenaOtherPlace=arenaOtherPlace,
-                        unlockSlotNum=0,
-                        heroList=hero_list,
-                        soldierList=escape.json_decode(soldierList),
-                        formations=escape.json_decode(formations),
-                        items=escape.json_decode(items),
-                        headIconList=escape.json_decode(headIconList),
-                        titleList=escape.json_decode(titleList),
-                        achievement=escape.json_decode(achievement),
-                        playerConfig=escape.json_decode(playerConfig),
-                        buddyList=escape.json_decode(buddyList),
-                        playerStatusInfo=escape.json_decode(playerStatusInfo),
-                        jmails=escape.json_decode(jmails),
-                        annalNormal=escape.json_decode(annalNormal),
-                        annelCurrentGateNormal=escape.json_decode(annelCurrentGateNormal),
-                        annalHero=escape.json_decode(annalHero),
-                        annelCurrentGateHero=escape.json_decode(annelCurrentGateHero),
-                        annalEpic=escape.json_decode(annalEpic),
-                        dungeonAnnelHero=escape.json_decode(dungeonAnnelHero),
-                        dungeonAnnelEpic=escape.json_decode(dungeonAnnelEpic),
-                        dungeonAnnelGatesNormal=escape.json_decode(dungeonAnnelGatesNormal),
-                        dungeonAnnelGatesHero=escape.json_decode(dungeonAnnelGatesHero),
-                        dungeonAnnelGatesEpic=escape.json_decode(dungeonAnnelGatesEpic),
-                        )
-            yield self.set_cache("user:%s" % use_id, user)
+    def get_player(self, use_id):
+        user = dict()
+        query = """SELECT b.nickname, b.avatar, b.gold, b.rock, b.star, b.phone, b.prods, b.gates, b.mails,\
+                b.ips FROM core_user AS a, core_player AS b WHERE a.id=%s AND a.id=b.user_id LIMIT 1"""
+        params = (use_id,)
+        res = yield self.sql.runQuery(query, params)
+        if res:
+            nickname, avatar, gold, rock, star, phone, prods, gates, mails, ips = res[0]
+            user = dict(nickname=nickname,
+                        avatar=avatar,
+                        gold=gold,
+                        rock=rock,
+                        star=star,
+                        phone=phone,
+                        prods=escape.json_decode(prods),
+                        gates=escape.json_decode(gates),
+                        mails=escape.json_decode(mails),
+                        ips=escape.json_decode(ips))
+            #yield self.set_cache("user:%s" % use_id, user)
         defer.returnValue(user)
 
     @storage.databaseSafe

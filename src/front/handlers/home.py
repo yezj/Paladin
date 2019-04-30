@@ -92,8 +92,6 @@ class ActiveHandler(ApiHandler):
     @defer.inlineCallbacks
     @api('Active', '/active/', [
         Param('channel', False, str, 'test1', 'test1', 'channel'),
-        Param('idcard', True, str, '864c04bf73a445fd84da86a206060c48h20', '864c04bf73a445fd84da86a206060c48h20',
-              'idcard'),
         Param('user_id', False, str, '1', '1', 'user_id'),
         Param('access_token', False, str, '55526fcb39ad4e0323d32837021655300f957edc',
               '55526fcb39ad4e0323d32837021655300f957edc', 'access_token'),
@@ -108,17 +106,18 @@ class ActiveHandler(ApiHandler):
             raise web.HTTPError(400, "Argument error")
 
         if idcard:
-            query = """SELECT b.phone, b.nickname, b.avatar, b.gold, b.rock, b.star, b.point, b.prods,\
+            query = """SELECT b.id, b.phone, b.nickname, b.avatar, b.gold, b.rock, b.star, b.point, b.prods,\
                     b.gates, b.mails FROM core_user AS a, core_player AS b WHERE a.access_token=%s AND a.id=%s AND
                      b.id=%s LIMIT 1"""
-            params = (user_id, access_token, idcard)
+            params = (user_id, access_token)
             res = yield self.sql.runQuery(query, params)
             if res:
-                phone, nickname, avatar, gold, rock, star, point, prods, gates, mails = res[0]
+                idcard, phone, nickname, avatar, gold, rock, star, point, prods, gates, mails = res[0]
             else:
                 self.write(dict(err=E.ERR_USER_NOTFOUND, msg=E.errmsg(E.ERR_USER_NOTFOUND)))
                 return
-            users = dict(phone=phone,
+            users = dict(idcard=idcard,
+                         phone=phone,
                          nickname=nickname,
                          avatar=avatar,
                          gold=gold,

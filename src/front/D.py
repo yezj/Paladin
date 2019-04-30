@@ -107,13 +107,15 @@ USERINIT_bak = {
 USERINIT = {
     "nickname": "test",
     "avatar": "1",
+    "phone": "",
     "gold": 120000,
     "rock": 0,
     "star": 0,
     "point": 0,
     "prods": {},
     "gates": {},
-    "mails": {}
+    "mails": {},
+    "ips": {}
 
 }
 

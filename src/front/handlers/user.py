@@ -37,13 +37,24 @@ class RegisterHandler(ApiHandler):
     @api('User register', '/user/register/', [
         Param('username', True, str, 'test1', 'test1', 'username'),
         Param('password', True, str, 'test1', 'test1', 'password'),
+        Param('channel', False, str, 'test1', 'test1', 'channel'),
+        Param('model', True, str, 'bigfish@hi3798mv100', 'bigfish@hi3798mv100', 'model'),
+        Param('serial', True, str, '0066cf0456732122121', '0066cf0456732122121', 'serial'),
     ], filters=[ps_filter], description="User register")
     def get(self):
         try:
             username = self.get_argument("username")
             password = self.get_argument("password")
+            model = self.get_argument("model")
+            serial = self.get_argument("serial")
+            channel = self.get_argument("channel", "test1")
         except Exception:
             raise web.HTTPError(400, "Argument error")
+        channels = yield self.sql.runQuery("SELECT id FROM core_channel WHERE slug=%s LIMIT 1", (channel,))
+        if not channels:
+            channels = yield self.sql.runQuery("SELECT id FROM core_channel WHERE slug=%s LIMIT 1", ("test1",))
+        channel, = channels[0]
+        
         res = yield self.sql.runQuery(
             "SELECT id, username, password_hash FROM core_user WHERE username=%s AND password_hash=%s LIMIT 1",
             (username, password))
@@ -60,7 +71,7 @@ class RegisterHandler(ApiHandler):
             print query % params
             for i in range(5):
                 try:
-                    user = yield self.sql.runQuery(query, params)
+                    user = yield self.sql.runOperation(query, params)
                     break
                 except storage.IntegrityError:
                     log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
@@ -68,8 +79,12 @@ class RegisterHandler(ApiHandler):
             print user
             if user:
                 user_id = user[0][0]
-                self.redis.set('access_token:%s' % access_token, user_id, D.EXPIRATION)
-                self.write(dict(user_id=user_id, access_token=access_token, refresh_token=refresh_token))
+                users = yield self.generate_player(model, serial, channel, user_id)
+                if not users:
+                    self.write(dict(err=E.ERR_USER_CREATED, msg=E.errmsg(E.ERR_USER_CREATED)))
+                    return
+                # self.redis.set('access_token:%s' % access_token, user_id, D.EXPIRATION)
+                self.write(dict(user_id=user_id, access_token=access_token, users=users, refresh_token=refresh_token))
                 return
             else:
                 self.write(dict(err=E.ERR_USER_CREATED, msg=E.errmsg(E.ERR_USER_CREATED)))
@@ -123,8 +138,14 @@ class LoginHandler(ApiHandler):
                         log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
                         continue
                 self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
-                self.write(dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token))
-                return
+                users = self.get_player(user_id)
+                if users:
+                    self.write(
+                        dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token, users=users))
+                    return
+                else:
+                    self.write(dict(err=E.ERR_USER_NOTFOUND, msg=E.errmsg(E.ERR_USER_NOTFOUND)))
+                    return
             else:
                 self.write(dict(err=E.ERR_USER_PASSWORD, msg=E.errmsg(E.ERR_USER_PASSWORD)))
                 return
@@ -135,7 +156,7 @@ class LoginHandler(ApiHandler):
             if r:
                 user_id, username, password_hash, _access_token, _refresh_token = r[0]
                 _access_token = binascii.hexlify(os.urandom(20)).decode()
-                #_refresh_token = binascii.hexlify(os.urandom(20)).decode()
+                # _refresh_token = binascii.hexlify(os.urandom(20)).decode()
                 query = "UPDATE core_user SET access_token=%s, modified=%s WHERE id=%s"
                 params = (_access_token, int(time.time()), user_id)
                 for i in range(5):
