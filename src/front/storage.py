@@ -122,14 +122,15 @@ class DatabaseMixin(object):
 
     @classmethod
     def build(cls, conf):
-        sched = cls.sched
-        sched.add_job(cls.day_job, 'cron', hour='5', minute='0', second='0')
-        sched.add_job(cls.clean_job, 'cron', hour='0', minute='0', second='0')
-        sched.add_job(cls.worship_job, 'cron', hour='21', minute='0', second='0')
+        pass
+        #sched = cls.sched
+        #.add_job(cls.day_job, 'cron', hour='5', minute='0', second='0')
+        #sched.add_job(cls.clean_job, 'cron', hour='0', minute='0', second='0')
+        #.add_job(cls.worship_job, 'cron', hour='21', minute='0', second='0')
         #sched.add_job(cls.arena_job_mutex, 'cron', hour='21', minute='30', second='0')
         #sched.add_job(cls.zone_job, 'cron', hour='0-23', minute='0', second='0', kwargs={'zoneid':ZONE_ID})
-        sched.add_job(cls.interval_job, 'interval', minutes=1, kwargs={'zoneid':conf['zoneid']})
-        sched.add_job(cls.monday_job, 'cron', month='1-12', day='1', hour='4', minute='50', second='0')
+        #sched.add_job(cls.interval_job, 'interval', minutes=1, kwargs={'zoneid':conf['zoneid']})
+        #.add_job(cls.monday_job, 'cron', month='1-12', day='1', hour='4', minute='50', second='0')
         #sched.add_job(cls.monday_job, 'cron', month='1-12', day='10', hour='16', minute='50', second='0')
 
     @classmethod
@@ -147,7 +148,7 @@ class DatabaseMixin(object):
                                        now_rank=r[4])
                                   )
 
-        yield cls.predis.set('worshipers:%s' % ZONE_ID, pickle.dumps(worshipers))
+        #yield cls.predis.set('worshipers:%s' % ZONE_ID, pickle.dumps(worshipers))
 
     @classmethod
     def syncdb(cls, url):
