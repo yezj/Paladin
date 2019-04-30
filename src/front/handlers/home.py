@@ -114,7 +114,7 @@ class ActiveHandler(ApiHandler):
             params = (user_id, access_token, idcard)
             res = yield self.sql.runQuery(query, params)
             if res:
-                phone, nickname, avatar, gold, rock, star, point, prods, gates = res[0]
+                phone, nickname, avatar, gold, rock, star, point, prods, gates, mails = res[0]
             else:
                 self.write(dict(err=E.ERR_USER_NOTFOUND, msg=E.errmsg(E.ERR_USER_NOTFOUND)))
                 return
