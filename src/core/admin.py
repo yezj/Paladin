@@ -24,12 +24,9 @@ class GateAdmin(admin.ModelAdmin):
     pass
 
 
-class ArenaAdmin(admin.ModelAdmin):
-    pass
 
 
 admin.site.register(Channel, ChannelAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Mail, MailAdmin)
 admin.site.register(Gate, GateAdmin)
-admin.site.register(Arena, ArenaAdmin)
