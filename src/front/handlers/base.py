@@ -112,7 +112,7 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
                  %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id"""
         params = (
             user_id, channel, model, serial, phone, nickname, avatar, gold, rock, star, point, prods, gates, \
-            mails, ips, int(time.time()), int(time.time()))
+            mails, ips, datetime.datetime.now(), datetime.datetime.now())
         # print query, params
         print query % params
         for i in range(5):
