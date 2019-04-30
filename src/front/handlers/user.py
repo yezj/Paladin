@@ -132,7 +132,7 @@ class LoginHandler(ApiHandler):
                 params = (_access_token, _refresh_token, int(time.time()), user_id)
                 for i in range(5):
                     try:
-                        yield self.sql.runOperation(query, params)
+                        yield self.sql.runQuery(query, params)
                         break
                     except storage.IntegrityError:
                         log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
