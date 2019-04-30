@@ -140,6 +140,10 @@ class LoginHandler(ApiHandler):
                 self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
                 users = self.get_player(user_id)
                 if users:
+                    users['prods'] = escape.json_decode(users['prods'])
+                    users['gates'] = escape.json_decode(users['gates'])
+                    users['mails'] = escape.json_decode(users['mails'])
+                    users['ips'] = escape.json_decode(users['ips'])
                     self.write(
                         dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token, users=users))
                     return
