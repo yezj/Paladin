@@ -153,10 +153,10 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
                         rock=rock,
                         star=star,
                         phone=phone,
-                        prods=escape.json_decode(prods),
-                        gates=escape.json_decode(gates),
-                        mails=escape.json_decode(mails),
-                        ips=escape.json_decode(ips))
+                        prods=prods,
+                        gates=gates,
+                        mails=mails,
+                        ips=ips)
             #yield self.set_cache("user:%s" % use_id, user)
         defer.returnValue(user)
 
