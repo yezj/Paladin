@@ -40,7 +40,7 @@ class StartupHandler(ApiHandler):
         Param('channel', False, str, 'test1', 'test1', 'channel'),
         Param('model', True, str, 'bigfish@hi3798mv100', 'bigfish@hi3798mv100', 'model'),
         Param('serial', True, str, '0066cf0456732122121', '0066cf0456732122121', 'serial'),
-        Param('idcard', False, str, None, None, 'idcard'),
+        # Param('idcard', False, str, None, None, 'idcard'),
         Param('user_id', False, str, '1', '1', 'user_id'),
         Param('access_token', False, str, '55526fcb39ad4e0323d32837021655300f957edc',
               '55526fcb39ad4e0323d32837021655300f957edc', 'access_token'),
@@ -69,23 +69,18 @@ class StartupHandler(ApiHandler):
         except Exception:
             self.write(dict(err=E.ERR_UNKNOWN, msg=E.errmsg(E.ERR_UNKNOWN)))
             return
-
-        idcard = yield self.refresh_idcard(idcard, model, serial, channel, access_token, user_id)
-        if not idcard:
-            self.write(dict(err=E.ERR_USER_CREATED, msg=E.errmsg(E.ERR_USER_CREATED)))
-            return
+        res = yield self.sql.runQuery(
+            "SELECT id FROM core_user WHERE id=%s AND access_token=% LIMIT 1", (user_id, access_token))
+        if res:
+            idcard = yield self.generate_idcard(model, serial, channel, access_token, user_id)
+            if not idcard:
+                self.write(dict(err=E.ERR_USER_CREATED, msg=E.errmsg(E.ERR_USER_CREATED)))
+                return
         else:
-            record = yield self.predis.get('zone:%s:%s' % (ZONE_ID, user_id))
-            if not record:
-                yield self.predis.set('zone:%s:%s' % (ZONE_ID, user_id), idcard)
-                #yield self.bind_token(idcard, self.arg('access_token'))
-        # if self.has_arg('access_token'):
-        #     record = yield self.predis.get('zone:%s:%s' % (ZONE_ID, self.arg('access_token')))
-        #     if not record:
-        #         yield self.predis.set('zone:%s:%s' % (ZONE_ID, self.arg('access_token')), idcard)
-        #         yield self.bind_token(idcard, self.arg('access_token'))
+            self.write(dict(err=E.ERR_USER_NOTFOUND, msg=E.errmsg(E.ERR_USER_NOTFOUND)))
+            return
 
-        ret = dict(idcard=idcard, zone=ZONE_ID, server=server)
+        ret = dict(idcard=idcard, server=server)
         reb = zlib.compress(escape.json_encode(ret))
         self.write(ret)
 
@@ -102,76 +97,41 @@ class ActiveHandler(ApiHandler):
         Param('user_id', False, str, '1', '1', 'user_id'),
         Param('access_token', False, str, '55526fcb39ad4e0323d32837021655300f957edc',
               '55526fcb39ad4e0323d32837021655300f957edc', 'access_token'),
-        Param('zone', True, str, '0', '0', 'zone'),
     ], filters=[ps_filter], description="Active")
     def get(self):
         try:
             channel = self.get_argument("channel", "test1")
+            user_id = self.get_argument("user_id", "123")
             idcard = self.get_argument("idcard")
-            zone = self.get_argument("zone")
+            access_token = self.get_argument("access_token")
         except Exception:
             raise web.HTTPError(400, "Argument error")
+
         if idcard:
-            ahex, aid = idcard.split('h', 1)
-            query = """SELECT nickname, avat, "playerLevel", "playerXp", "goldcoin", gem, "honorPoint",\
-                  "arena5v5Rank", "arena5v5Place",  "arenaOtherRank", "arenaOtherPlace", "heroList", "soldierList",\
-                   formations, items, "headIconList", "titleList", achievement, "playerConfig", "buddyList",\
-                    "playerStatusInfo", jmails, "annalNormal", "annelCurrentGateNormal", "annalHero",\
-                     "annelCurrentGateHero", "annalEpic", "dungeonAnnelHero", "dungeonAnnelEpic",\
-                      "dungeonAnnelGatesNormal", "dungeonAnnelGatesHero", "dungeonAnnelGatesEpic"\
-                       FROM core_user WHERE hex=%s and id=%s LIMIT 1"""
-            params = (ahex, aid)
+            query = """SELECT b.phone, b.nickname, b.avatar, b.gold, b.rock, b.star, b.point, b.prods,\
+                    b.gates, b.mails FROM core_user AS a, core_player AS b WHERE a.access_token=%s AND a.id=%s AND
+                     b.id=%s LIMIT 1"""
+            params = (user_id, access_token, idcard)
             res = yield self.sql.runQuery(query, params)
             if res:
-                nickname, avat, playerLevel, playerXp, goldcoin, gem, honorPoint, arena5v5Rank, arena5v5Place,\
-                arenaOtherRank, arenaOtherPlace, heroList, soldierList, formations, items, headIconList, titleList,\
-                achievement, playerConfig, buddyList, playerStatusInfo, jmails, annalNormal, annelCurrentGateNormal,\
-                annalHero, annelCurrentGateHero, annalEpic, dungeonAnnelHero, dungeonAnnelEpic, dungeonAnnelGatesNormal, \
-                dungeonAnnelGatesHero, dungeonAnnelGatesEpic = res[0]
+                phone, nickname, avatar, gold, rock, star, point, prods, gates = res[0]
             else:
                 self.write(dict(err=E.ERR_USER_NOTFOUND, msg=E.errmsg(E.ERR_USER_NOTFOUND)))
                 return
-                # yield self.predis.hset('zone:%s:%s' % (zone, datetime.datetime.now().strftime('%Y%m%d')), aid, E.true)
-            hero_list = []
-            heroList = escape.json_decode(heroList)
-            for index, one in enumerate(heroList):
-                if int(one['unlock']) != 0:
-                    hero_list.append(one)
-            for index, one in enumerate(hero_list):
-                one.pop("unlock")
-            users = dict(avat=avat,
-                         playerLevel=playerLevel,
-                         playerXp=playerXp,
-                         goldcoin=goldcoin,
-                         gem=gem,
-                         honorPoint=honorPoint,
-                         arena5v5Rank=arena5v5Rank,
-                         arena5v5Place=arena5v5Place,
-                         arenaOtherRank=arenaOtherRank,
-                         arenaOtherPlace=arenaOtherPlace,
-                         unlockSlotNum=0,
-                         heroList=hero_list,
-                         soldierList=escape.json_decode(soldierList),
-                         formations=escape.json_decode(formations),
-                         items=escape.json_decode(items),
-                         headIconList=escape.json_decode(headIconList),
-                         titleList=escape.json_decode(titleList),
-                         achievement=escape.json_decode(achievement),
-                         playerConfig=escape.json_decode(playerConfig),
-                         buddyList=escape.json_decode(buddyList),
-                         playerStatusInfo=escape.json_decode(playerStatusInfo),
-                         jmails=escape.json_decode(jmails),
-                         annalNormal=escape.json_decode(annalNormal),
-                         annelCurrentGateNormal=escape.json_decode(annelCurrentGateNormal),
-                         annalHero=escape.json_decode(annalHero),
-                         annelCurrentGateHero=escape.json_decode(annelCurrentGateHero),
-                         annalEpic=escape.json_decode(annalEpic),
-                         dungeonAnnelHero=escape.json_decode(dungeonAnnelHero),
-                         dungeonAnnelEpic=escape.json_decode(dungeonAnnelEpic),
-                         dungeonAnnelGatesNormal=escape.json_decode(dungeonAnnelGatesNormal),
-                         dungeonAnnelGatesHero=escape.json_decode(dungeonAnnelGatesHero),
-                         dungeonAnnelGatesEpic=escape.json_decode(dungeonAnnelGatesEpic),
+            users = dict(phone=phone,
+                         nickname=nickname,
+                         avatar=avatar,
+                         gold=gold,
+                         rock=rock,
+                         star=star,
+                         point=point,
+                         prods=escape.json_decode(prods),
+                         gates=escape.json_decode(gates),
+                         mails=escape.json_decode(mails),
                          )
+        else:
+            self.write(dict(err=E.ERR_USER_NOTFOUND, msg=E.errmsg(E.ERR_USER_NOTFOUND)))
+            return
         # try:
         #     sign = yield self.generate_sign(idcard=idcard, zone=zone)
         # except E.USERNOTFOUND:
@@ -187,8 +147,8 @@ class ActiveHandler(ApiHandler):
         #     self.write(dict(err=E.ERR_UNKNOWN, msg=E.errmsg(E.ERR_UNKNOWN)))
         #     return
         # print 'sign', sign
-        #ret = dict(users=users)
-        #reb = zlib.compress(escape.json_encode(users))
+        # ret = dict(users=users)
+        # reb = zlib.compress(escape.json_encode(users))
         self.write(users)
 
 
@@ -225,9 +185,9 @@ class SyncHandler(ApiHandler):
             params = (ahex, aid)
             res = yield self.sql.runQuery(query, params)
             if res:
-                nickname, avat, playerLevel, playerXp, goldcoin, gem, honorPoint, arena5v5Rank, arena5v5Place,\
-                arenaOtherRank, arenaOtherPlace, heroList, soldierList, formations, items, headIconList, titleList,\
-                achievement, playerConfig, buddyList, playerStatusInfo, jmails, annalNormal, annelCurrentGateNormal,\
+                nickname, avat, playerLevel, playerXp, goldcoin, gem, honorPoint, arena5v5Rank, arena5v5Place, \
+                arenaOtherRank, arenaOtherPlace, heroList, soldierList, formations, items, headIconList, titleList, \
+                achievement, playerConfig, buddyList, playerStatusInfo, jmails, annalNormal, annelCurrentGateNormal, \
                 annalHero, annelCurrentGateHero, annalEpic, dungeonAnnelHero, dungeonAnnelEpic, dungeonAnnelGatesNormal, \
                 dungeonAnnelGatesHero, dungeonAnnelGatesEpic = res[0]
             else:
@@ -277,7 +237,7 @@ class SyncHandler(ApiHandler):
 
         self.write(users)
 
-#         uid = self.uid
+# uid = self.uid
 #         user = yield self.get_user(uid)
 #         notice = yield self.get_notice()
 #         userseals = yield self.get_seal(uid)
@@ -357,5 +317,3 @@ class SyncHandler(ApiHandler):
 #                             fourteenseal=[sealnu, status]), timestamp=int(time.time()))
 #         reb = zlib.compress(escape.json_encode(ret))
 #         self.write(ret)
-
-

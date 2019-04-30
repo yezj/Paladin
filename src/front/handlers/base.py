@@ -92,6 +92,43 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
 
     @storage.databaseSafe
     @defer.inlineCallbacks
+    def generate_idcard(self, model, serial, channel, access_token, user_id):
+        idcard = ''
+        nickname = D.USERINIT["nickname"]
+        avatar = D.USERINIT["avatar"]
+        gold = D.USERINIT["gold"]
+        rock = D.USERINIT["rock"]
+        star = D.USERINIT["star"]
+        point = D.USERINIT["point"]
+        phone = ''
+        ####
+        prods = escape.json_encode(D.USERINIT["prods"])
+        gates = escape.json_encode(D.USERINIT["gates"])
+        mails = escape.json_encode(D.USERINIT["mails"])
+        ips = escape.json_encode([])
+
+        query = """INSERT INTO core_player(user_id, channel_id, model, serial, phone, nickname, avatar, gold,\
+                rock, star, point, prods, gates, mails, created, modified) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,\
+                 %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id"""
+        params = (
+            user_id, channel, model, serial, phone, nickname, avatar, gold, rock, star, point, prods, gates, \
+            mails, ips, int(time.time()), int(time.time()))
+        # print query, params
+        print query % params
+        for i in range(5):
+
+            try:
+                res = yield self.sql.runOperation(query, params)
+                print 'res', res
+                idcard = res[0][0]
+                break
+            except storage.IntegrityError:
+                log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
+                continue
+        defer.returnValue(idcard)
+
+    @storage.databaseSafe
+    @defer.inlineCallbacks
     def refresh_idcard(self, idcard, model, serial, channel, access_token, user_id):
         if idcard:
             ahex, aid = idcard.split('h', 1)
@@ -172,18 +209,6 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
                         print 'res', res
                         aid = res[0][0]
                         idcard = '%sh%s' % (ahex, aid)
-                        break
-                    except storage.IntegrityError:
-                        log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                        continue
-
-                query = """INSERT INTO core_arena(user_id, rank, timestamp) VALUE (%s, %s, %s)"""
-                params = (aid, '[25, 0]', int(time.time()))
-                for i in range(5):
-
-                    try:
-                        res = yield self.sql.runOperation(query, params)
-                        print 'res', res
                         break
                     except storage.IntegrityError:
                         log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))

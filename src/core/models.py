@@ -199,37 +199,7 @@ class Channel(models.Model):
 #         return self.user.name
 
 
-# class Mail(models.Model):
-#     MAIL = 0
-#     NOTICE = 1
-#     TYPES = (
-#         (MAIL, _('Mail')),
-#         (NOTICE, _('Notice')),
-#     )
-#     sender = models.CharField(_('Sender'), max_length=20, db_index=True)
-#     to = models.ForeignKey(User, blank=True, null=True)
-#     title = models.CharField(_('Title'), max_length=50)
-#     content = models.TextField(_('Content'), blank=True)
-#     jawards = models.TextField(_('JSON Awards'), blank=True)
-#     comment = models.TextField(_('Comment'), blank=True)
-#     type = models.PositiveSmallIntegerField(
-#         _('types'), choices=TYPES, default=MAIL)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#
-#     class Meta:
-#         verbose_name = _('Mail')
-#         verbose_name_plural = _('Mails')
-#
-#     def save(self, *args, **kwargs):
-#         if self.jawards:
-#             try:
-#                 escape.json_decode(self.jawards)
-#             except Exception:
-#                 raise ValueError("JSON jawards format error")
-#         super(Mail, self).save(*args, **kwargs)
-#
-#     def __unicode__(self):
-#         return self.title
+
 
 
 # class Product(models.Model):
@@ -370,6 +340,7 @@ class Player(TimeStampedModel):
     point = models.PositiveIntegerField(_('Point'), default=0)  # 积分
     prods = JSONField(default={})  # 道具
     gates = JSONField(default={})  # 关卡
+    mails = JSONField(default={})  # 邮件
     ips = JSONField(default=[])  # 常用IP
 
     class Meta:
@@ -391,3 +362,36 @@ class Hp(TimeStampedModel):
 
     def __unicode__(self):
         return self.user
+
+
+class Mail(models.Model):
+    MAIL = 0
+    NOTICE = 1
+    TYPES = (
+        (MAIL, _('Mail')),
+        (NOTICE, _('Notice')),
+    )
+    sender = models.CharField(_('Sender'), max_length=20, db_index=True)
+    to = models.ForeignKey(User, blank=True, null=True)
+    title = models.CharField(_('Title'), max_length=50)
+    content = models.TextField(_('Content'), blank=True)
+    awards = JSONField(_('JSON Awards'), blank=True)
+    comment = models.TextField(_('Comment'), blank=True)
+    type = models.PositiveSmallIntegerField(
+        _('types'), choices=TYPES, default=MAIL)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _('Mail')
+        verbose_name_plural = _('Mails')
+
+    def save(self, *args, **kwargs):
+        if self.jawards:
+            try:
+                escape.json_decode(self.jawards)
+            except Exception:
+                raise ValueError("JSON jawards format error")
+        super(Mail, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return self.title

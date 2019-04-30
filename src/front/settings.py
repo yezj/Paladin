@@ -52,6 +52,5 @@ settings['email'] = dict(
     password=EMAIL_PASSWORD
 )
 
-settings['zoneid'] = ZONE_ID
 settings['domain'] = DOMAIN
 settings['timepoch'] = 1420041600  # 2015/1/1
