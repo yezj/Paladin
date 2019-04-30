@@ -294,6 +294,7 @@ class Gate(TimeStampedModel):
     diff = models.CharField(_('diff'), max_length=64)
     taskType = models.CharField(_('taskType'), max_length=64)
     trackBelt = models.TextField(_('trackBelt'), blank=True)
+    flipBlocker = models.TextField(_('flipBlocker'), blank=True)
     movingFloor = models.TextField(_('movingFloor'), blank=True)
 
     class Meta:

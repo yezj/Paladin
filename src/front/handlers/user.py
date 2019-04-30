@@ -54,7 +54,7 @@ class RegisterHandler(ApiHandler):
         if not channels:
             channels = yield self.sql.runQuery("SELECT id FROM core_channel WHERE slug=%s LIMIT 1", ("test1",))
         channel, = channels[0]
-        
+
         res = yield self.sql.runQuery(
             "SELECT id, username, password_hash FROM core_user WHERE username=%s AND password_hash=%s LIMIT 1",
             (username, password))
