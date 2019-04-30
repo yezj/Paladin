@@ -14,7 +14,6 @@ from twisted.python import log
 # from front.handlers.base import BaseHandler
 from front.wiapi import *
 from front.handlers.base import ApiHandler, ApiJSONEncoder
-from local_settings import ZONE_ID
 
 
 @handler
