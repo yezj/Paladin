@@ -15,7 +15,7 @@ from filebrowser.fields import FileBrowseField, FileObject
 from django.contrib.auth.models import User as AdminUser
 from passlib.apps import custom_app_context as pwd_context
 
-from django.contrib.postgres.fields import JSONField
+# from django.contrib.postgres.fields import JSONField
 
 
 class Channel(models.Model):
@@ -339,10 +339,10 @@ class Player(TimeStampedModel):
     rock = models.PositiveIntegerField(_('Rock'), default=0)  # 钻石
     star = models.PositiveIntegerField(_('Star'), default=0)  # 总星数
     point = models.PositiveIntegerField(_('Point'), default=0)  # 积分
-    prods = JSONField(default={})  # 道具
-    gates = JSONField(default={})  # 关卡
-    mails = JSONField(default={})  # 邮件
-    ips = JSONField(default=[])  # 常用IP
+    prods = models.TextField(_('Prods'), blank=True)  # 道具
+    gates = models.TextField(_('Gates'), blank=True)  # 关卡
+    mails = models.TextField(_('Mails'), blank=True)  # 邮件
+    ips = models.TextField(_('Ips'), blank=True) # 常用IP
 
     class Meta:
         verbose_name = _('Player')
@@ -376,7 +376,7 @@ class Mail(models.Model):
     to = models.ForeignKey(User, blank=True, null=True)
     title = models.CharField(_('Title'), max_length=50)
     content = models.TextField(_('Content'), blank=True)
-    awards = JSONField(_('JSON Awards'), blank=True)
+    awards = models.TextField(_('Json Awards'), blank=True)
     comment = models.TextField(_('Comment'), blank=True)
     type = models.PositiveSmallIntegerField(
         _('types'), choices=TYPES, default=MAIL)
