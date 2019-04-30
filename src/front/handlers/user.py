@@ -138,7 +138,7 @@ class LoginHandler(ApiHandler):
                         log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
                         continue
                 self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
-                users = self.get_player(user_id)
+                users = yield self.get_player(user_id)
                 if users:
                     print users
                     users['prods'] = escape.json_decode(users['prods'])
