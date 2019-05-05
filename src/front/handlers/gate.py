@@ -150,15 +150,15 @@ class SetHandler(ApiHandler):
         if not res:
             query = """INSERT INTO core_gate (gate_id, vers, rs, "itemTypes", props, "taskStep", tasks, scores, gird,
                     "newGridTypes", "newGrid", portal, item, "itemBg", "wallH", "wallV", "taskBgItem", "wayDownOut",
-                     attach, diff, "taskType", "trackBelt", "movingFloor", "flipBlocker", created, modified) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                      %s, %s, %s, %s, %s, %s, %s, %s, %s, now(), now()) RETURNING id"""
+                     attach, diff, "taskType", "trackBelt", "movingFloor", "flipBlocker", created, modified) VALUES (%s,
+                      %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now(), now()) RETURNING id"""
             params = (
                 gate_id, vers, rs, itemTypes, props, taskStep, tasks, scores, gird, newGridTypes, newGrid, portal, item,
                 itemBg, wallH, wallV, taskBgItem, wayDownOut, attach, diff, taskType, trackBelt, movingFloor, flipBlocker)
             print query % params
             for i in range(5):
                 try:
-                    gid = yield self.sql.runOperation(query, params)
+                    yield self.sql.runOperation(query, params)
                     break
                 except storage.IntegrityError:
                     log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
