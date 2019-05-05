@@ -172,7 +172,14 @@ class LoginHandler(ApiHandler):
                         log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
                         continue
                 self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
-                self.write(dict(access_token=_access_token))
+                users = yield self.get_player(user_id)
+                if users:
+                    print users
+                    users['prods'] = escape.json_decode(users['prods'])
+                    users['gates'] = escape.json_decode(users['gates'])
+                    users['mails'] = escape.json_decode(users['mails'])
+                    users['ips'] = escape.json_decode(users['ips'])
+                self.write(dict(access_token=_access_token, users=users))
             else:
                 self.write(dict(err=E.ERR_USER_TOKEN_EXPIRE, msg=E.errmsg(E.ERR_USER_TOKEN_EXPIRE)))
                 return
@@ -194,7 +201,14 @@ class LoginHandler(ApiHandler):
                         log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
                         continue
                 self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
-                self.write(dict(access_token=_access_token))
+                users = yield self.get_player(user_id)
+                if users:
+                    print users
+                    users['prods'] = escape.json_decode(users['prods'])
+                    users['gates'] = escape.json_decode(users['gates'])
+                    users['mails'] = escape.json_decode(users['mails'])
+                    users['ips'] = escape.json_decode(users['ips'])
+                self.write(dict(access_token=_access_token, users=users))
             else:
                 self.write(dict(err=E.ERR_USER_REFRESH_TOKEN, msg=E.errmsg(E.ERR_USER_REFRESH_TOKEN)))
                 return
