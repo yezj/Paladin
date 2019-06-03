@@ -113,7 +113,7 @@ USERINIT = {
     "star": 0,
     "point": 0,
     "prods": {},
-    "gates": {},
+    "gates": [],
     "mails": {},
     "ips": {}
 

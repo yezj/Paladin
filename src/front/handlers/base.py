@@ -220,7 +220,7 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
                     r = res[0]
                     user = dict(user_id=user_id, nickname=r[0], avatar=r[1], gold=r[2], rock=r[3], star=r[4], phone=r[5])
                     user['prods'] = r[6] and escape.json_decode(r[6]) or {}
-                    user['gates'] = r[7] and escape.json_decode(r[7]) or {}
+                    user['gates'] = r[7] and escape.json_decode(r[7]) or []
                     user['mails'] = r[8] and escape.json_decode(r[8]) or {}
                     user['ips'] = r[9] and escape.json_decode(r[9]) or {}
                     yield self.set_cache("user:%s" % user_id, user)
