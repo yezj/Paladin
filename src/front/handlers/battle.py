@@ -14,177 +14,83 @@ from twisted.python import log
 # from front.handlers.base import BaseHandler
 from front.wiapi import *
 from front.handlers.base import ApiHandler, ApiJSONEncoder
-from local_settings import ZONE_ID
 
 
 @handler
 class GetHandler(ApiHandler):
-    @utils.token
+    # @utils.token
     @storage.databaseSafe
     @defer.inlineCallbacks
-    # @utils.signed
     @api('Battle get', '/battle/get/', [
-        Param('stage_id', True, str, '010208_0', '010208_0', 'stage_id'),
-        Param('opponent_Id_card', True, str, '', '', 'opponent_Id_card'),
-        Param('access_token', True, str, '010208_0', '010208_0', 'access_token'),
-        Param('idcard', True, str, '010208_0', '010208_0', 'idcard'),
-        Param('user_id', True, str, '7', '7', 'user_id'),
-        Param('heros1P', True, str, '[]', '[]', 'heros1P'),
+        Param('gate_id', True, str, '010208_0', '010208_0', 'gate_id'),
+        Param('user_id', True, str, '1', '1', 'user_id'),
+        Param('access_token', True, str, 'bb6ab3286a923c66088f790c395c0d11019c075b',
+              'bb6ab3286a923c66088f790c395c0d11019c075b', 'access_token'),
     ], filters=[ps_filter], description="Battle get")
     def get(self):
         try:
-            stage_id = self.get_argument("stage_id")
-            opponent_Id_card = self.get_argument("opponent_Id_card", None)
+            gate_id = self.get_argument("gate_id")
             access_token = self.get_argument("access_token")
             user_id = self.get_argument("user_id")
-            idcard = self.get_argument("idcard")
-            heros1P = self.get_argument("heros1P")
-
         except Exception:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
 
-        query = """SELECT "playerLevel", avat, nickname FROM core_user WHERE user_id=%s LIMIT 1"""
-        res = yield self.sql.runQuery(query, (user_id,))
-        if res:
-            playerLevel, avat, nickname = res[0]
-        else:
+        battle_id = uuid.uuid4().hex
+        user = yield self.get_player(user_id)
+        print user
+        user.update(dict(gate_id=gate_id))
+        if not user:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
-
-        battleId = uuid.uuid4().hex
-
-        res = yield self.sql.runQuery("""SELECT gate_id, type, "is1PLeft", "winCondition", "winTarget", "winTargetNum",
-                    "lostTarget", "lostTargetNum", "winTime", "rageTime", "supplyNow1p", "supplyMax1p", "supplyGrowSpeed1p",
-                    "supplyNow2p", "supplyMax2p", "supplyGrowSpeed2p",
-                     map, barrie, "wave1P", "wave2P", "name_2P", "level_2P", "icon_2P", "herosNum1P", "herosPermit1P",
-                      "herosLevelPermit1P", "soldiersPermit1P", "heros2P", "initTeam1P", "initTeam2P", "pathType", "barricade" FROM core_gate
-                       WHERE gate_id=%s LIMIT 1""", (stage_id,))
-
-        if res:
-            gate_id, type, is1PLeft, winCondition, winTarget, winTargetNum, lostTarget, lostTargetNum, winTime, \
-            rageTime, supplyNow1p, supplyMax1p, supplyGrowSpeed1p, supplyNow2p, supplyMax2p, supplyGrowSpeed2p, map, barrie, wave1P, wave2P, name_2P, level_2P, \
-            icon_2P, herosNum1P, herosPermit1P, herosLevelPermit1P, soldiersPermit1P, heros2P, initTeam1P, \
-            initTeam2P, pathType, barricade = res[0]
-            # print 'jgates', jgates
-            # jgates = escape.json_decode(jgates)
-            jgates = dict(battleId=battleId,
-                          level_1P=playerLevel,
-                          icon_1P=avat,
-                          name_1P=nickname,
-                          heros1P=escape.json_decode(heros1P),
-                          gate_id=gate_id,
-                          type=type,
-                          is1PLeft=is1PLeft,
-                          winCondition=winCondition,
-                          winTarget=winTarget,
-                          winTargetNum=winTargetNum,
-                          lostTarget=lostTarget,
-                          lostTargetNum=lostTargetNum,
-                          winTime=winTime,
-                          rageTime=rageTime,
-                          supplyNow1p=supplyNow1p,
-                          supplyMax1p=supplyMax1p,
-                          supplyGrowSpeed1p=supplyGrowSpeed1p,
-                          supplyNow2p=supplyNow2p,
-                          supplyMax2p=supplyMax2p,
-                          supplyGrowSpeed2p=supplyGrowSpeed2p,
-                          map=map,
-                          barrie=escape.json_decode(barrie),
-                          wave1P=escape.json_decode(wave1P),
-                          wave2P=escape.json_decode(wave2P),
-                          name_2P=name_2P,
-                          level_2P=level_2P,
-                          icon_2P=icon_2P,
-                          herosNum1P=herosNum1P,
-                          herosPermit1P=escape.json_decode(herosPermit1P),
-                          herosLevelPermit1P=herosLevelPermit1P,
-                          soldiersPermit1P=escape.json_decode(soldiersPermit1P),
-                          heros2P=escape.json_decode(heros2P),
-                          initTeam1P=escape.json_decode(initTeam1P),
-                          initTeam2P=escape.json_decode(initTeam2P),
-                          pathType=pathType,
-                          barricade=barricade,
-                          timestamp=int(time.time())
-                          )
-            # jgates.update(dict(battleId=battleId,
-            #                    level_1P=playerLevel,
-            #                    icon_1P=avat,
-            #                    name_1P=nickname,
-            #                    heros1P=escape.json_decode(heros1P),
-            #                    timestamp=int(time.time())))
+        now_hp, tick = yield self.get_hp(user)
+        if now_hp >= E.hplimit:
+            yield self.set_flush(battle_id, user)
+            ret = dict(user=user)
+            reb = zlib.compress(escape.json_encode(ret))
+            self.write(dict(battle_id=battle_id, timestamp=int(time.time())))
         else:
-            self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
+            self.write(dict(err=E.ERR_NOTENOUGH_HP, msg=E.errmsg(E.ERR_NOTENOUGH_HP)))
             return
-
-        yield self.set_flush(battleId, jgates)
-
-        # ret = dict(result=jgates)
-        # reb = zlib.compress(escape.json_encode(ret))
-        self.write(jgates)
 
 
 @handler
 class SetHandler(ApiHandler):
-    @utils.token
+    # @utils.token
     @storage.databaseSafe
     @defer.inlineCallbacks
-    # @utils.signed
     @api('Battle set', '/battle/set/', [
-        Param('battleId', True, str, '010208_0', '010208_0', 'stage_id'),
-        Param('access_token', True, str, '010208_0', '010208_0', 'access_token'),
-        Param('idcard', True, str, '010208_0', '010208_0', 'idcard'),
-        Param('user_id', True, str, '7', '7', 'user_id'),
-        Param('totalFrame', True, int, 23432, 23432, 'totalFrame'),
-        Param('record', True, str, '-1', '-1', 'record'),
-        Param('antiCheatCode', True, str, '2327e474291a71427e474291a725', '2327e474291a71427e474291a725',
-              'antiCheatCode'),
+        Param('battle_id', True, str, '010208_0', '010208_0', 'battle_id'),
+        Param('user_id', True, str, '1', '1', 'user_id'),
+        Param('access_token', True, str, 'bb6ab3286a923c66088f790c395c0d11019c075b',
+              'bb6ab3286a923c66088f790c395c0d11019c075b', 'access_token'),
+        Param('star', True, str, '1', '1', 'star'),
+        Param('step', True, str, '1', '1', 'step'),
+        Param('point', True, str, '1', '1', 'point'),
     ], filters=[ps_filter], description="Battle set")
     def get(self):
         try:
-            battleId = self.get_argument("battleId")
+            battle_id = self.get_argument("battle_id")
             access_token = self.get_argument("access_token")
-            idcard = self.get_argument("idcard")
             user_id = self.get_argument("user_id")
-            totalFrame = self.get_argument("totalFrame")
-            record = self.get_argument("record")
-            antiCheatCode = self.get_argument("antiCheatCode")
+            star = self.get_argument("star")
+            step = self.get_argument("step")
+            point = self.get_argument("point")
         except Exception:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
-        batt = yield self.get_flush(battleId)
-        if batt:
-            heroLvl = [
-                          "23", "24", "5", "4"
-                      ],
-            heroExp = [
-                          2134, 2314, 213, 213
-                      ],
-            # 胜利时间
-            timestamp = 2421432143,
-            # 保存录像的话，录像ID，唯一，不保存则为空
-            recordId = ""
-            # 获得的金币
-            goldCoin = 0,
-            # 获得的钻石, 没有钻石则为0
-            gem = 0,
-            # 获得物品的话，物品列表
-            item = [
-                {"id": 214322, "num": 1},
-                {"id": 214322, "num": 1},
-                {"id": 214322, "num": 1}
-            ]
-            data = dict(heroLvl=heroLvl,
-                        heroExp=heroExp,
-                        timestamp=timestamp,
-                        recordId=recordId,
-                        goldCoin=goldCoin,
-                        gem=gem,
-                        item=item
-                        )
+        battle = yield self.get_flush(battle_id)
+        if battle:
+            hp, tick = yield self.add_hp(battle, -E.hplimit)
+            gates = battle['gates']
+            gate_id = battle['gate_id']
+            gates[gate_id] = dict(star=star, step=step, point=point)
+            yield self.set_player(user_id, gates=gates)
         else:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
+        user = yield self.get_player(user_id)
+        user.update(dict(hp=hp, tick=tick, timestamp=int(time.time())))
         # ret = dict(timestamp=int(time.time()), data=data)
         # reb = zlib.compress(escape.json_encode(ret))
-        self.write(data)
+        self.write(user)
