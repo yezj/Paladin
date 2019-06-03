@@ -82,7 +82,7 @@ class SetHandler(ApiHandler):
             hp, tick = yield self.add_hp(battle, -E.hplimit)
             gates = battle['gates']
             gate_id = battle['gate_id']
-            gates[gate_id].append([star, point])
+            gates.append([star, point])
             yield self.set_player(user_id, gates=gates)
         else:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
