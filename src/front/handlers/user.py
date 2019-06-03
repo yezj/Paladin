@@ -141,12 +141,14 @@ class LoginHandler(ApiHandler):
                 if users:
                     print users
                     now_hp, tick = yield self.get_hp(users)
-                    users['prods'] = escape.json_decode(users['prods'])
-                    users['gates'] = escape.json_decode(users['gates'])
-                    users['mails'] = escape.json_decode(users['mails'])
-                    users['ips'] = escape.json_decode(users['ips'])
+                    # print now_hp, tick
+                    # users['prods'] = escape.json_decode(users['prods'])
+                    # users['gates'] = escape.json_decode(users['gates'])
+                    # users['mails'] = escape.json_decode(users['mails'])
+                    # users['ips'] = escape.json_decode(users['ips'])
                     users['hp'] = now_hp
                     users['tick'] = tick
+                    print users
                     self.write(
                         dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token, users=users))
                     return
@@ -178,10 +180,10 @@ class LoginHandler(ApiHandler):
                 if users:
                     print users
                     now_hp, tick = yield self.get_hp(users)
-                    users['prods'] = escape.json_decode(users['prods'])
-                    users['gates'] = escape.json_decode(users['gates'])
-                    users['mails'] = escape.json_decode(users['mails'])
-                    users['ips'] = escape.json_decode(users['ips'])
+                    # users['prods'] = escape.json_decode(users['prods'])
+                    # users['gates'] = escape.json_decode(users['gates'])
+                    # users['mails'] = escape.json_decode(users['mails'])
+                    # users['ips'] = escape.json_decode(users['ips'])
                     users['hp'] = now_hp
                     users['tick'] = tick
                 self.write(dict(access_token=_access_token, users=users))
@@ -210,10 +212,10 @@ class LoginHandler(ApiHandler):
                 if users:
                     print users
                     now_hp, tick = yield self.get_hp(users)
-                    users['prods'] = escape.json_decode(users['prods'])
-                    users['gates'] = escape.json_decode(users['gates'])
-                    users['mails'] = escape.json_decode(users['mails'])
-                    users['ips'] = escape.json_decode(users['ips'])
+                    # users['prods'] = escape.json_decode(users['prods'])
+                    # users['gates'] = escape.json_decode(users['gates'])
+                    # users['mails'] = escape.json_decode(users['mails'])
+                    # users['ips'] = escape.json_decode(users['ips'])
                     users['hp'] = now_hp
                     users['tick'] = tick
                 self.write(dict(access_token=_access_token, users=users))
