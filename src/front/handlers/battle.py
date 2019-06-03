@@ -65,7 +65,6 @@ class SetHandler(ApiHandler):
         Param('access_token', True, str, 'bb6ab3286a923c66088f790c395c0d11019c075b',
               'bb6ab3286a923c66088f790c395c0d11019c075b', 'access_token'),
         Param('star', True, str, '1', '1', 'star'),
-        Param('step', True, str, '1', '1', 'step'),
         Param('point', True, str, '1', '1', 'point'),
     ], filters=[ps_filter], description="Battle set")
     def get(self):
@@ -74,7 +73,6 @@ class SetHandler(ApiHandler):
             access_token = self.get_argument("access_token")
             user_id = self.get_argument("user_id")
             star = self.get_argument("star")
-            step = self.get_argument("step")
             point = self.get_argument("point")
         except Exception:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
@@ -84,7 +82,7 @@ class SetHandler(ApiHandler):
             hp, tick = yield self.add_hp(battle, -E.hplimit)
             gates = battle['gates']
             gate_id = battle['gate_id']
-            gates[gate_id] = dict(star=star, step=step, point=point)
+            gates[gate_id].append([star, point])
             yield self.set_player(user_id, gates=gates)
         else:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
