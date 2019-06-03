@@ -114,7 +114,6 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
             user_id, channel, model, serial, phone, nickname, avatar, gold, rock, star, point, prods, gates, \
             mails, ips, datetime.datetime.now(), datetime.datetime.now())
         # print query, params
-        print query % params
         for i in range(5):
             try:
                 res = yield self.sql.runQuery(query, params)
@@ -129,6 +128,8 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
                                 gates=D.USERINIT["gates"],
                                 mails=D.USERINIT["mails"],
                                 ips=D.USERINIT["ips"])
+                    now_hp, tick = yield self.get_hp(user)
+                    user.update(dict(hp=now_hp, tick=tick))
 
                 break
             except storage.IntegrityError:
@@ -140,24 +141,94 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
     @storage.databaseSafe
     @defer.inlineCallbacks
     def get_player(self, use_id):
-        user = dict()
-        query = """SELECT b.nickname, b.avatar, b.gold, b.rock, b.star, b.phone, b.prods, b.gates, b.mails,\
-                b.ips FROM core_user AS a, core_player AS b WHERE a.id=%s AND a.id=b.user_id LIMIT 1"""
-        params = (use_id,)
-        res = yield self.sql.runQuery(query, params)
-        if res:
-            nickname, avatar, gold, rock, star, phone, prods, gates, mails, ips = res[0]
-            user = dict(nickname=nickname,
-                        avatar=avatar,
-                        gold=gold,
-                        rock=rock,
-                        star=star,
-                        phone=phone,
-                        prods=prods,
-                        gates=gates,
-                        mails=mails,
-                        ips=ips)
-            #yield self.set_cache("user:%s" % use_id, user)
+        user = yield self.get_cache("user:%s" % use_id)
+        if not user:
+            user = dict()
+            query = """SELECT b.user_id, b.nickname, b.avatar, b.gold, b.rock, b.star, b.phone, b.prods, b.gates, b.mails,\
+                    b.ips FROM core_user AS a, core_player AS b WHERE a.id=%s AND a.id=b.user_id LIMIT 1"""
+            params = (use_id,)
+            res = yield self.sql.runQuery(query, params)
+            if res:
+                user_id, nickname, avatar, gold, rock, star, phone, prods, gates, mails, ips = res[0]
+                user = dict(user_id=user_id,
+                            nickname=nickname,
+                            avatar=avatar,
+                            gold=gold,
+                            rock=rock,
+                            star=star,
+                            phone=phone,
+                            prods=escape.json_decode(prods),
+                            gates=escape.json_decode(gates),
+                            mails=escape.json_decode(mails),
+                            ips=escape.json_decode(ips))
+            yield self.set_cache("user:%s" % use_id, user)
+        defer.returnValue(user)
+
+    @storage.databaseSafe
+    @defer.inlineCallbacks
+    def set_player(self, user_id, nickname=None, avat=None, gold=None, rock=None,
+                   star=None, phone=None, prods=None, gates=None, mails=None, ips=None):
+        # olduser = yield self.get_user(uid)
+        suser = {'user_id': user_id}
+        subqueries = []
+        if nickname is not None:
+            suser['nickname'] = nickname
+            subqueries.append("nickname=%(nickname)s")
+        if avat is not None:
+            suser['avat'] = avat
+            subqueries.append("avat=%(avat)s")
+        if gold is not None:
+            suser['gold'] = gold
+            subqueries.append("gold=%(gold)s")
+        if rock is not None:
+            suser['rock'] = rock
+            subqueries.append("rock=%(rock)s")
+        if star is not None:
+            suser['star'] = star
+            subqueries.append("star=%(star)s")
+        if phone is not None:
+            suser['phone'] = phone
+            subqueries.append("phone=%(phone)s")
+        if prods is not None:
+            suser['prods'] = escape.json_encode(prods)
+            subqueries.append("prods=%(prods)s")
+        if gates is not None:
+            suser['gates'] = escape.json_encode(gates)
+            subqueries.append("gates=%(gates)s")
+        if mails is not None:
+            suser['mails'] = escape.json_encode(mails)
+            subqueries.append("mails=%(mails)s")
+        if ips is not None:
+            suser['ips'] = escape.json_encode(ips)
+            subqueries.append("ips=%(ips)s")
+
+        # suser['timestamp'] = str(int(time.time()))
+        # subqueries.append("timestamp=%(timestamp)s")
+        # SQL UPDATE START
+        query = "UPDATE core_player SET " + ",".join(
+            subqueries) + " WHERE user_id=%(user_id)s RETURNING nickname, avatar, gold, rock, star, phone, prods, gates, mails,\
+             ips"
+        params = suser
+        user = None
+        for i in range(5):
+            try:
+                res = yield self.sql.runQuery(query, params)
+                if not res:
+                    user = None
+                    yield self.del_cache("user:%s" % user_id)
+                else:
+                    r = res[0]
+                    user = dict(user_id=user_id, nickname=r[0], avatar=r[1], gold=r[2], rock=r[3], star=r[4], phone=r[5])
+                    user['prods'] = r[6] and escape.json_decode(r[6]) or {}
+                    user['gates'] = r[7] and escape.json_decode(r[7]) or {}
+                    user['mails'] = r[8] and escape.json_decode(r[8]) or {}
+                    user['ips'] = r[9] and escape.json_decode(r[9]) or {}
+                    yield self.set_cache("user:%s" % user_id, user)
+                break
+            except storage.IntegrityError:
+                log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
+                continue
+        # SQL UPDATE END
         defer.returnValue(user)
 
     @storage.databaseSafe
@@ -212,65 +283,6 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
 
     @storage.databaseSafe
     @defer.inlineCallbacks
-    def create_user(self):
-        nuser = E.initdata4user()
-        query = "INSERT INTO core_user(secret, name, nickname, avat, xp, gold, rock, feat, book, vrock, jextra, " \
-                "jheros, jprods, jbatts, jseals, jtasks, jworks, jmails, jdoors, jbeautys, jactivities, jrecharge, jinsts, timestamp) VALUES " \
-                "(%(secret)s, %(name)s, %(nickname)s, %(avat)s, %(xp)s, %(gold)s, %(rock)s, %(feat)s, %(book)s, %(vrock)s, %(jextra)s, " \
-                "%(jheros)s, %(jprods)s, %(jbatts)s, %(jseals)s, %(jtasks)s, %(jworks)s, %(jmails)s, %(jdoors)s, %(jbeautys)s, %(jactivities)s, " \
-                "%(jrecharge)s, %(jinsts)s, %(timestamp)s) RETURNING id"
-        params = nuser
-        params['name'] = str(uuid.uuid4().hex)[:20]
-        params['secret'] = str(uuid.uuid4().hex)[:20]
-        for i in range(5):
-            try:
-                res = yield self.sql.runQuery(query, params)
-                uid, = res[0]
-                break
-            except storage.IntegrityError:
-                log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                continue
-        # for lot in D.LOTT.keys():
-        #     query = "INSERT INTO core_freelott(user_id, lotttype, times, timestamp, free) VALUES (%s, %s, %s, %s, %s) RETURNING id"
-        #     params = (uid, lot, 0, int(time.time()), True)
-        #     for i in range(5):
-        #         try:
-        #             yield self.sql.runQuery(query, params)
-        #             break
-        #         except storage.IntegrityError:
-        #             log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-        #             continue
-
-        # query = "INSERT INTO core_arena(user_id, arena_coin, before_rank, now_rank, last_rank, jguards, jpositions, formation, timestamp) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id"
-        # params = (uid, 0, uid, uid, uid, nuser['jheros'], D.USERARENA['jpositions'], E.default_formation, int(time.time()))
-        #
-        # for i in range(5):
-        #     try:
-        #         yield self.sql.runQuery(query, params)
-        #         break
-        #     except storage.IntegrityError:
-        #         log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-        #         continue
-
-        query = "INSERT INTO core_hunt(user_id, jguards, formation, timestamp) VALUES (%s, %s, %s, %s) RETURNING id"
-        params = (uid, nuser['jheros'], E.default_formation, int(time.time()))
-        for i in range(5):
-            try:
-                yield self.sql.runQuery(query, params)
-                break
-            except storage.IntegrityError:
-                log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                continue
-
-        mail = D.TRIOMAIL
-        yield self.send_mails(mail['sender'], uid, mail['title'], mail['content'], mail['jawards'])
-        yield self.set_arena(uid)
-        yield self.redis.set('arenatimes:%s' % uid, 0)
-        yield self.redis.set('arenatime:%s' % uid, int(time.time()))
-        defer.returnValue(uid)
-
-    @storage.databaseSafe
-    @defer.inlineCallbacks
     def get_notice(self):
         notice_dict = {}
         notices = yield self.sql.runQuery("SELECT notice_id, position FROM core_noticeship")
@@ -296,199 +308,9 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
 
     @storage.databaseSafe
     @defer.inlineCallbacks
-    def set_user(self, uid, reason=None, name=None, nickname=None, avat=None, xp=None, gold=None, rock=None, feat=None,
-                 book=None, extra=None, \
-                 heros=None, prods=None, batts=None, seals=None, tasks=None, works=None, mails=None, doors=None,
-                 vrock=None, beautys=None, \
-                 activities=None, recharge=None, insts=None):
-        olduser = yield self.get_user(uid)
-        suser = {'uid': uid}
-        subqueries = []
-        if name is not None:
-            suser['name'] = name
-            subqueries.append("name=%(name)s")
-        if nickname is not None:
-            suser['nickname'] = nickname
-            subqueries.append("nickname=%(nickname)s")
-        if avat is not None:
-            suser['avat'] = avat
-            subqueries.append("avat=%(avat)s")
-        if xp is not None:
-            suser['xp'] = xp
-            subqueries.append("xp=%(xp)s")
-        if gold is not None:
-            suser['gold'] = gold
-            subqueries.append("gold=%(gold)s")
-        if rock is not None:
-            suser['rock'] = rock
-            subqueries.append("rock=%(rock)s")
-        if feat is not None:
-            suser['feat'] = feat
-            subqueries.append("feat=%(feat)s")
-        if book is not None:
-            suser['book'] = book
-            subqueries.append("book=%(book)s")
-        if vrock is not None:
-            suser['vrock'] = vrock
-            subqueries.append("vrock=%(vrock)s")
-        if extra is not None:
-            suser['jextra'] = escape.json_encode(extra)
-            subqueries.append("jextra=%(jextra)s")
-        if heros is not None:
-            suser['jheros'] = escape.json_encode(heros)
-            subqueries.append("jheros=%(jheros)s")
-        if prods is not None:
-            suser['jprods'] = escape.json_encode(prods)
-            subqueries.append("jprods=%(jprods)s")
-        if batts is not None:
-            suser['jbatts'] = escape.json_encode(batts)
-            subqueries.append("jbatts=%(jbatts)s")
-        if seals is not None:
-            suser['jseals'] = escape.json_encode(seals)
-            subqueries.append("jseals=%(jseals)s")
-        if tasks is not None:
-            suser['jtasks'] = escape.json_encode(tasks)
-            subqueries.append("jtasks=%(jtasks)s")
-        if works is not None:
-            suser['jworks'] = escape.json_encode(works)
-            subqueries.append("jworks=%(jworks)s")
-        if mails is not None:
-            suser['jmails'] = escape.json_encode(mails)
-            subqueries.append("jmails=%(jmails)s")
-        if doors is not None:
-            suser['jdoors'] = escape.json_encode(doors)
-            subqueries.append("jdoors=%(jdoors)s")
-        if beautys is not None:
-            suser['jbeautys'] = escape.json_encode(beautys)
-            subqueries.append("jbeautys=%(jbeautys)s")
-        if activities is not None:
-            suser['jactivities'] = escape.json_encode(activities)
-            subqueries.append("jactivities=%(jactivities)s")
-        if recharge is not None:
-            suser['jrecharge'] = escape.json_encode(recharge)
-            subqueries.append("jrecharge=%(jrecharge)s")
-        if insts is not None:
-            suser['jinsts'] = escape.json_encode(insts)
-            subqueries.append("jinsts=%(jinsts)s")
-
-        suser['timestamp'] = str(int(time.time()))
-        subqueries.append("timestamp=%(timestamp)s")
-        res = yield self.sql.runQuery(
-            "SELECT user_id FROM core_firstlott WHERE user_id=%s AND first=True AND lotttype=%s LIMIT 1",
-            (uid, E.lott_by_rock))
-        if res:
-            firstlott = E.true
-        else:
-            firstlott = E.false
-        # SQL UPDATE START
-        query = "UPDATE core_user SET " + ",".join(
-            subqueries) + " WHERE id=%(uid)s RETURNING name, nickname, avat, xp, gold, rock, feat, book, jextra," \
-                          "jheros, jprods, jbatts, jseals, jtasks, jworks, jmails, jdoors, vrock, jbeautys, jactivities, jrecharge, jinsts"
-        params = suser
-        user = None
-        for i in range(5):
-            try:
-                res = yield self.sql.runQuery(query, params)
-                if not res:
-                    user = None
-                    yield self.del_cache("user:%s" % uid)
-                else:
-                    r = res[0]
-                    user = dict(uid=uid, name=r[0], nickname=r[1], avat=r[2], xp=r[3], gold=r[4], rock=r[5], feat=r[6],
-                                book=r[7], vrock=r[17])
-                    user['extra'] = r[8] and escape.json_decode(r[8]) or {}
-                    user['heros'] = r[9] and escape.json_decode(r[9]) or {}
-                    user['prods'] = r[10] and escape.json_decode(r[10]) or {}
-                    user['batts'] = r[11] and escape.json_decode(r[11]) or {}
-                    user['seals'] = r[12] and escape.json_decode(r[12]) or {}
-                    user['tasks'] = r[13] and escape.json_decode(r[13]) or {}
-                    user['works'] = r[14] and escape.json_decode(r[14]) or {}
-                    user['mails'] = r[15] and escape.json_decode(r[15]) or {}
-                    user['doors'] = r[16] and escape.json_decode(r[16]) or {}
-                    user['beautys'] = r[18] and escape.json_decode(r[18]) or {}
-                    user['activities'] = r[19] and escape.json_decode(r[19]) or {}
-                    user['recharge'] = r[20] and escape.json_decode(r[20]) or {}
-                    user['insts'] = r[21] and escape.json_decode(r[21]) or {}
-                    user['first_by_rock'] = firstlott
-                    yield self.set_cache("user:%s" % uid, user)
-                break
-            except storage.IntegrityError:
-                log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                continue
-        # SQL UPDATE END
-        if reason:
-            changed = {}
-            if olduser['gold'] != user['gold']:
-                changed['gold'] = (olduser['gold'], user['gold'])
-            if olduser['rock'] != user['rock']:
-                changed['rock'] = (olduser['rock'], user['rock'])
-            if olduser['feat'] != user['feat']:
-                changed['feat'] = (olduser['feat'], user['feat'])
-            changedprods = {}
-            olduserprodkeys = set(olduser['prods'].keys())
-            userprodkeys = set(user['prods'].keys())
-            delkeys = olduserprodkeys - userprodkeys
-            for key in delkeys:
-                changedprods[key] = (olduser['prods'][key], 0)
-            newkeys = userprodkeys - olduserprodkeys
-            for key in newkeys:
-                changedprods[key] = (0, user['prods'][key])
-            samekeys = userprodkeys & olduserprodkeys
-            for key in samekeys:
-                if olduser['prods'][key] != user['prods'][key]:
-                    changedprods[key] = (olduser['prods'][key], user['prods'][key])
-            if changedprods:
-                changed['prods'] = changedprods
-            value = json.dumps(changed)
-            yield self.predis.lpush('all:log:user', pickle.dumps([int(time.time()), ZONE_ID, uid, value, reason]))
-        defer.returnValue(user)
-
-    @storage.databaseSafe
-    @defer.inlineCallbacks
-    def get_seal(self, uid):
-        user = []
-        res = yield self.sql.runQuery("SELECT seals FROM core_fourteensealsecond WHERE user_id=%s LIMIT 1", (uid,))
-        if not res:
-            user = None
-        else:
-            r = res[0]
-            try:
-                user = r[0] and escape.json_decode(r[0]) or {}
-            except Exception:
-                user = None
-        defer.returnValue(user)
-
-    @storage.databaseSafe
-    @defer.inlineCallbacks
-    def set_seal(self, uid, seals=None):
-        suser = {'uid': uid}
-        subqueries = []
-        if seals is not None:
-            suser['seals'] = escape.json_encode(seals)
-            subqueries.append("seals=%(seals)s")
-        query = "SELECt id FROM core_fourteensealsecond WHERE user_id=%(uid)s;"
-        res = yield self.sql.runQuery(query, suser);
-        if not res:
-            query = "INSERT INTO core_fourteensealsecond (user_id, seals) VALUES (%(uid)s, %(seals)s) RETURNING user_id,seals;"
-        else:
-            query = "UPDATE core_fourteensealsecond SET " + ",".join(
-                subqueries) + " WHERE user_id=%(uid)s RETURNING user_id,seals;"
-        user = None
-        params = suser
-        for i in range(5):
-            try:
-                yield self.sql.runQuery(query, params)
-                break
-            except storage.IntegrityError:
-                log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                continue
-        defer.returnValue(user)
-
-    @storage.databaseSafe
-    @defer.inlineCallbacks
     def get_hp(self, user):
-        uid = user['uid']
-        hpmax = E.hpmax(user['xp']) + E.incr4hp(user['vrock'])
+        uid = user['user_id']
+        hpmax = E.hpmax
         hpup = E.hpup
         hptick = E.hptick
         timenow = int(time.time()) - self.settings["timepoch"]
@@ -501,8 +323,9 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
                 yield self.redis.hset("hp", uid, hp)
             else:
                 hpcur = hpmax
-                yield self.sql.runQuery("INSERT INTO core_hp (user_id, hp, timestamp) VALUES (%s, %s, %s) RETURNING id",
-                                        (uid, hpcur, timenow))
+                yield self.sql.runQuery(
+                    "INSERT INTO core_hp (user_id, hp, timestamp, created, modified) VALUES (%s, %s, %s, %s, %s) RETURNING id",
+                    (uid, hpcur, timenow, datetime.datetime.now(), datetime.datetime.now()))
                 yield self.redis.hset("hp", uid, timenow * 100000 + hpcur)
         if hp:
             timestamp, hpsnap = divmod(hp, 100000)
@@ -525,8 +348,8 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
     @storage.databaseSafe
     @defer.inlineCallbacks
     def add_hp(self, user, value, reason=''):
-        uid = user['uid']
-        hpmax = E.hpmax(user['xp']) + E.incr4hp(user['vrock'])
+        uid = user['user_id']
+        hpmax = E.hpmax
         hpup = E.hpup
         hptick = E.hptick
         timenow = int(time.time()) - self.settings["timepoch"]
@@ -546,8 +369,9 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
         res = yield self.sql.runQuery("UPDATE core_hp SET hp=%s, timestamp=%s WHERE user_id=%s RETURNING id",
                                       (hpnow, timetick, uid))
         if not res:
-            res = yield self.sql.runQuery("INSERT INTO core_hp (user_id, hp, timestamp) VALUES (%s, %s, %s)",
-                                          (uid, hpnow, timetick))
+            res = yield self.sql.runQuery(
+                "INSERT INTO core_hp (user_id, hp, timestamp, created, modified) VALUES (%s, %s, %s, %s, %s)",
+                (uid, hpnow, timetick, datetime.datetime.now(), datetime.datetime.now()))
         yield self.predis.lpush('all:log:hp',
                                 pickle.dumps([int(time.time()), ZONE_ID, uid, value, hpcur, hpmax, reason]))
         defer.returnValue((hpnow, tick))

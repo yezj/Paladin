@@ -13,8 +13,8 @@ import psycopg2
 import datetime
 import time
 import D
-import django_rq
-import requests
+
+# import requests
 from local_settings import *
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)

@@ -9,7 +9,7 @@ import uuid
 from cyclone import web
 import D
 import random
-import requests
+#import requests
 from local_settings import BASE_URL
 
 
@@ -815,88 +815,14 @@ class E(object):
         return xp, ahp
 
     @staticmethod
-    def normhxp_bak(user, hxp, cxp):
-        lv, lxp = divmod(hxp, 100000)
-        lxp += cxp
-        userlv = user['xp'] / 100000
-        hxplimit = False
-        hlvlimit = False
-        #print 'lxp', lxp, D.LEVELHXP[(lv+1)*2+1], D.LEVELHXP[lv*2+1], D.LEVELIMIT[userlv*2+1]
-        while lxp >= D.LEVELHXP[(lv+1)*2+1] and lv < 100:
-            if lv < D.LEVELIMIT[userlv*2+1]:
-                lv += 1
-                lxp = lxp - D.LEVELHXP[lv*2+1]
-                hxp = lv * 100000 + lxp
-                hxplimit = True
-            else:
-                lxp = lxp - cxp
-                hxp = lv * 100000 + lxp
-                hlvlimit = True
-            #break
-        while lxp > D.LEVELHXP[lv*2+1] and lxp < D.LEVELHXP[(lv+1)*2+1] and lv < 100:
-            if lv < D.LEVELIMIT[userlv*2+1] and not hxplimit:
-                hxp = hxp + cxp
-            break
-        while lxp-cxp <= D.LEVELHXP[lv*2+1] and lxp <= D.LEVELHXP[lv*2+1]:
-            hxp = hxp + cxp
-            break
-        if lv == 80:
-            lv = 99
-            lxp = 9900000
-            hxp = lv * 100000 #+ lxp
-        return hlvlimit, hxp
-
-    @staticmethod
-    def normhxp(user, hxp, cxp):
-        lv, lxp = divmod(hxp, 100000)
-        userlv = user['xp'] / 100000
-        hxplimit = False
-        hlvlimit = False
-        #print 'cxp', cxp
-        #print 'lxp', lxp, cxp, D.LEVELHXP[(lv+1)*2+1], D.LEVELHXP[lv*2+1], D.LEVELIMIT[userlv*2+1]
-
-        while True:
-            #print lxp + cxp, lv, D.LEVELHXP[(lv)*2+1], #D.LEVELHXP[(lv+1)*2+1]
-            if (lxp + cxp) >= D.LEVELHXP[(lv+1)*2+1] and lv < 100:
-                #print 111, userlv, D.LEVELIMIT[userlv*2+1]
-                if lv < D.LEVELIMIT[userlv*2+1]:
-                    lv += 1
-                    lxp = (lxp + cxp) - D.LEVELHXP[lv*2+1]
-                    cxp = 0
-                    hxplimit = True
-                    #print 111, lxp, cxp
-                    continue
-                else:
-                    #print 22, lxp, cxp
-                    lxp = (lxp + cxp)
-                    hlvlimit = True
-                    break
-            else:
-                break
-        while (lxp + cxp) > D.LEVELHXP[lv*2+1] and (lxp + cxp) < D.LEVELHXP[(lv+1)*2+1] and lv < 100:
-            if lv < D.LEVELIMIT[userlv*2+1] and not hxplimit:
-                lxp = (lxp + cxp)
-            break
-
-        while lxp < D.LEVELHXP[lv*2+1] and (lxp + cxp) <= D.LEVELHXP[lv*2+1]:
-            lxp = (lxp + cxp)
-            break
-
-        hxp = lv * 100000 + lxp
-        if lv == 100:
-            lv = 99
-            lxp = 9900000
-            hxp = lv * 100000 #+ lxp
-
-        return hlvlimit, hxp
-
-    @staticmethod
     def hpmax(xp):
         lv = int(xp) / 100000
         return D.LEVELHP[lv]
 
+    hpmax = 30
     hpup = 1
     hptick = 360
+    hplimit = 5
 
     @staticmethod
     def cost4lott(lotttype, times):

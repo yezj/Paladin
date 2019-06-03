@@ -16,14 +16,13 @@ from cyclone import escape, web
 from front import storage
 from front import utils
 from front.utils import E
-from passlib.apps import custom_app_context as pwd_context
 from front.D import USERINIT, PREFIX, POSTFIX
 from itertools import *
 # from front.handlers.base import BaseHandler
 from front.wiapi import *
 from front.handlers.base import ApiHandler, ApiJSONEncoder
-from itsdangerous import (TimedJSONWebSignatureSerializer
-                          as Serializer, BadSignature, SignatureExpired)
+# from itsdangerous import (TimedJSONWebSignatureSerializer
+#                           as Serializer, BadSignature, SignatureExpired)
 from front.utils import E
 from front.wiapi import *
 from front import D
@@ -141,10 +140,13 @@ class LoginHandler(ApiHandler):
                 users = yield self.get_player(user_id)
                 if users:
                     print users
+                    now_hp, tick = yield self.get_hp(users)
                     users['prods'] = escape.json_decode(users['prods'])
                     users['gates'] = escape.json_decode(users['gates'])
                     users['mails'] = escape.json_decode(users['mails'])
                     users['ips'] = escape.json_decode(users['ips'])
+                    users['hp'] = now_hp
+                    users['tick'] = tick
                     self.write(
                         dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token, users=users))
                     return
@@ -175,10 +177,13 @@ class LoginHandler(ApiHandler):
                 users = yield self.get_player(user_id)
                 if users:
                     print users
+                    now_hp, tick = yield self.get_hp(users)
                     users['prods'] = escape.json_decode(users['prods'])
                     users['gates'] = escape.json_decode(users['gates'])
                     users['mails'] = escape.json_decode(users['mails'])
                     users['ips'] = escape.json_decode(users['ips'])
+                    users['hp'] = now_hp
+                    users['tick'] = tick
                 self.write(dict(access_token=_access_token, users=users))
             else:
                 self.write(dict(err=E.ERR_USER_TOKEN_EXPIRE, msg=E.errmsg(E.ERR_USER_TOKEN_EXPIRE)))
@@ -204,10 +209,13 @@ class LoginHandler(ApiHandler):
                 users = yield self.get_player(user_id)
                 if users:
                     print users
+                    now_hp, tick = yield self.get_hp(users)
                     users['prods'] = escape.json_decode(users['prods'])
                     users['gates'] = escape.json_decode(users['gates'])
                     users['mails'] = escape.json_decode(users['mails'])
                     users['ips'] = escape.json_decode(users['ips'])
+                    users['hp'] = now_hp
+                    users['tick'] = tick
                 self.write(dict(access_token=_access_token, users=users))
             else:
                 self.write(dict(err=E.ERR_USER_REFRESH_TOKEN, msg=E.errmsg(E.ERR_USER_REFRESH_TOKEN)))
