@@ -48,10 +48,11 @@ class GetHandler(ApiHandler):
                 return
             now_hp, tick = yield self.get_hp(user)
             if now_hp >= E.hplimit:
+                hp, tick = yield self.add_hp(user, -E.hplimit)
                 yield self.set_flush(battle_id, user)
                 ret = dict(user=user)
                 reb = zlib.compress(escape.json_encode(ret))
-                self.write(dict(battle_id=battle_id, timestamp=int(time.time())))
+                self.write(dict(battle_id=battle_id, hp=hp, tick=tick, timestamp=int(time.time())))
             else:
                 self.write(dict(err=E.ERR_NOTENOUGH_HP, msg=E.errmsg(E.ERR_NOTENOUGH_HP)))
                 return
@@ -89,7 +90,7 @@ class SetHandler(ApiHandler):
         if res:
             battle = yield self.get_flush(battle_id)
             if battle:
-                hp, tick = yield self.add_hp(battle, -E.hplimit)
+
                 gates = battle['gates']
                 gate_id = battle['gate_id']
                 gates[gate_id] = [star, point]
@@ -98,7 +99,8 @@ class SetHandler(ApiHandler):
                 self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
                 return
             user = yield self.get_player(user_id)
-            user.update(dict(hp=hp, tick=tick, timestamp=int(time.time())))
+            now_hp, tick = yield self.get_hp(user)
+            user.update(dict(hp=now_hp, tick=tick, timestamp=int(time.time())))
             # ret = dict(timestamp=int(time.time()), data=data)
             # reb = zlib.compress(escape.json_encode(ret))
             self.write(user)
