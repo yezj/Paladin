@@ -35,24 +35,29 @@ class GetHandler(ApiHandler):
         except Exception:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
-
-        battle_id = uuid.uuid4().hex
-        user = yield self.get_player(user_id)
-        print user
-        user.update(dict(gate_id=gate_id))
-        if not user:
+        query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE id=%s AND" \
+                " access_token=%s LIMIT 1"
+        res = yield self.sql.runQuery(query, (user_id, access_token))
+        if res:
+            battle_id = uuid.uuid4().hex
+            user = yield self.get_player(user_id)
+            print user
+            user.update(dict(gate_id=gate_id))
+            if not user:
+                self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
+                return
+            now_hp, tick = yield self.get_hp(user)
+            if now_hp >= E.hplimit:
+                yield self.set_flush(battle_id, user)
+                ret = dict(user=user)
+                reb = zlib.compress(escape.json_encode(ret))
+                self.write(dict(battle_id=battle_id, timestamp=int(time.time())))
+            else:
+                self.write(dict(err=E.ERR_NOTENOUGH_HP, msg=E.errmsg(E.ERR_NOTENOUGH_HP)))
+                return
+        else:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
-        now_hp, tick = yield self.get_hp(user)
-        if now_hp >= E.hplimit:
-            yield self.set_flush(battle_id, user)
-            ret = dict(user=user)
-            reb = zlib.compress(escape.json_encode(ret))
-            self.write(dict(battle_id=battle_id, timestamp=int(time.time())))
-        else:
-            self.write(dict(err=E.ERR_NOTENOUGH_HP, msg=E.errmsg(E.ERR_NOTENOUGH_HP)))
-            return
-
 
 @handler
 class SetHandler(ApiHandler):
@@ -77,18 +82,26 @@ class SetHandler(ApiHandler):
         except Exception:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
-        battle = yield self.get_flush(battle_id)
-        if battle:
-            hp, tick = yield self.add_hp(battle, -E.hplimit)
-            gates = battle['gates']
-            gate_id = battle['gate_id']
-            gates[gate_id] = [star, point]
-            yield self.set_player(user_id, gates=gates)
+
+        query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE id=%s AND" \
+                " access_token=%s LIMIT 1"
+        res = yield self.sql.runQuery(query, (user_id, access_token))
+        if res:
+            battle = yield self.get_flush(battle_id)
+            if battle:
+                hp, tick = yield self.add_hp(battle, -E.hplimit)
+                gates = battle['gates']
+                gate_id = battle['gate_id']
+                gates[gate_id] = [star, point]
+                yield self.set_player(user_id, gates=gates)
+            else:
+                self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
+                return
+            user = yield self.get_player(user_id)
+            user.update(dict(hp=hp, tick=tick, timestamp=int(time.time())))
+            # ret = dict(timestamp=int(time.time()), data=data)
+            # reb = zlib.compress(escape.json_encode(ret))
+            self.write(user)
         else:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
-        user = yield self.get_player(user_id)
-        user.update(dict(hp=hp, tick=tick, timestamp=int(time.time())))
-        # ret = dict(timestamp=int(time.time()), data=data)
-        # reb = zlib.compress(escape.json_encode(ret))
-        self.write(user)
