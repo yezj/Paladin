@@ -311,10 +311,12 @@ class Prop(TimeStampedModel):
     FRONT = 1
     MIDDLE = 2
     BACK = 3
+    HP = 4
     TYPE = (
         (FRONT, _('FRONT')),
         (MIDDLE, _('MIDDLE')),
         (BACK, _('BACK')),
+        (HP, _('HP')),
     )
     pid = models.CharField(_('Pid'), max_length=64)
     name = models.CharField(_('Name'), max_length=20, db_index=True)

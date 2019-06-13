@@ -24,9 +24,14 @@ class GateAdmin(admin.ModelAdmin):
     pass
 
 
+class PropAdmin(admin.ModelAdmin):
+    list_display = ('pid', 'name', 'num', 'type', 'expired')
+    search_fields = ('pid', 'name')
 
 
 admin.site.register(Channel, ChannelAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Mail, MailAdmin)
 admin.site.register(Gate, GateAdmin)
+admin.site.register(Prop, PropAdmin)
+
