@@ -27,7 +27,7 @@ class GateAdmin(admin.ModelAdmin):
 class PropAdmin(admin.ModelAdmin):
     list_display = ('pid', 'name', 'num', 'type', 'expired')
     search_fields = ('pid', 'name')
-    fields = ('pid', 'name', 'num', 'type', 'expired')
+    fields = ('pid', 'name', 'num', 'type')
 
 
 admin.site.register(Channel, ChannelAdmin)
