@@ -323,7 +323,7 @@ class Prop(TimeStampedModel):
     num = models.PositiveIntegerField(_('Num'), blank=True, null=True)  # 每局使用次数
     type = models.PositiveSmallIntegerField(
         _('Type'), choices=TYPE, default=FRONT)  # 类型
-    expired = models.DateTimeField(auto_now_add=True)
+    expired = models.DateTimeField(default=datetime.datetime.now())
 
     class Meta:
         verbose_name = _('Prop')
