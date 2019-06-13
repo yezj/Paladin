@@ -15,6 +15,7 @@ from filebrowser.fields import FileBrowseField, FileObject
 from django.contrib.auth.models import User as AdminUser
 from passlib.apps import custom_app_context as pwd_context
 
+
 # from django.contrib.postgres.fields import JSONField
 
 
@@ -306,6 +307,30 @@ class Gate(TimeStampedModel):
         return u'%s' % self.vers
 
 
+class Prop(TimeStampedModel):
+    FRONT = 1
+    MIDDLE = 2
+    BACK = 3
+    TYPE = (
+        (FRONT, _('FRONT')),
+        (MIDDLE, _('MIDDLE')),
+        (BACK, _('BACK')),
+    )
+    pid = models.CharField(_('Pid'), max_length=64)
+    name = models.CharField(_('Name'), max_length=20, db_index=True)
+    num = models.PositiveIntegerField(_('Num'), blank=True, null=True)  # 每局使用次数
+    type = models.PositiveSmallIntegerField(
+        _('Type'), choices=TYPE, default=FRONT)  # 类型
+    expired = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _('Prop')
+        verbose_name_plural = _('Props')
+
+    def __unicode__(self):
+        return self.name
+
+
 class User(TimeStampedModel):
     username = models.CharField(_('Username'), max_length=32, unique=True)
     password_hash = models.CharField(_('Password_hash'), max_length=128, blank=True)
@@ -343,7 +368,7 @@ class Player(TimeStampedModel):
     prods = models.TextField(_('Prods'), blank=True)  # 道具
     gates = models.TextField(_('Gates'), blank=True)  # 关卡
     mails = models.TextField(_('Mails'), blank=True)  # 邮件
-    ips = models.TextField(_('Ips'), blank=True) # 常用IP
+    ips = models.TextField(_('Ips'), blank=True)  # 常用IP
 
     class Meta:
         verbose_name = _('Player')
@@ -364,6 +389,20 @@ class Hp(TimeStampedModel):
 
     def __unicode__(self):
         return self.user
+
+
+class UserGate(TimeStampedModel):
+    user = models.OneToOneField(User)
+    gate = models.OneToOneField(Gate)
+    star = models.PositiveSmallIntegerField(_('Star'), default=0)  # 体力
+    step = models.PositiveSmallIntegerField(_('Step'), default=0)  # 剩余步数
+
+    class Meta:
+        verbose_name = _('UserGate')
+        verbose_name_plural = _('UserGates')
+
+    def __unicode__(self):
+        return '{}@{}'.format(self.user.id, self.gate.id)
 
 
 class Mail(models.Model):
