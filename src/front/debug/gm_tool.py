@@ -46,7 +46,7 @@ class EditProdHandler(ApiHandler):
     @defer.inlineCallbacks
     @api('Gm add prod', '/gm/add/prod/', [
         Param('user_id', True, str, '1', '1', 'user_id'),
-        Param('pid', True, str, 'b_1', 'b_1', 'pid'),
+        Param('pid', True, str, '01014', '01014', 'pid'),
         Param('num', True, str, '1', '1', 'num'),
     ], filters=[ps_filter], description="Gm add prod")
     def get(self):
@@ -58,7 +58,6 @@ class EditProdHandler(ApiHandler):
             raise web.HTTPError(400, "Argument error")
 
         user = yield self.get_player(user_id)
-        props = user['props']
         if num > 0:
             if pid in user['props']:
                 user['props'][pid] += num
@@ -67,7 +66,7 @@ class EditProdHandler(ApiHandler):
         else:
             if pid in user['props']:
                 del user['props'][pid]
-
-        yield self.set_player(user_id, props)
+        cuser = dict(props=user['props'])
+        yield self.set_palyer(user_id, **cuser)
         msg = "SUCCESS! pid: " + pid + " curr num:" + str(num)
         self.write(msg)
