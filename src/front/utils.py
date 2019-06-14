@@ -16,18 +16,18 @@ from local_settings import BASE_URL
 def token(method):
     @functools.wraps(method)
     def wraps(self, *args, **kwargs):
-        access_token = self.get_argument("access_token", None)
+        access_token = str(self.get_argument("access_token", None))
         user_id = self.get_argument("user_id", None)
         if not access_token:
             raise web.HTTPError(400, "Access_token required")
         else:
             try:
-                s = access_token[-1] + access_token[1:-1] + access_token[0]
-                self.token = pickle.loads(base64.urlsafe_b64decode(str(s + '=' * (-len(s) % 4))))
+                self.token = pickle.loads(base64.urlsafe_b64decode(access_token))
                 self.user_id = self.token['user_id']
                 if self.user_id != user_id:
                     raise web.HTTPError(400, "Access_token error")
-            except Exception:
+            except Exception as e:
+                print e.message
                 raise web.HTTPError(400, "Access_token invalid")
         return method(self, *args, **kwargs)
 

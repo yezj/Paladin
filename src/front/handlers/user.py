@@ -60,10 +60,11 @@ class RegisterHandler(ApiHandler):
         if not res:
             username = username
             password_hash = password  # pwd_context.encrypt(password)
-            access_token = str(binascii.hexlify(os.urandom(20)).decode())
-            refresh_token = str(binascii.hexlify(os.urandom(20)).decode())
+            access_token = ''
+            refresh_token = ''
             created = int(time.time())
             modified = int(time.time())
+
             query = "INSERT INTO core_user(username, password_hash, access_token, refresh_token, created, modified)" \
                     " VALUES (%s, %s, %s, %s, %s, %s) RETURNING id"
             params = (username, password_hash, access_token, refresh_token, created, modified)
@@ -78,6 +79,11 @@ class RegisterHandler(ApiHandler):
             print user
             if user:
                 user_id = user[0][0]
+                token = dict(user_id=str(user_id))
+                access_token = base64.urlsafe_b64encode(pickle.dumps(token)).rstrip('=')
+                #access_token = s[-1] + s[1:-1] + s[0]
+                refresh_token = str(binascii.hexlify(os.urandom(20)).decode())
+                yield self.update_user_token(user_id, access_token, refresh_token)
                 users = yield self.generate_player(model, serial, channel, user_id)
                 if not users:
                     self.write(dict(err=E.ERR_USER_CREATED, msg=E.errmsg(E.ERR_USER_CREATED)))
@@ -118,34 +124,21 @@ class LoginHandler(ApiHandler):
             return
         print self.has_arg("access_token"), self.has_arg("user_id")
         if username and password:
-            query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE username=%s AND" \
-                    " password_hash=%s LIMIT 1"
+            query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE" \
+                    " username=%s AND password_hash=%s LIMIT 1"
             r = yield self.sql.runQuery(query, (username, password))
             if r:
                 user_id, username, password_hash, _access_token, _refresh_token = r[0]
-                # access_token_redis = self.redis.get('access_token:%s' % access_token)
-                # if not access_token_redis:
-                _access_token = binascii.hexlify(os.urandom(20)).decode()
-                _refresh_token = binascii.hexlify(os.urandom(20)).decode()
-                query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
-                params = (_access_token, _refresh_token, int(time.time()), user_id)
-                for i in range(5):
-                    try:
-                        yield self.sql.runOperation(query, params)
-                        break
-                    except storage.IntegrityError:
-                        log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                        continue
+                token = dict(user_id=str(user_id))
+                _access_token = base64.urlsafe_b64encode(pickle.dumps(token)).rstrip('=')
+                #_access_token = s[-1] + s[1:-1] + s[0]
+                _refresh_token = str(binascii.hexlify(os.urandom(20)).decode())
+                yield self.update_user_token(user_id, _access_token, _refresh_token)
                 self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
                 users = yield self.get_player(user_id)
                 if users:
                     print users
                     now_hp, tick = yield self.get_hp(users)
-                    # print now_hp, tick
-                    # users['prods'] = escape.json_decode(users['prods'])
-                    # users['gates'] = escape.json_decode(users['gates'])
-                    # users['mails'] = escape.json_decode(users['mails'])
-                    # users['ips'] = escape.json_decode(users['ips'])
                     users['hp'] = now_hp
                     users['tick'] = tick
                     print users
@@ -164,17 +157,10 @@ class LoginHandler(ApiHandler):
             r = yield self.sql.runQuery(query, (user_id, access_token))
             if r:
                 user_id, username, password_hash, _access_token, _refresh_token = r[0]
-                _access_token = binascii.hexlify(os.urandom(20)).decode()
-                # _refresh_token = binascii.hexlify(os.urandom(20)).decode()
-                query = "UPDATE core_user SET access_token=%s, modified=%s WHERE id=%s"
-                params = (_access_token, int(time.time()), user_id)
-                for i in range(5):
-                    try:
-                        yield self.sql.runOperation(query, params)
-                        break
-                    except storage.IntegrityError:
-                        log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                        continue
+                token = dict(user_id=str(user_id))
+                _access_token = base64.urlsafe_b64encode(pickle.dumps(token)).rstrip('=')
+                #_access_token = s[-1] + s[1:-1] + s[0]
+                yield self.update_user_token(user_id, _access_token)
                 self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
                 users = yield self.get_player(user_id)
                 if users:
@@ -196,26 +182,14 @@ class LoginHandler(ApiHandler):
                     " refresh_token=%s LIMIT 1"
             r = yield self.sql.runQuery(query, (self.arg("user_id"), self.arg("refresh_token")))
             if r:
-                _access_token = binascii.hexlify(os.urandom(20)).decode()
-                # _refresh_token = binascii.hexlify(os.urandom(20)).decode()
-                query = "UPDATE core_user SET access_token=%s, modified=%s WHERE id=%s"
-                params = (_access_token, int(time.time()), user_id)
-                for i in range(5):
-                    try:
-                        yield self.sql.runOperation(query, params)
-                        break
-                    except storage.IntegrityError:
-                        log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                        continue
+                token = dict(user_id=str(user_id))
+                _access_token = base64.urlsafe_b64encode(pickle.dumps(token)).rstrip('=')
+                #_access_token = s[-1] + s[1:-1] + s[0]
+                yield self.update_user_token(user_id, _access_token)
                 self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
                 users = yield self.get_player(user_id)
                 if users:
-                    print users
                     now_hp, tick = yield self.get_hp(users)
-                    # users['prods'] = escape.json_decode(users['prods'])
-                    # users['gates'] = escape.json_decode(users['gates'])
-                    # users['mails'] = escape.json_decode(users['mails'])
-                    # users['ips'] = escape.json_decode(users['ips'])
                     users['hp'] = now_hp
                     users['tick'] = tick
                 self.write(dict(access_token=_access_token, users=users))
