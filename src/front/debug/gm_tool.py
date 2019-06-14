@@ -58,16 +58,16 @@ class EditProdHandler(ApiHandler):
             raise web.HTTPError(400, "Argument error")
 
         user = yield self.get_player(user_id)
-        prods = user['prods']
+        props = user['props']
         if num > 0:
-            if pid in user['prods']:
-                user['prods'][pid] += num
+            if pid in user['props']:
+                user['props'][pid] += num
             else:
-                user['prods'][pid] = num
+                user['props'][pid] = num
         else:
-            if pid in user['prods']:
-                del user['prods'][pid]
+            if pid in user['props']:
+                del user['props'][pid]
 
-        yield self.set_palyer(user_id, prods)
+        yield self.set_palyer(user_id, props)
         msg = "SUCCESS! pid: " + pid + " curr num:" + str(num)
         self.write(msg)
