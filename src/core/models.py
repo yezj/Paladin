@@ -367,7 +367,7 @@ class Player(TimeStampedModel):
     rock = models.PositiveIntegerField(_('Rock'), default=0)  # 钻石
     star = models.PositiveIntegerField(_('Star'), default=0)  # 总星数
     point = models.PositiveIntegerField(_('Point'), default=0)  # 积分
-    prods = models.TextField(_('Prods'), blank=True)  # 道具
+    props = models.TextField(_('Props'), blank=True)  # 道具
     gates = models.TextField(_('Gates'), blank=True)  # 关卡
     mails = models.TextField(_('Mails'), blank=True)  # 邮件
     ips = models.TextField(_('Ips'), blank=True)  # 常用IP

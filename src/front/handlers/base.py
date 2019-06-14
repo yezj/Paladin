@@ -69,26 +69,22 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
 
     @storage.databaseSafe
     @defer.inlineCallbacks
-    def bind_token(self, idcard, authstring):
-        ahex, aid = idcard.split('h', 1)
-        res = yield self.sql.runQuery(
-            "SELECT state, user_id FROM core_account WHERE id=%s AND hex=%s AND authstring=%s LIMIT 1",
-            (aid, ahex, authstring))
-        if res:
-            IS_BINDED = True
+    def update_user_token(self, user_id, access_token, refresh_token=None):
+        if refresh_token:
+            query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
+            params = (access_token, refresh_token, int(time.time()), user_id)
         else:
-            query = "UPDATE core_account SET authstring=%s, timestamp=%s WHERE id=%s AND hex=%s RETURNING id"
-            params = (authstring, int(time.time()), aid, ahex)
-            for i in range(5):
-                try:
-                    yield self.sql.runQuery(query, params)
-                    break
-                except storage.IntegrityError:
-                    log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                    continue
-            IS_BINDED = False
+            query = "UPDATE core_user SET access_token=%s, modified=%s WHERE id=%s"
+            params = (access_token, int(time.time()), user_id)
+        for i in range(5):
+            try:
+                yield self.sql.runOperation(query, params)
+                break
+            except storage.IntegrityError:
+                log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
+                continue
 
-        defer.returnValue(IS_BINDED)
+        defer.returnValue(None)
 
     @storage.databaseSafe
     @defer.inlineCallbacks
@@ -102,16 +98,16 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
         point = D.USERINIT["point"]
         phone = D.USERINIT["phone"]
         ####
-        prods = escape.json_encode(D.USERINIT["prods"])
+        props = escape.json_encode(D.USERINIT["props"])
         gates = escape.json_encode(D.USERINIT["gates"])
         mails = escape.json_encode(D.USERINIT["mails"])
         ips = escape.json_encode(D.USERINIT["ips"])
 
         query = """INSERT INTO core_player(user_id, channel_id, model, serial, phone, nickname, avatar, gold,\
-                rock, star, point, prods, gates, mails, ips, created, modified) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,\
+                rock, star, point, props, gates, mails, ips, created, modified) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,\
                  %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id"""
         params = (
-            user_id, channel, model, serial, phone, nickname, avatar, gold, rock, star, point, prods, gates, \
+            user_id, channel, model, serial, phone, nickname, avatar, gold, rock, star, point, props, gates, \
             mails, ips, datetime.datetime.now(), datetime.datetime.now())
         # print query, params
         for i in range(5):
@@ -124,7 +120,7 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
                                 rock=rock,
                                 star=star,
                                 phone=phone,
-                                prods=D.USERINIT["prods"],
+                                props=D.USERINIT["props"],
                                 gates=D.USERINIT["gates"],
                                 mails=D.USERINIT["mails"],
                                 ips=D.USERINIT["ips"])
@@ -144,12 +140,12 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
         user = yield self.get_cache("user:%s" % use_id)
         if not user:
             user = dict()
-            query = """SELECT b.user_id, b.nickname, b.avatar, b.gold, b.rock, b.star, b.phone, b.prods, b.gates, b.mails,\
+            query = """SELECT b.user_id, b.nickname, b.avatar, b.gold, b.rock, b.star, b.phone, b.props, b.gates, b.mails,\
                     b.ips FROM core_user AS a, core_player AS b WHERE a.id=%s AND a.id=b.user_id LIMIT 1"""
             params = (use_id,)
             res = yield self.sql.runQuery(query, params)
             if res:
-                user_id, nickname, avatar, gold, rock, star, phone, prods, gates, mails, ips = res[0]
+                user_id, nickname, avatar, gold, rock, star, phone, props, gates, mails, ips = res[0]
                 user = dict(user_id=user_id,
                             nickname=nickname,
                             avatar=avatar,
@@ -157,7 +153,7 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
                             rock=rock,
                             star=star,
                             phone=phone,
-                            prods=escape.json_decode(prods),
+                            props=escape.json_decode(props),
                             gates=escape.json_decode(gates),
                             mails=escape.json_decode(mails),
                             ips=escape.json_decode(ips))
@@ -167,7 +163,7 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
     @storage.databaseSafe
     @defer.inlineCallbacks
     def set_player(self, user_id, nickname=None, avat=None, gold=None, rock=None,
-                   star=None, phone=None, prods=None, gates=None, mails=None, ips=None):
+                   star=None, phone=None, props=None, gates=None, mails=None, ips=None):
         # olduser = yield self.get_user(uid)
         suser = {'user_id': user_id}
         subqueries = []
@@ -189,9 +185,9 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
         if phone is not None:
             suser['phone'] = phone
             subqueries.append("phone=%(phone)s")
-        if prods is not None:
-            suser['prods'] = escape.json_encode(prods)
-            subqueries.append("prods=%(prods)s")
+        if props is not None:
+            suser['props'] = escape.json_encode(props)
+            subqueries.append("props=%(props)s")
         if gates is not None:
             suser['gates'] = escape.json_encode(gates)
             subqueries.append("gates=%(gates)s")
@@ -206,8 +202,8 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
         # subqueries.append("timestamp=%(timestamp)s")
         # SQL UPDATE START
         query = "UPDATE core_player SET " + ",".join(
-            subqueries) + " WHERE user_id=%(user_id)s RETURNING nickname, avatar, gold, rock, star, phone, prods, gates, mails,\
-             ips"
+            subqueries) + " WHERE user_id=%(user_id)s RETURNING nickname, avatar, gold, rock, star, phone, props," \
+                          " gates, mails, ips"
         params = suser
         user = None
         for i in range(5):
@@ -218,8 +214,9 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
                     yield self.del_cache("user:%s" % user_id)
                 else:
                     r = res[0]
-                    user = dict(user_id=user_id, nickname=r[0], avatar=r[1], gold=r[2], rock=r[3], star=r[4], phone=r[5])
-                    user['prods'] = r[6] and escape.json_decode(r[6]) or {}
+                    user = dict(user_id=user_id, nickname=r[0], avatar=r[1], gold=r[2], rock=r[3], star=r[4],
+                                phone=r[5])
+                    user['props'] = r[6] and escape.json_decode(r[6]) or {}
                     user['gates'] = r[7] and escape.json_decode(r[7]) or []
                     user['mails'] = r[8] and escape.json_decode(r[8]) or {}
                     user['ips'] = r[9] and escape.json_decode(r[9]) or {}
@@ -1631,54 +1628,6 @@ class ApiHandler(BaseHandler):
         except Exception:
             result = None
         return result
-
-    def random_pick(self, some_list):
-        x = random.uniform(0, 1)
-        cumulative_probability = 0.0
-        for item, item_probability in some_list:
-            cumulative_probability += item_probability
-            if x < cumulative_probability: break
-        return item
-
-    def random_prod(self, some_list):
-        x = random.uniform(0, 1)
-        cumulative_probability = 0.0
-        for item, item_probability, num in some_list:
-            cumulative_probability += item_probability
-            if x < cumulative_probability: break
-        return item, num
-
-    def random_prods(self, start, end, mprods):
-        # print start, end, mprods
-        prods = {}
-        if end <= len(mprods):
-            for one in xrange(start, end):
-                prod = mprods[one]
-                if prod in prods:
-                    prods[prod] += 1
-                else:
-                    prods[prod] = 1
-        if end > len(mprods) and start > len(mprods):
-            for one in xrange(start % len(mprods), end % len(mprods) + 1):
-                prod = mprods[one]
-                if prod in prods:
-                    prods[prod] += 1
-                else:
-                    prods[prod] = 1
-        if start <= len(mprods) and end >= len(mprods):
-            for one in xrange(start, len(mprods)):
-                prod = mprods[one]
-                if prod in prods:
-                    prods[prod] += 1
-                else:
-                    prods[prod] = 1
-            for one in xrange(0, end % len(mprods)):
-                prod = mprods[one]
-                if prod in prods:
-                    prods[prod] += 1
-                else:
-                    prods[prod] = 1
-        return prods
 
 
 class ApiJSONEncoder(DjangoJSONEncoder):

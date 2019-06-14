@@ -112,7 +112,7 @@ USERINIT = {
     "rock": 0,
     "star": 0,
     "point": 0,
-    "prods": {},
+    "props": {},
     "gates": [],
     "mails": {},
     "ips": {}

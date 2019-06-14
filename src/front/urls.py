@@ -6,7 +6,7 @@ from front.handlers import user
 from front.handlers import gate
 from front.debug import gm_tool
 from front.handlers import battle
-# from front.handlers import home
+from front.handlers import prop
 # from front.handlers import stage
 
 # from front.handlers import formation
