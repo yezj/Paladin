@@ -15,6 +15,7 @@ from twisted.python import log
 from front.wiapi import *
 from front.handlers.base import ApiHandler, ApiJSONEncoder
 
+
 @handler
 class AddHP(ApiHandler):
     @storage.databaseSafe
@@ -36,4 +37,37 @@ class AddHP(ApiHandler):
         currhp, tick = yield self.add_hp(user, hp)
 
         msg = "SUCCESS! curr hp: " + str(currhp)
+        self.write(msg)
+
+
+@handler
+class EditProdHandler(ApiHandler):
+    @storage.databaseSafe
+    @defer.inlineCallbacks
+    @api('Gm add prod', '/gm/add/prod/', [
+        Param('user_id', True, str, '1', '1', 'user_id'),
+        Param('pid', True, str, '01014', '01014', 'pid'),
+        Param('num', True, str, '1', '1', 'num'),
+    ], filters=[ps_filter], description="Gm add prod")
+    def get(self):
+        try:
+            user_id = self.get_argument("user_id")
+            pid = self.get_argument("pid")
+            num = int(self.get_argument("num", 1))
+        except Exception:
+            raise web.HTTPError(400, "Argument error")
+
+        user = yield self.get_player(user_id)
+        prods = user['prods']
+        if num > 0:
+            if pid in user['prods']:
+                user['prods'][pid] += num
+            else:
+                user['prods'][pid] = num
+        else:
+            if pid in user['prods']:
+                del user['prods'][pid]
+
+        yield self.set_palyer(user_id, prods)
+        msg = "SUCCESS! pid: " + pid + " curr num:" + str(num)
         self.write(msg)

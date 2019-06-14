@@ -21,14 +21,14 @@ class SetHandler(ApiHandler):
     @utils.token
     @storage.databaseSafe
     @defer.inlineCallbacks
-    @api('Prop set', '/prop/set/', [
+    @api('Prop use', '/prop/use/', [
         Param('battle_id', True, str, '010208_0', '010208_0', 'battle_id'),
         Param('user_id', True, str, '1', '1', 'user_id'),
         Param('access_token', True, str, 'bb6ab3286a923c66088f790c395c0d11019c075b',
               'bb6ab3286a923c66088f790c395c0d11019c075b', 'access_token'),
         Param('pid', True, str, '1', '1', 'pid'),
         Param('num', True, str, '1', '1', 'num'),
-    ], filters=[ps_filter], description="Prop set")
+    ], filters=[ps_filter], description="Prop use")
     def get(self):
         try:
             battle_id = self.get_argument("battle_id")

@@ -18,7 +18,7 @@ from front.handlers.base import ApiHandler, ApiJSONEncoder
 
 @handler
 class GetHandler(ApiHandler):
-    # @utils.token
+    @utils.token
     @storage.databaseSafe
     @defer.inlineCallbacks
     @api('Battle get', '/battle/get/', [
@@ -30,18 +30,13 @@ class GetHandler(ApiHandler):
     def get(self):
         try:
             gate_id = self.get_argument("gate_id")
-            access_token = self.get_argument("access_token")
-            user_id = self.get_argument("user_id")
         except Exception:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
-        query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE id=%s AND" \
-                " access_token=%s LIMIT 1"
-        res = yield self.sql.runQuery(query, (user_id, access_token))
-        if res:
+        user_id = self.user_id
+        if user_id:
             battle_id = uuid.uuid4().hex
             user = yield self.get_player(user_id)
-            print user
             user.update(dict(gate_id=gate_id))
             if not user:
                 self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
@@ -60,9 +55,10 @@ class GetHandler(ApiHandler):
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
 
+
 @handler
 class SetHandler(ApiHandler):
-    # @utils.token
+    @utils.token
     @storage.databaseSafe
     @defer.inlineCallbacks
     @api('Battle set', '/battle/set/', [
@@ -76,21 +72,15 @@ class SetHandler(ApiHandler):
     def get(self):
         try:
             battle_id = self.get_argument("battle_id")
-            access_token = self.get_argument("access_token")
-            user_id = self.get_argument("user_id")
             star = self.get_argument("star")
             point = self.get_argument("point")
-        except Exception:
+        except Exception as e:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
-
-        query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE id=%s AND" \
-                " access_token=%s LIMIT 1"
-        res = yield self.sql.runQuery(query, (user_id, access_token))
-        if res:
+        user_id = self.user_id
+        if user_id:
             battle = yield self.get_flush(battle_id)
             if battle:
-
                 gates = battle['gates']
                 gate_id = battle['gate_id']
                 gates[gate_id] = [star, point]
