@@ -51,7 +51,9 @@ class SetHandler(ApiHandler):
                 else:
                     self.write(dict(err=E.ERR_NOTENOUGH_PROD, msg=E.errmsg(E.ERR_NOTENOUGH_PROD)))
                     return
-                yield self.set_player(user_id, props=props)
+                #yield self.set_player(user_id, props=props)
+                cuser = dict(props=props)
+                yield self.set_player(user_id, **cuser)
             else:
                 self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
                 return
