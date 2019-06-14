@@ -26,7 +26,7 @@ class SetHandler(ApiHandler):
         Param('user_id', True, str, '1', '1', 'user_id'),
         Param('access_token', True, str, 'bb6ab3286a923c66088f790c395c0d11019c075b',
               'bb6ab3286a923c66088f790c395c0d11019c075b', 'access_token'),
-        Param('pid', True, str, '1', '1', 'pid'),
+        Param('pid', True, str, 'b_1', 'b_1', 'pid'),
         Param('num', True, str, '1', '1', 'num'),
     ], filters=[ps_filter], description="Prop use")
     def get(self):

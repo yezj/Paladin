@@ -46,7 +46,7 @@ class EditProdHandler(ApiHandler):
     @defer.inlineCallbacks
     @api('Gm add prod', '/gm/add/prod/', [
         Param('user_id', True, str, '1', '1', 'user_id'),
-        Param('pid', True, str, '01014', '01014', 'pid'),
+        Param('pid', True, str, 'b_1', 'b_1', 'pid'),
         Param('num', True, str, '1', '1', 'num'),
     ], filters=[ps_filter], description="Gm add prod")
     def get(self):
