@@ -27,36 +27,44 @@ class SetHandler(ApiHandler):
         Param('access_token', True, str, 'bb6ab3286a923c66088f790c395c0d11019c075b',
               'bb6ab3286a923c66088f790c395c0d11019c075b', 'access_token'),
         Param('pid', True, str, 'b_1', 'b_1', 'pid'),
-        Param('num', True, str, '1', '1', 'num'),
+        Param('num', False, str, '1', '1', 'num'),
     ], filters=[ps_filter], description="Prop use")
     def get(self):
         try:
             battle_id = self.get_argument("battle_id")
             pid = self.get_argument("pid")
-            num = int(self.get_argument("num"))
         except Exception as e:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
         user_id = self.user_id
-        if user_id:
-            user = yield self.get_player(user_id)
-            if user:
-                props = user['props']
+        user = yield self.get_player(user_id)
+        if user:
+            props = user['props']
+            if 'l' in pid.split('_'):
                 if pid in props:
+                    if user['props']['pid'] - int(time.time()) > 0:
+                        del user['props']['pid']
+                    else:
+                        del user['props']['pid']
+                        self.write(dict(err=E.ERR_NOTENOUGH_PROP_EXPIRED, msg=E.errmsg(E.ERR_NOTENOUGH_PROP_EXPIRED)))
+                        return
+                else:
+                    self.write(dict(err=E.ERR_NOTENOUGH_PROP, msg=E.errmsg(E.ERR_NOTENOUGH_PROP)))
+                    return
+            else:
+                if pid in props:
+                    num = int(self.get_argument("num"))
                     if props[pid] >= num:
                         props[pid] = props[pid] - num
                     else:
-                        self.write(dict(err=E.ERR_NOTENOUGH_PROD, msg=E.errmsg(E.ERR_NOTENOUGH_PROD)))
+                        self.write(dict(err=E.ERR_NOTENOUGH_PROP, msg=E.errmsg(E.ERR_NOTENOUGH_PROP)))
                         return
                 else:
-                    self.write(dict(err=E.ERR_NOTENOUGH_PROD, msg=E.errmsg(E.ERR_NOTENOUGH_PROD)))
+                    self.write(dict(err=E.ERR_NOTENOUGH_PROP, msg=E.errmsg(E.ERR_NOTENOUGH_PROP)))
                     return
-                #yield self.set_player(user_id, props=props)
-                cuser = dict(props=props)
-                yield self.set_player(user_id, **cuser)
-            else:
-                self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
-                return
+
+            cuser = dict(props=props)
+            yield self.set_player(user_id, **cuser)
             user = yield self.get_player(user_id)
             now_hp, tick = yield self.get_hp(user)
             user.update(dict(hp=now_hp, tick=tick, timestamp=int(time.time())))

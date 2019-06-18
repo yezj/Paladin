@@ -226,6 +226,9 @@ class E(object):
     ERR_JOIN_GUILD_REPEAT = 5001
     ERR_QUIT_GUILD_REPEAT = 5002
     ERR_NOTEXIST_GUILD_USER = 5003
+
+    ERR_NOTENOUGH_PROP = 10001
+    ERR_NOTENOUGH_PROP_EXPIRED = 10002
     _errmsg = {
         ERR_UNKNOWN: u'未知错误',
         ERR_INVALID: u'非法请求',
@@ -244,6 +247,8 @@ class E(object):
         ERR_USER_TOKEN_EXPIRE: u'Access_token过期,请重新登录',
         ERR_USER_TOKEN: u'Access_token错误',
         ERR_USER_REFRESH_TOKEN: u'Refresh_token错误',
+        ERR_NOTENOUGH_PROP: u'道具不足',
+        ERR_NOTENOUGH_PROP_EXPIRED: u'道具已过期',
         ERR_NOTENOUGH_HP: u'体力不足',
         ERR_NOTENOUGH_GOLD: u'金币不足',
         ERR_NOTENOUGH_ROCK: u'钻石不足',
