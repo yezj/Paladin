@@ -146,6 +146,13 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
             res = yield self.sql.runQuery(query, params)
             if res:
                 user_id, nickname, avatar, gold, rock, star, phone, props, gates, mails, ips = res[0]
+                props = escape.json_decode(props)
+                for key, value in props.iteritems():
+                    if 'l' in key.split('_'):
+                        if props[key] - int(time.time()) <= 0:
+                            del props[key]
+                        else:
+                            props[key] = props[key] - int(time.time())
                 user = dict(user_id=user_id,
                             nickname=nickname,
                             avatar=avatar,
@@ -153,7 +160,7 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
                             rock=rock,
                             star=star,
                             phone=phone,
-                            props=escape.json_decode(props),
+                            props=props,
                             gates=escape.json_decode(gates),
                             mails=escape.json_decode(mails),
                             ips=escape.json_decode(ips))
