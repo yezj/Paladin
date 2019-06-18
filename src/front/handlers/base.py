@@ -147,7 +147,7 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
             if res:
                 user_id, nickname, avatar, gold, rock, star, phone, props, gates, mails, ips = res[0]
                 props = escape.json_decode(props)
-                for key, value in props.iteritems():
+                for key in list(props.keys()):
                     if 'l' in key.split('_'):
                         if props[key] - int(time.time()) <= 0:
                             del props[key]
