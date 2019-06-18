@@ -79,9 +79,10 @@ class RegisterHandler(ApiHandler):
             print user
             if user:
                 user_id = user[0][0]
-                token = dict(user_id=str(user_id))
+                uuid1 = uuid.uuid1().get_hex()
+                token = dict(user_id=str(user_id), uuid1=uuid1)
                 access_token = base64.urlsafe_b64encode(pickle.dumps(token)).rstrip('=')
-                #access_token = s[-1] + s[1:-1] + s[0]
+                # access_token = s[-1] + s[1:-1] + s[0]
                 refresh_token = str(binascii.hexlify(os.urandom(20)).decode())
                 yield self.update_user_token(user_id, access_token, refresh_token)
                 users = yield self.generate_player(model, serial, channel, user_id)
@@ -129,9 +130,10 @@ class LoginHandler(ApiHandler):
             r = yield self.sql.runQuery(query, (username, password))
             if r:
                 user_id, username, password_hash, _access_token, _refresh_token = r[0]
-                token = dict(user_id=str(user_id))
+                uuid1 = uuid.uuid1().get_hex()
+                token = dict(user_id=str(user_id), uuid1=uuid1)
                 _access_token = base64.urlsafe_b64encode(pickle.dumps(token)).rstrip('=')
-                #_access_token = s[-1] + s[1:-1] + s[0]
+                # _access_token = s[-1] + s[1:-1] + s[0]
                 _refresh_token = str(binascii.hexlify(os.urandom(20)).decode())
                 yield self.update_user_token(user_id, _access_token, _refresh_token)
                 self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
@@ -157,9 +159,10 @@ class LoginHandler(ApiHandler):
             r = yield self.sql.runQuery(query, (user_id, access_token))
             if r:
                 user_id, username, password_hash, _access_token, _refresh_token = r[0]
-                token = dict(user_id=str(user_id))
+                uuid1 = uuid.uuid1().get_hex()
+                token = dict(user_id=str(user_id), uuid1=uuid1)
                 _access_token = base64.urlsafe_b64encode(pickle.dumps(token)).rstrip('=')
-                #_access_token = s[-1] + s[1:-1] + s[0]
+                # _access_token = s[-1] + s[1:-1] + s[0]
                 yield self.update_user_token(user_id, _access_token)
                 self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
                 users = yield self.get_player(user_id)
@@ -182,9 +185,10 @@ class LoginHandler(ApiHandler):
                     " refresh_token=%s LIMIT 1"
             r = yield self.sql.runQuery(query, (self.arg("user_id"), self.arg("refresh_token")))
             if r:
-                token = dict(user_id=str(user_id))
+                uuid1 = uuid.uuid1().get_hex()
+                token = dict(user_id=str(user_id), uuid1=uuid1)
                 _access_token = base64.urlsafe_b64encode(pickle.dumps(token)).rstrip('=')
-                #_access_token = s[-1] + s[1:-1] + s[0]
+                # _access_token = s[-1] + s[1:-1] + s[0]
                 yield self.update_user_token(user_id, _access_token)
                 self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
                 users = yield self.get_player(user_id)
