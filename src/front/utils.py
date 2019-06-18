@@ -22,7 +22,7 @@ def token(method):
             raise web.HTTPError(400, "Access_token required")
         else:
             try:
-                self.token = pickle.loads(base64.urlsafe_b64decode(access_token))
+                self.token = pickle.loads(base64.urlsafe_b64decode(access_token+'=='))
                 self.user_id = self.token['user_id']
                 if self.user_id != user_id:
                     raise web.HTTPError(400, "Access_token error")
