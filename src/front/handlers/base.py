@@ -137,34 +137,33 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
     @storage.databaseSafe
     @defer.inlineCallbacks
     def get_player(self, use_id):
-        user = yield self.get_cache("user:%s" % use_id)
-        if not user:
-            user = dict()
-            query = """SELECT b.user_id, b.nickname, b.avatar, b.gold, b.rock, b.star, b.phone, b.props, b.gates, b.mails,\
-                    b.ips FROM core_user AS a, core_player AS b WHERE a.id=%s AND a.id=b.user_id LIMIT 1"""
-            params = (use_id,)
-            res = yield self.sql.runQuery(query, params)
-            if res:
-                user_id, nickname, avatar, gold, rock, star, phone, props, gates, mails, ips = res[0]
-                props = escape.json_decode(props)
-                for key in list(props.keys()):
-                    if 'l' in key.split('_'):
-                        if props[key] - int(time.time()) <= 0:
-                            del props[key]
-                        else:
-                            props[key] = props[key] - int(time.time())
-                user = dict(user_id=user_id,
-                            nickname=nickname,
-                            avatar=avatar,
-                            gold=gold,
-                            rock=rock,
-                            star=star,
-                            phone=phone,
-                            props=props,
-                            gates=escape.json_decode(gates),
-                            mails=escape.json_decode(mails),
-                            ips=escape.json_decode(ips))
-            yield self.set_cache("user:%s" % use_id, user)
+        #user = yield self.get_cache("user:%s" % use_id)
+        user = dict()
+        query = """SELECT b.user_id, b.nickname, b.avatar, b.gold, b.rock, b.star, b.phone, b.props, b.gates, b.mails,\
+                b.ips FROM core_user AS a, core_player AS b WHERE a.id=%s AND a.id=b.user_id LIMIT 1"""
+        params = (use_id,)
+        res = yield self.sql.runQuery(query, params)
+        if res:
+            user_id, nickname, avatar, gold, rock, star, phone, props, gates, mails, ips = res[0]
+            props = escape.json_decode(props)
+            for key in list(props.keys()):
+                if 'l' in key.split('_'):
+                    if props[key] - int(time.time()) <= 0:
+                        del props[key]
+                    else:
+                        props[key] = props[key] - int(time.time())
+            user = dict(user_id=user_id,
+                        nickname=nickname,
+                        avatar=avatar,
+                        gold=gold,
+                        rock=rock,
+                        star=star,
+                        phone=phone,
+                        props=props,
+                        gates=escape.json_decode(gates),
+                        mails=escape.json_decode(mails),
+                        ips=escape.json_decode(ips))
+            #yield self.set_cache("user:%s" % use_id, user)
         defer.returnValue(user)
 
     @storage.databaseSafe
