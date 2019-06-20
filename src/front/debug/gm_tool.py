@@ -60,7 +60,10 @@ class EditProdHandler(ApiHandler):
         if 'l' in pid.split('_'):
             seconds = self.get_argument("seconds")
             expire_time = int(time.time()) + int(seconds)
-            user['props'][pid] = expire_time
+            if pid in user['props']:
+                user['props'][pid].append(expire_time)
+            else:
+                user['props'][pid] = [expire_time]
             msg = "SUCCESS! pid: " + pid + " expire_time:" + str(expire_time)
         else:
             num = int(self.get_argument("num", 1))
