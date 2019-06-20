@@ -146,12 +146,11 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
         if res:
             user_id, nickname, avatar, gold, rock, star, phone, props, gates, mails, ips = res[0]
             props = escape.json_decode(props)
-            for key in list(props.keys()):
-                if 'l' in key.split('_'):
-                    if props[key] - int(time.time()) <= 0:
-                        del props[key]
-                    else:
-                        props[key] = props[key] - int(time.time())
+            # for key in list(props.keys()):
+            #     if 'l' in key.split('_'):
+            #         p_list = props[key]
+            #         print p_list
+            #         props[key] = [(p-int(time.time())) for p in p_list if (p-int(time.time())) > 0]
             user = dict(user_id=user_id,
                         nickname=nickname,
                         avatar=avatar,
