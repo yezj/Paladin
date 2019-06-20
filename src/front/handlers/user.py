@@ -123,7 +123,6 @@ class LoginHandler(ApiHandler):
         except Exception:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
-        print self.has_arg("access_token"), self.has_arg("user_id")
         if username and password:
             query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE" \
                     " username=%s AND password_hash=%s LIMIT 1"
@@ -139,11 +138,14 @@ class LoginHandler(ApiHandler):
                 self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
                 users = yield self.get_player(user_id)
                 if users:
-                    print users
                     now_hp, tick = yield self.get_hp(users)
                     users['hp'] = now_hp
                     users['tick'] = tick
-                    print users
+                    props = users['props']
+                    for key in list(props.keys()):
+                        if 'l' in key.split('_'):
+                            p_list = props[key]
+                            props[key] = [(p-int(time.time())) for p in p_list if (p-int(time.time())) > 0]
                     self.write(
                         dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token, users=users))
                     return
@@ -169,12 +171,14 @@ class LoginHandler(ApiHandler):
                 if users:
                     print users
                     now_hp, tick = yield self.get_hp(users)
-                    # users['prods'] = escape.json_decode(users['prods'])
-                    # users['gates'] = escape.json_decode(users['gates'])
-                    # users['mails'] = escape.json_decode(users['mails'])
-                    # users['ips'] = escape.json_decode(users['ips'])
                     users['hp'] = now_hp
                     users['tick'] = tick
+                    props = users['props']
+                    for key in list(props.keys()):
+                        if 'l' in key.split('_'):
+                            p_list = props[key]
+                            props[key] = [(p-int(time.time())) for p in p_list if (p-int(time.time())) > 0]
+
                 self.write(dict(access_token=_access_token, users=users))
             else:
                 self.write(dict(err=E.ERR_USER_TOKEN_EXPIRE, msg=E.errmsg(E.ERR_USER_TOKEN_EXPIRE)))
@@ -196,6 +200,11 @@ class LoginHandler(ApiHandler):
                     now_hp, tick = yield self.get_hp(users)
                     users['hp'] = now_hp
                     users['tick'] = tick
+                    props = users['props']
+                    for key in list(props.keys()):
+                        if 'l' in key.split('_'):
+                            p_list = props[key]
+                            props[key] = [(p-int(time.time())) for p in p_list if (p-int(time.time())) > 0]
                 self.write(dict(access_token=_access_token, users=users))
             else:
                 self.write(dict(err=E.ERR_USER_REFRESH_TOKEN, msg=E.errmsg(E.ERR_USER_REFRESH_TOKEN)))
