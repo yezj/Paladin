@@ -139,9 +139,9 @@ class LoginHandler(ApiHandler):
                 users = yield self.get_player(user_id)
                 if users:
                     now_hp, tick = yield self.get_hp(users)
+                    users = yield self.get_prop_l(user_id)
                     users['hp'] = now_hp
                     users['tick'] = tick
-                    users = yield self.get_prop_l(user_id)
                     self.write(
                         dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token, users=users))
                     return
@@ -167,9 +167,9 @@ class LoginHandler(ApiHandler):
                 if users:
                     print users
                     now_hp, tick = yield self.get_hp(users)
+                    users = yield self.get_prop_l(user_id)
                     users['hp'] = now_hp
                     users['tick'] = tick
-                    users = yield self.get_prop_l(user_id)
                 self.write(dict(access_token=_access_token, users=users))
             else:
                 self.write(dict(err=E.ERR_USER_TOKEN_EXPIRE, msg=E.errmsg(E.ERR_USER_TOKEN_EXPIRE)))
@@ -189,9 +189,9 @@ class LoginHandler(ApiHandler):
                 users = yield self.get_player(user_id)
                 if users:
                     now_hp, tick = yield self.get_hp(users)
+                    users = yield self.get_prop_l(user_id)
                     users['hp'] = now_hp
                     users['tick'] = tick
-                    users = yield self.get_prop_l(user_id)
                 self.write(dict(access_token=_access_token, users=users))
             else:
                 self.write(dict(err=E.ERR_USER_REFRESH_TOKEN, msg=E.errmsg(E.ERR_USER_REFRESH_TOKEN)))

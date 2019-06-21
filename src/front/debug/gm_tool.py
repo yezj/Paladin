@@ -75,7 +75,7 @@ class EditProdHandler(ApiHandler):
             else:
                 if pid in user['props']:
                     del user['props'][pid]
-            msg = "SUCCESS! pid: " + pid + " curr num:" + str(num)
+            msg = "SUCCESS! pid: " + pid + " curr num:" + str(user['props'][pid])
         cuser = dict(props=user['props'])
         yield self.set_player(user_id, **cuser)
         self.write(msg)
