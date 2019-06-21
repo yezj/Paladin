@@ -15,13 +15,11 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ('nickname',)
 
 
-class MailAdmin(admin.ModelAdmin):
-    list_display = ('sender', 'to', 'title', 'type', 'created_at')
-    search_fields = ('title',)
-
-
 class GateAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('gate_id', 'vers', 'rs', 'itemTypes', 'props', 'taskStep', 'tasks', 'scores', 'gird',
+                    'newGridTypes', 'newGrid', 'portal', 'item', 'itemBg', 'wallH', 'wallV', 'taskBgItem',
+                    'wayDownOut', 'attach', 'diff', 'taskType', 'trackBelt', 'iceWall', 'flipBlocker', 'movingFloor')
+    search_fields = ('gate_id',)
 
 
 class PropAdmin(admin.ModelAdmin):
@@ -32,7 +30,6 @@ class PropAdmin(admin.ModelAdmin):
 
 admin.site.register(Channel, ChannelAdmin)
 admin.site.register(User, UserAdmin)
-admin.site.register(Mail, MailAdmin)
+# admin.site.register(Mail, MailAdmin)
 admin.site.register(Gate, GateAdmin)
 admin.site.register(Prop, PropAdmin)
-
