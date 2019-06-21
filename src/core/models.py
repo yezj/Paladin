@@ -304,7 +304,7 @@ class Gate(TimeStampedModel):
         verbose_name_plural = _('Gates')
 
     def __unicode__(self):
-        return u'%s' % self.vers
+        return u'%s@%s' % (self.gate_id, self.vers)
 
 
 class Prop(TimeStampedModel):
