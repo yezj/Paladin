@@ -42,11 +42,13 @@ class SetHandler(ApiHandler):
             props = user['props']
             if 'l' in pid.split('_'):
                 if pid in props:
-                    if user['props']['pid'] - int(time.time()) > 0:
-                        del user['props']['pid']
+                    p_list = user['props'][pid]
+                    tmp_list = [p for p in p_list if (p - int(time.time())) > 0]
+                    if len(tmp_list) > 0:
+                        tmp_list.pop(0)
+                        user['props'][pid] = tmp_list
                     else:
-                        del user['props']['pid']
-                        self.write(dict(err=E.ERR_NOTENOUGH_PROP_EXPIRED, msg=E.errmsg(E.ERR_NOTENOUGH_PROP_EXPIRED)))
+                        self.write(dict(err=E.ERR_NOTENOUGH_PROP, msg=E.errmsg(E.ERR_NOTENOUGH_PROP)))
                         return
                 else:
                     self.write(dict(err=E.ERR_NOTENOUGH_PROP, msg=E.errmsg(E.ERR_NOTENOUGH_PROP)))
@@ -67,6 +69,7 @@ class SetHandler(ApiHandler):
             yield self.set_player(user_id, **cuser)
             user = yield self.get_player(user_id)
             now_hp, tick = yield self.get_hp(user)
+            user = yield self.get_prop_l(user_id)
             user.update(dict(hp=now_hp, tick=tick, timestamp=int(time.time())))
             # ret = dict(timestamp=int(time.time()), data=data)
             # reb = zlib.compress(escape.json_encode(ret))

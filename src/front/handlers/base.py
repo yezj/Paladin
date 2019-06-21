@@ -137,7 +137,7 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
     @storage.databaseSafe
     @defer.inlineCallbacks
     def get_player(self, use_id):
-        #user = yield self.get_cache("user:%s" % use_id)
+        # user = yield self.get_cache("user:%s" % use_id)
         user = dict()
         query = """SELECT b.user_id, b.nickname, b.avatar, b.gold, b.rock, b.star, b.phone, b.props, b.gates, b.mails,\
                 b.ips FROM core_user AS a, core_player AS b WHERE a.id=%s AND a.id=b.user_id LIMIT 1"""
@@ -162,7 +162,7 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
                         gates=escape.json_decode(gates),
                         mails=escape.json_decode(mails),
                         ips=escape.json_decode(ips))
-            #yield self.set_cache("user:%s" % use_id, user)
+            # yield self.set_cache("user:%s" % use_id, user)
         defer.returnValue(user)
 
     @storage.databaseSafe
@@ -231,6 +231,19 @@ class BaseHandler(web.RequestHandler, storage.DatabaseMixin):
                 log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
                 continue
         # SQL UPDATE END
+        defer.returnValue(user)
+
+    @storage.databaseSafe
+    @defer.inlineCallbacks
+    def get_prop_l(self, user_id):
+        user = yield self.get_player(user_id)
+        props = user['props']
+        for key in list(props.keys()):
+            if 'l' in key.split('_'):
+                p_list = props[key]
+                props[key] = [(p - int(time.time())) for p in p_list if (p - int(time.time())) > 0]
+                if len(props[key]) <= 0:
+                    del props[key]
         defer.returnValue(user)
 
     @storage.databaseSafe

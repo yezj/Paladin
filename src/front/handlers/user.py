@@ -141,11 +141,7 @@ class LoginHandler(ApiHandler):
                     now_hp, tick = yield self.get_hp(users)
                     users['hp'] = now_hp
                     users['tick'] = tick
-                    props = users['props']
-                    for key in list(props.keys()):
-                        if 'l' in key.split('_'):
-                            p_list = props[key]
-                            props[key] = [(p-int(time.time())) for p in p_list if (p-int(time.time())) > 0]
+                    users = yield self.get_prop_l(user_id)
                     self.write(
                         dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token, users=users))
                     return
@@ -173,12 +169,7 @@ class LoginHandler(ApiHandler):
                     now_hp, tick = yield self.get_hp(users)
                     users['hp'] = now_hp
                     users['tick'] = tick
-                    props = users['props']
-                    for key in list(props.keys()):
-                        if 'l' in key.split('_'):
-                            p_list = props[key]
-                            props[key] = [(p-int(time.time())) for p in p_list if (p-int(time.time())) > 0]
-
+                    users = yield self.get_prop_l(user_id)
                 self.write(dict(access_token=_access_token, users=users))
             else:
                 self.write(dict(err=E.ERR_USER_TOKEN_EXPIRE, msg=E.errmsg(E.ERR_USER_TOKEN_EXPIRE)))
@@ -200,11 +191,7 @@ class LoginHandler(ApiHandler):
                     now_hp, tick = yield self.get_hp(users)
                     users['hp'] = now_hp
                     users['tick'] = tick
-                    props = users['props']
-                    for key in list(props.keys()):
-                        if 'l' in key.split('_'):
-                            p_list = props[key]
-                            props[key] = [(p-int(time.time())) for p in p_list if (p-int(time.time())) > 0]
+                    users = yield self.get_prop_l(user_id)
                 self.write(dict(access_token=_access_token, users=users))
             else:
                 self.write(dict(err=E.ERR_USER_REFRESH_TOKEN, msg=E.errmsg(E.ERR_USER_REFRESH_TOKEN)))
