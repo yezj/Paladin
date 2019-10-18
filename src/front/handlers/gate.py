@@ -192,7 +192,7 @@ class ScanHandler(ApiHandler):
     @storage.databaseSafe
     @defer.inlineCallbacks
     # @utils.signed
-    @api('Gate get', '/gate/scan/', [
+    @api('Gate scan', '/gate/scan/', [
         Param('gateType', True, str, 'm', 'm', 'm_1'),
     ], filters=[ps_filter], description="Gate get")
     def get(self):
@@ -203,7 +203,7 @@ class ScanHandler(ApiHandler):
         gate_list = []
         for x in xrange(1, 1000):
             res = yield self.sql.runQuery(
-                """SELECT id, gate_id, modified FROM CORE_GATE WHERE gate_id LIKE %s_%s""",
+                """SELECT id, gate_id, modified FROM CORE_GATE WHERE gate_id=%s_%s""",
                 (gate_type, x))
             if res:
                 id, gate_id, modified = res[0]
