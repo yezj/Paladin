@@ -203,7 +203,7 @@ class ScanHandler(ApiHandler):
         gate_list = []
         for x in xrange(1, 1000):
             res = yield self.sql.runQuery(
-                """SELECT id, gate_id, modified FROM CORE_GATE WHERE gate_id=%s_%s""",
+                """SELECT id, gate_id, modified FROM CORE_GATE WHERE gate_id='%s_%s'""",
                 (gate_type, x))
             if res:
                 id, gate_id, modified = res[0]
