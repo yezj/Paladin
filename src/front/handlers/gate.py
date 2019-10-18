@@ -1,19 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import random
 import time
 import zlib
-import uuid
-from twisted.internet import defer
+
 from cyclone import escape, web
 from front import storage
-from front import utils
-from front.utils import E
-from front import storage, D
-from twisted.python import log
+from front.handlers.base import ApiHandler
 # from front.handlers.base import BaseHandler
 from front.wiapi import *
-from front.handlers.base import ApiHandler, ApiJSONEncoder
+from twisted.internet import defer
+from twisted.python import log
 
 
 @handler
@@ -32,8 +28,8 @@ class GetHandler(ApiHandler):
 
         res = yield self.sql.runQuery("""SELECT gate_id, vers, rs, "itemTypes",  props, "taskStep", tasks, scores, gird,
                     "newGridTypes", "newGrid", portal, item, "itemBg", "wallH", "wallV", "taskBgItem", "wayDownOut",
-                     attach, diff, "taskType", "trackBelt", "movingFloor", "flipBlocker", "iceWall" FROM core_gate WHERE gate_id=%s LIMIT 1""",
-                                      (gate_id,))
+                     attach, diff, "taskType", "trackBelt", "movingFloor", "flipBlocker", "iceWall" FROM core_gate WHERE
+                      gate_id=%s LIMIT 1""", (gate_id,))
         if res:
             gate_id, vers, rs, itemTypes, props, taskStep, tasks, scores, gird, newGridTypes, newGrid, portal, item, \
             itemBg, wallH, wallV, taskBgItem, wayDownOut, attach, diff, taskType, trackBelt, movingFloor, flipBlocker, \
@@ -83,7 +79,7 @@ class SetHandler(ApiHandler):
     @defer.inlineCallbacks
     # @utils.signed
     @api('Gate set', '/gate/set/', [
-        Param('gate_id', True, str, '010208_0', '010208_0', 'gate_id'),
+        Param('gate_id', True, str, 'm_1', 'm_1', 'gate_id'),
         Param('vers', True, str, '1.0', '1.0', 'vers'),
         Param('rs', True, str, '[]', '[]', 'rs'),
         Param('itemTypes', True, str, '[]', '[]', 'itemTypes'),
@@ -170,9 +166,9 @@ class SetHandler(ApiHandler):
                     continue
         else:
             query = """UPDATE core_gate SET vers=%s, rs=%s, "itemTypes"=%s, props=%s, "taskStep"=%s, tasks=%s,
-                    scores=%s, gird=%s, "newGridTypes"=%s, "newGrid"=%s, portal=%s, item=%s,
-                     "itemBg"=%s, "wallH"=%s, "wallV"=%s, "taskBgItem"=%s, "wayDownOut"=%s, attach=%s, diff=%s,
-                      "taskType"=%s, "trackBelt"=%s, "movingFloor"=%s, "flipBlocker"=%s, "iceWall"=%s WHERE gate_id=%s"""
+                    scores=%s, gird=%s, "newGridTypes"=%s, "newGrid"=%s, portal=%s, item=%s, "itemBg"=%s, "wallH"=%s,
+                     "wallV"=%s, "taskBgItem"=%s, "wayDownOut"=%s, attach=%s, diff=%s, "taskType"=%s, "trackBelt"=%s,
+                      "movingFloor"=%s, "flipBlocker"=%s, "iceWall"=%s WHERE gate_id=%s"""
             params = (
                 vers, rs, itemTypes, props, taskStep, tasks, scores, gird, newGridTypes, newGrid, portal, item, itemBg,
                 wallH, wallV, taskBgItem, wayDownOut, attach, diff, taskType, trackBelt, movingFloor, flipBlocker,
@@ -189,3 +185,29 @@ class SetHandler(ApiHandler):
         ret = dict(timestamp=int(time.time()))
         reb = zlib.compress(escape.json_encode(ret))
         self.write(ret)
+
+
+@handler
+class ScanHandler(ApiHandler):
+    @storage.databaseSafe
+    @defer.inlineCallbacks
+    # @utils.signed
+    @api('Gate get', '/gate/scan/', [
+        Param('gateType', True, str, 'm', 'm', 'm_1'),
+    ], filters=[ps_filter], description="Gate get")
+    def get(self):
+        try:
+            gate_type = self.get_argument("gateType")
+        except Exception:
+            raise web.HTTPError(400, "Argument error")
+        gate_list = []
+        for x in xrange(1, 1000):
+            res = yield self.sql.runQuery(
+                """SELECT id, gate_id, modified FROM CORE_GATE WHERE gate_id LIKE %s_%s""",
+                (gate_type, x))
+            if res:
+                id, gate_id, modified = res[0]
+                gate_list.append(dict(id=gate_id, status='ok', modified=modified))
+            else:
+                gate_list.append(dict(id='{}_{}'.format(gate_type, x), status='null', modified=''))
+        self.write(gate_list)
