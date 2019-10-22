@@ -219,7 +219,7 @@ class DeleteHandler(ApiHandler):
     @defer.inlineCallbacks
     # @utils.signed
     @api('Gate delete', '/gate/delete/', [
-        Param('gate_id', True, str, 'm_1', 'm_1', 'm_1'),
+        Param('gate_id', True, str, 'test_1', 'test_1', 'test_1'),
     ], filters=[ps_filter], description="Gate delete")
     def get(self):
         try:
