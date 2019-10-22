@@ -168,7 +168,7 @@ class SetHandler(ApiHandler):
             query = """UPDATE core_gate SET vers=%s, rs=%s, "itemTypes"=%s, props=%s, "taskStep"=%s, tasks=%s,
                     scores=%s, gird=%s, "newGridTypes"=%s, "newGrid"=%s, portal=%s, item=%s, "itemBg"=%s, "wallH"=%s,
                      "wallV"=%s, "taskBgItem"=%s, "wayDownOut"=%s, attach=%s, diff=%s, "taskType"=%s, "trackBelt"=%s,
-                      "movingFloor"=%s, "flipBlocker"=%s, "iceWall"=%s WHERE gate_id=%s"""
+                      "movingFloor"=%s, "flipBlocker"=%s, "iceWall"=%s, modified=now() WHERE gate_id=%s"""
             params = (
                 vers, rs, itemTypes, props, taskStep, tasks, scores, gird, newGridTypes, newGrid, portal, item, itemBg,
                 wallH, wallV, taskBgItem, wayDownOut, attach, diff, taskType, trackBelt, movingFloor, flipBlocker,
@@ -194,13 +194,54 @@ class ScanHandler(ApiHandler):
     # @utils.signed
     @api('Gate scan', '/gate/scan/', [
         Param('gateType', True, str, 'm', 'm', 'm_1'),
-    ], filters=[ps_filter], description="Gate get")
+    ], filters=[ps_filter], description="Gate scan")
     def get(self):
         try:
             gate_type = self.get_argument("gateType")
         except Exception:
             raise web.HTTPError(400, "Argument error")
         gate_list = []
+        for x in xrange(1, 1000):
+            res = yield self.sql.runQuery(
+                """SELECT id, gate_id, modified FROM CORE_GATE WHERE gate_id=%s""",
+                ('{}_{}'.format(gate_type, x), ))
+            if res:
+                id, gate_id, modified = res[0]
+                gate_list.append(dict(id=gate_id, status='ok', modified=modified))
+            else:
+                gate_list.append(dict(id='{}_{}'.format(gate_type, x), status='null', modified=''))
+        self.write(gate_list)
+
+
+@handler
+class DeleteHandler(ApiHandler):
+    @storage.databaseSafe
+    @defer.inlineCallbacks
+    # @utils.signed
+    @api('Gate delete', '/gate/delete/', [
+        Param('gate_id', True, str, 'm_1', 'm_1', 'm_1'),
+    ], filters=[ps_filter], description="Gate delete")
+    def get(self):
+        try:
+            gate_id = self.get_argument("gate_id")
+        except Exception:
+            raise web.HTTPError(400, "Argument error")
+        res = yield self.sql.runQuery("SELECT * FROM core_gate WHERE gate_id=%s LIMIT 1", (gate_id,))
+        if res:
+            query = 'DELETE FROM core_gate WHERE gate_id=%s'
+            params = (gate_id, )
+            for i in range(5):
+                try:
+                    yield self.sql.runOperation(query, params)
+                    break
+                except storage.IntegrityError:
+                    log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
+                    continue
+        else:
+            raise web.HTTPError(400, "Argument error")
+
+        gate_list = []
+        gate_type, _ = gate_id.split('_')
         for x in xrange(1, 1000):
             res = yield self.sql.runQuery(
                 """SELECT id, gate_id, modified FROM CORE_GATE WHERE gate_id=%s""",
